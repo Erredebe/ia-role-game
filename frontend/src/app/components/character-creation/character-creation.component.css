@@ -89,6 +89,63 @@
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
 }
 
+.environment-selection {
+  margin-top: 2rem;
+}
+
+.environment-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.environment-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.environment-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.environment-card.active {
+  border-color: var(--neon-purple);
+  background: rgba(188, 19, 254, 0.08);
+  box-shadow: 0 0 15px rgba(188, 19, 254, 0.15);
+}
+
+.environment-icon {
+  font-size: 1.4rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: var(--text-bright);
+}
+
+.environment-info h4 {
+  margin: 0;
+  color: var(--text-bright);
+}
+
+.environment-info p {
+  margin: 0.2rem 0 0 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
 .class-icon {
   font-size: 2rem;
   width: 50px;
@@ -154,6 +211,23 @@
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: bold;
+}
+
+.environment-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.9rem;
+  background: rgba(0, 255, 255, 0.12);
+  color: var(--neon-cyan);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.environment-desc {
+  margin: 0.35rem 0 0 0;
+  color: var(--text-dim);
+  font-size: 0.85rem;
 }
 
 .stats-card {

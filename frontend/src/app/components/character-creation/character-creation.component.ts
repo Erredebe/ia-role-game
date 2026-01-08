@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,6 +13,13 @@ interface CharacterClass {
   baseMana: number;
 }
 
+interface EnvironmentOption {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+}
+
 @Component({
   selector: 'app-character-creation',
   standalone: true,
@@ -23,12 +30,21 @@ interface CharacterClass {
 export class CharacterCreationComponent {
   name: string = '';
   selectedClassId: string = 'warrior';
-  
+  selectedEnvironmentId: string = 'fantasy';
+
   classes: CharacterClass[] = [
-    { id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: '⚔️', baseHp: 120, baseMana: 20 },
-    { id: 'mage', name: 'Mago', description: 'Erudito de las artes arcanas y hechizos poderosos.', icon: '🔮', baseHp: 80, baseMana: 100 },
-    { id: 'archer', name: 'Arquero', description: 'Experto en combate a distancia y agilidad.', icon: '🏹', baseHp: 100, baseMana: 40 },
-    { id: 'rogue', name: 'Pícaro', description: 'Sombrío y letal, experto en sigilo y dagas.', icon: '🗡️', baseHp: 90, baseMana: 30 }
+    { id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: 'W', baseHp: 120, baseMana: 20 },
+    { id: 'mage', name: 'Mago', description: 'Erudito de las artes arcanas y hechizos poderosos.', icon: 'M', baseHp: 80, baseMana: 100 },
+    { id: 'archer', name: 'Arquero', description: 'Experto en combate a distancia y agilidad.', icon: 'A', baseHp: 100, baseMana: 40 },
+    { id: 'rogue', name: 'Picaro', description: 'Sombrio y letal, experto en sigilo y dagas.', icon: 'R', baseHp: 90, baseMana: 30 }
+  ];
+
+  environments: EnvironmentOption[] = [
+    { id: 'fantasy', name: 'Fantasia', description: 'Reinos magicos, criaturas miticas y hechizos antiguos.', icon: 'F' },
+    { id: 'realistic', name: 'Realista', description: 'Sin magia, decisiones humanas y consecuencias reales.', icon: 'R' },
+    { id: 'contemporary', name: 'Contemporaneo', description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.', icon: 'C' },
+    { id: 'sci-fi', name: 'Ciencia Ficcion', description: 'Naves, IA y fronteras del espacio profundo.', icon: 'SF' },
+    { id: 'post-apocalyptic', name: 'Postapocaliptico', description: 'Ruinas, supervivencia y facciones emergentes.', icon: 'PA' }
   ];
 
   stats = {
@@ -46,6 +62,10 @@ export class CharacterCreationComponent {
     return this.classes.find(c => c.id === this.selectedClassId)!;
   }
 
+  get currentEnvironment() {
+    return this.environments.find(env => env.id === this.selectedEnvironmentId)!;
+  }
+
   get avatarUrl() {
     const seed = `${this.selectedClassId}-${this.name || 'avatar'}`;
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
@@ -54,10 +74,10 @@ export class CharacterCreationComponent {
   rollStats() {
     if (this.isRolling) return;
     this.isRolling = true;
-    
+
     const startTime = Date.now();
     const duration = 800;
-    
+
     const interval = setInterval(() => {
       this.stats = {
         strength: Math.floor(Math.random() * 16) + 3,
@@ -80,14 +100,14 @@ export class CharacterCreationComponent {
   }
 
   private roll3d6(): number {
-    return Math.floor(Math.random() * 6) + 1 + 
-           Math.floor(Math.random() * 6) + 1 + 
+    return Math.floor(Math.random() * 6) + 1 +
+           Math.floor(Math.random() * 6) + 1 +
            Math.floor(Math.random() * 6) + 1;
   }
 
   async finishCreation() {
     if (!this.name) {
-      alert('¡Por favor, elige un nombre!');
+      alert('Por favor, elige un nombre!');
       return;
     }
 
@@ -102,7 +122,8 @@ export class CharacterCreationComponent {
       inventory: this.getInitialInventory()
     };
 
-    const response = await this.gameService.createNewGame(character);
+    const environment = this.currentEnvironment;
+    const response = await this.gameService.createNewGame(character, environment);
     if (response) {
       this.router.navigate(['/game', response.id]);
     }
@@ -111,7 +132,7 @@ export class CharacterCreationComponent {
   private getInitialInventory(): string[] {
     switch (this.selectedClassId) {
       case 'warrior': return ['Espada ancha', 'Escudo de madera'];
-      case 'mage': return ['Bastón rúnico', 'Poción de maná'];
+      case 'mage': return ['Baston runico', 'Pocion de mana'];
       case 'archer': return ['Arco largo', 'Carcaj de flechas'];
       case 'rogue': return ['Dagas gemelas', 'Bomba de humo'];
       default: return ['Cuerda'];

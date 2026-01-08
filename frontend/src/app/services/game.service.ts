@@ -20,10 +20,10 @@ export class GameService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/list`));
   }
 
-  async createNewGame(character: any) {
+  async createNewGame(character: any, environment?: any) {
     this.loading.set(true);
     try {
-      const response = await firstValueFrom(this.http.post<{id: string, state: GameState}>(`${this.apiUrl}/new`, { character }));
+      const response = await firstValueFrom(this.http.post<{id: string, state: GameState}>(`${this.apiUrl}/new`, { character, environment }));
       this.currentId.set(response.id);
       this.state.set(response.state);
       return response;

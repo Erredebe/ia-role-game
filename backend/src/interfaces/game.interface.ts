@@ -2,6 +2,7 @@ export interface GameState {
     character: Character;
     location: string;
     narrativeHistory: ChatMessage[];
+    environment?: EnvironmentSetting;
 }
 
 export interface Character {
@@ -20,6 +21,12 @@ export interface Stats {
     dexterity: number;
     intelligence: number;
     luck: number;
+}
+
+export interface EnvironmentSetting {
+    id: string;
+    name: string;
+    description: string;
 }
 
 export interface ChatMessage {

@@ -1,5 +1,5 @@
-import { ChatMessage, GameAction } from '../interfaces/game.interface.js';
+import { ChatMessage, GameAction, EnvironmentSetting } from '../interfaces/game.interface.js';
 
 export interface AIAdapter {
-    generateNarrative(history: ChatMessage[]): Promise<GameAction>;
+    generateNarrative(history: ChatMessage[], environment?: EnvironmentSetting): Promise<GameAction>;
 }

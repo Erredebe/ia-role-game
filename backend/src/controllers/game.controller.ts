@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+﻿import { Request, Response } from 'express';
 import { LMStudioService } from '../services/lmstudio.service.js';
 import { StorageService } from '../services/storage.service.js';
 import { GameState, ChatMessage } from '../interfaces/game.interface.js';
@@ -7,8 +7,17 @@ import { v4 as uuidv4 } from 'uuid';
 const aiService = new LMStudioService();
 const storageService = new StorageService();
 
+const normalizeEnvironment = (environment: any) => {
+    if (!environment) return undefined;
+    if (typeof environment === 'string') {
+        return { id: environment, name: environment, description: '' };
+    }
+    return environment;
+};
+
 export const createNewGame = async (req: Request, res: Response) => {
-    const { character } = req.body;
+    const { character, environment } = req.body;
+    const resolvedEnvironment = normalizeEnvironment(environment);
     
     const initialState: GameState = {
         character: {
@@ -21,19 +30,25 @@ export const createNewGame = async (req: Request, res: Response) => {
             stats: character.stats || { strength: 10, dexterity: 10, intelligence: 10 }
         },
         location: 'El inicio de tu viaje',
-        narrativeHistory: []
+        narrativeHistory: [],
+        environment: resolvedEnvironment
     };
 
     const sessionId = uuidv4();
     
     // Generate initial narrative
+    const environmentText = resolvedEnvironment
+        ? `Ambientacion elegida: ${resolvedEnvironment.name}${resolvedEnvironment.description ? `. ${resolvedEnvironment.description}` : ''}.`
+        : 'Ambientacion generica.';
+
     const greetingMsg: ChatMessage = { 
         role: 'system', 
         content: `El jugador ha creado un personaje: ${character.name}, un ${character.class}. 
-        Comienza la aventura narrando su llegada al mundo o el inicio de su misión.` 
+        ${environmentText}
+        Comienza la aventura narrando su llegada al mundo o el inicio de su mision.` 
     };
     
-    const result = await aiService.generateNarrative([greetingMsg]);
+    const result = await aiService.generateNarrative([greetingMsg], resolvedEnvironment);
     initialState.narrativeHistory.push({ role: 'assistant', content: result.description });
     
     await storageService.saveGame(sessionId, initialState);
@@ -69,7 +84,7 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
     state.narrativeHistory.push(userMessage);
 
     // Call AI
-    const result = await aiService.generateNarrative(state.narrativeHistory);
+    const result = await aiService.generateNarrative(state.narrativeHistory, state.environment);
 
     // Update state if AI recommended changes
     let hpLog = '';
@@ -113,3 +128,4 @@ export const resetGame = async (req: Request, res: Response) => {
     // For now simple reload or delete? Let's just return 400 as it's handled differently now
     res.status(400).json({ message: 'Use Create New Game instead' });
 };
+

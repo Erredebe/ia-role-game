@@ -314,5 +314,122 @@
       }
     ],
     "updatedAt": "2026-01-08T08:42:13.472Z"
+  },
+  "b4da706d-6876-4f93-93be-ee51c4cd65a2": {
+    "character": {
+      "name": "aLBERTO",
+      "class": "Picaro",
+      "hp": 90,
+      "maxHp": 90,
+      "mana": 30,
+      "maxMana": 30,
+      "stats": {
+        "strength": 15,
+        "dexterity": 14,
+        "intelligence": 11,
+        "luck": 7
+      },
+      "inventory": [
+        "Dagas gemelas",
+        "Bomba de humo"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Alberto, un picaro audaz y experimentado, se encuentra en una taberna bulliciosa en el corazón de una ciudad costera realista. El ambiente está lleno de olores y sonidos auténticos: el humo del fuego de la chimenea, las conversaciones animadas de los lugareños, y el aroma a cerveza y pescado fresco. La misión de Alberto es obtener un documento vital que ha sido robado por una organización criminal local. Se dice que el documento contiene información sobre los recursos naturales del área y podría cambiar el equilibrio de poder en la región."
+      }
+    ],
+    "environment": {
+      "id": "realistic",
+      "name": "Realista",
+      "description": "Sin magia, decisiones humanas y consecuencias reales.",
+      "icon": "R"
+    },
+    "updatedAt": "2026-01-08T08:58:28.563Z"
+  },
+  "52f2f2a3-3fbc-4bb9-945b-77e71f48b05b": {
+    "character": {
+      "name": "aLBERTO",
+      "class": "Picaro",
+      "hp": 80,
+      "maxHp": 90,
+      "mana": 30,
+      "maxMana": 30,
+      "stats": {
+        "strength": 15,
+        "dexterity": 14,
+        "intelligence": 11,
+        "luck": 7
+      },
+      "inventory": [
+        "Dagas gemelas",
+        "Bomba de humo",
+        "daga"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Alberto se encuentra en una posada en un pueblo realista, bebiendo una copa de vino y escuchando las conversaciones sobre el comercio local. Un anciano le acaba de dar una misión importante: robar un objeto valioso que está guardado en la casa del alcalde."
+      },
+      {
+        "role": "user",
+        "content": "por que tengo unas dagas?"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto se encuentra en una posada en un pueblo realista, bebiendo una copa de vino y escuchando las conversaciones sobre el comercio local. Un anciano le acaba de dar una misión importante: robar un objeto valioso que está guardado en la casa del alcalde. Las dagas que tienes son para protegerte durante la misión."
+      },
+      {
+        "role": "user",
+        "content": "empujo al anciano"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto se encuentra en una posada en un pueblo realista, bebiendo una copa de vino y escuchando las conversaciones sobre el comercio local. Un anciano le acaba de dar una misión importante: robar un objeto valioso que está guardado en la casa del alcalde. Las dagas que tienes son para protegerte durante la misión."
+      },
+      {
+        "role": "user",
+        "content": "empujo al anciano"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, con las manos temblorosas y el corazón latiendo a mil por hora, empuja al anciano hacia atrás.\n\n--- (-10 HP)"
+      },
+      {
+        "role": "user",
+        "content": "que más?"
+      },
+      {
+        "role": "assistant",
+        "content": "undefined"
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "Hola! ¿En qué puedo ayudarte hoy?"
+      },
+      {
+        "role": "user",
+        "content": "eing"
+      },
+      {
+        "role": "assistant",
+        "content": "¿Qué significa \"eing\"? Si estás buscando información o ayuda con algún tema específico, por favor proporciona más detalles para que pueda asistirte mejor."
+      }
+    ],
+    "environment": {
+      "id": "realistic",
+      "name": "Realista",
+      "description": "Sin magia, decisiones humanas y consecuencias reales.",
+      "icon": "R"
+    },
+    "updatedAt": "2026-01-08T09:00:05.970Z"
   }
 }

@@ -1,8 +1,8 @@
-<div class="creation-container">
+﻿<div class="creation-container">
   <div class="creation-layout glass-card">
     <header class="creation-header">
-      <h1>Crea tu Héroe</h1>
-      <p>Define tu destino en este mundo de fantasía</p>
+      <h1>Crea tu Heroe</h1>
+      <p>Define tu destino en este mundo</p>
     </header>
 
     <div class="main-steps">
@@ -28,6 +28,22 @@
             </div>
           </div>
         </div>
+
+        <div class="environment-selection">
+          <label>Tipo de Ambiente</label>
+          <div class="environment-grid">
+            <div class="environment-card" 
+                 *ngFor="let env of environments" 
+                 [class.active]="selectedEnvironmentId === env.id"
+                 (click)="selectedEnvironmentId = env.id">
+              <span class="environment-icon">{{ env.icon }}</span>
+              <div class="environment-info">
+                <h4>{{ env.name }}</h4>
+                <p>{{ env.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Step 2: Stats & Preview -->
@@ -38,12 +54,14 @@
           </div>
           <h3>{{ name || '???' }}</h3>
           <p class="class-badge">{{ currentClass.name }}</p>
+          <p class="environment-badge">{{ currentEnvironment.name }}</p>
+          <p class="environment-desc">{{ currentEnvironment.description }}</p>
         </div>
 
         <div class="stats-card glass-card">
           <div class="stats-header">
             <h3>Atributos</h3>
-            <button (click)="rollStats()" [disabled]="isRolling">🎲 LANZAR DADOS</button>
+            <button (click)="rollStats()" [disabled]="isRolling">LANZAR DADOS</button>
           </div>
           
           <div class="stats-grid">
