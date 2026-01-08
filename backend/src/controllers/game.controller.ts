@@ -52,6 +52,16 @@ export const createNewGame = async (req: Request, res: Response) => {
     
     const result = await aiService.generateNarrative([greetingMsg], resolvedEnvironment);
     initialState.narrativeHistory.push({ role: 'assistant', content: result.description });
+
+    const environmentPrompt = resolvedEnvironment
+        ? `Ambientacion: ${resolvedEnvironment.name}${resolvedEnvironment.description ? `. ${resolvedEnvironment.description}` : ''}.`
+        : 'Ambientacion generica.';
+    const characterPrompt = `Personaje: ${character.name}, ${character.class}.`;
+    const imagePrompt = `${environmentPrompt} ${characterPrompt} Inicio de la aventura. ${initialState.narrativeSummary}`;
+    const environmentImage = await aiService.generateEnvironmentImage(imagePrompt);
+    if (environmentImage) {
+        initialState.environmentImage = environmentImage;
+    }
     
     await storageService.saveGame(sessionId, initialState);
 

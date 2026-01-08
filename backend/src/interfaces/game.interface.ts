@@ -3,6 +3,7 @@ export interface GameState {
     location: string;
     narrativeHistory: ChatMessage[];
     environment?: EnvironmentSetting;
+    environmentImage?: EnvironmentImage;
     narrativeSummary: string; // Resumen acumulativo de la historia
 }
 
@@ -29,6 +30,12 @@ export interface EnvironmentSetting {
     id: string;
     name: string;
     description: string;
+}
+
+export interface EnvironmentImage {
+    url?: string;
+    base64?: string;
+    prompt: string;
 }
 
 export interface ChatMessage {
