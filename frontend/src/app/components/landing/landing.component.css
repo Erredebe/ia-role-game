@@ -17,35 +17,35 @@
 .hero h1 {
   font-size: 4rem;
   margin-bottom: 1rem;
-  background: linear-gradient(to right, var(--neon-cyan), var(--neon-purple));
+  background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+  filter: drop-shadow(0 0 10px var(--accent-glow));
 }
 
 .hero p {
   font-size: 1.2rem;
-  color: var(--text-dim);
+  color: var(--text-muted);
   margin-bottom: 2.5rem;
 }
 
 .primary-btn {
-  background: var(--neon-cyan);
-  color: #000;
+  background: var(--accent-primary);
+  color: var(--bg-void);
   border: none;
   padding: 1.2rem 3rem;
   font-size: 1.5rem;
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px var(--accent-glow);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .primary-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+  box-shadow: 0 0 40px var(--accent-glow);
 }
 
 .saves-section {
@@ -55,7 +55,7 @@
 
 .saves-section h2 {
   margin-bottom: 1.5rem;
-  color: var(--neon-purple);
+  color: var(--accent-secondary);
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -75,8 +75,8 @@
 }
 
 .save-card:hover {
-  border-color: var(--neon-cyan);
-  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-primary);
+  background: var(--bg-panel-strong);
   transform: translateX(10px);
 }
 

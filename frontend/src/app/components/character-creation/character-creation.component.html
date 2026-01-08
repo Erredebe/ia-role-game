@@ -72,7 +72,7 @@
               <div class="environment-card" 
                    *ngFor="let env of environments" 
                    [class.active]="selectedEnvironmentId === env.id"
-                   (click)="selectedEnvironmentId = env.id">
+                   (click)="selectEnvironment(env.id)">
                 <span class="environment-icon">{{ env.icon }}</span>
                 <div class="environment-info">
                   <h4>{{ env.name }}</h4>

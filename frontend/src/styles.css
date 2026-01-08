@@ -1,27 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;600;700&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
 
 :root {
-  --bg-void: #0a0f14;
-  --bg-void-2: #0b1318;
-  --bg-panel: #121b23;
-  --bg-panel-strong: #0f171f;
-  --accent-cyan: #22d3ee;
-  --accent-amber: #f59e0b;
-  --accent-lime: #a3e635;
-  --accent-purple: #bc13fe;
+  /* Default (Fantasy) */
+  --bg-void: #0a0612;
+  --bg-void-2: #120a1f;
+  --bg-panel: #1a102e;
+  --bg-panel-strong: #140d24;
+  --accent-primary: #8b5cf6; /* Magic Purple */
+  --accent-secondary: #fcd34d; /* Gold */
+  --accent-glow: rgba(139, 92, 246, 0.4);
   
-  --neon-cyan: var(--accent-cyan);
-  --neon-purple: var(--accent-purple);
-  --neon-amber: var(--accent-amber);
+  --text-main: #e9e4f0;
+  --text-bright: #ffffff;
+  --text-muted: #a78bfa;
+  --text-dim: #6d5b98;
+  
+  --panel-border: rgba(139, 92, 246, 0.25);
+  --panel-glow: rgba(139, 92, 246, 0.2);
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Rajdhani', sans-serif;
+  
+  --body-bg-image: 
+    radial-gradient(1200px circle at 10% -20%, rgba(139, 92, 246, 0.15), transparent 55%),
+    radial-gradient(900px circle at 90% 10%, rgba(252, 211, 77, 0.08), transparent 45%),
+    linear-gradient(180deg, #120a1f 0%, #0a0612 100%);
+}
+
+/* Sci-Fi Theme */
+body.theme-sci-fi {
+  --bg-void: #050a10;
+  --bg-void-2: #0a1118;
+  --bg-panel: #0d1721;
+  --bg-panel-strong: #081016;
+  --accent-primary: #22d3ee; /* Neon Cyan */
+  --accent-secondary: #f59e0b; /* Amber */
+  --accent-glow: rgba(34, 211, 238, 0.4);
   
   --text-main: #e6f0f7;
-  --text-bright: #ffffff;
   --text-muted: #98a7b6;
   --text-dim: #718096;
   
-  --panel-border: rgba(34, 211, 238, 0.18);
+  --panel-border: rgba(34, 211, 238, 0.2);
   --panel-glow: rgba(34, 211, 238, 0.25);
-  --shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  
+  --body-bg-image: 
+    radial-gradient(1200px circle at 10% -20%, rgba(34, 211, 238, 0.15), transparent 55%),
+    radial-gradient(900px circle at 90% 10%, rgba(245, 158, 11, 0.1), transparent 45%),
+    linear-gradient(180deg, #0a1118 0%, #050a10 100%);
+}
+
+/* Realistic Theme */
+body.theme-realistic {
+  --bg-void: #1a1a1a;
+  --bg-void-2: #242424;
+  --bg-panel: #2d2d2d;
+  --bg-panel-strong: #222222;
+  --accent-primary: #6366f1; /* Steel Blue */
+  --accent-secondary: #94a3b8; /* Slate */
+  --accent-glow: rgba(99, 102, 241, 0.2);
+  
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --panel-glow: rgba(0, 0, 0, 0);
+  
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --body-bg-image: 
+    linear-gradient(180deg, #242424 0%, #1a1a1a 100%);
+}
+
+/* Contemporary Theme */
+body.theme-contemporary {
+  --bg-void: #0f172a;
+  --bg-void-2: #1e293b;
+  --bg-panel: #ffffff;
+  --bg-panel-strong: #f8fafc;
+  --accent-primary: #2563eb; /* Corporate Blue */
+  --accent-secondary: #64748b;
+  --accent-glow: rgba(37, 99, 235, 0.1);
+  
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  
+  --panel-border: rgba(37, 99, 235, 0.1);
+  --panel-glow: rgba(0, 0, 0, 0.05);
+  
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --body-bg-image: 
+    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 40%),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Post-Apocalyptic Theme */
+body.theme-post-apocalyptic {
+  --bg-void: #1c1917; /* Dark Earth */
+  --bg-void-2: #292524;
+  --bg-panel: #333333;
+  --bg-panel-strong: #1c1917;
+  --accent-primary: #ea580c; /* Rust Orange */
+  --accent-secondary: #a3e635; /* Toxix Lime */
+  --accent-glow: rgba(234, 88, 12, 0.3);
+  
+  --text-main: #d6d3d1;
+  --text-muted: #a8a29e;
+  --text-dim: #78716c;
+  
+  --panel-border: rgba(234, 88, 12, 0.2);
+  --panel-glow: rgba(163, 230, 53, 0.1);
+  
+  --font-heading: 'Share Tech Mono', monospace;
+  --font-body: 'Share Tech Mono', monospace;
+  
+  --body-bg-image: 
+    radial-gradient(circle at 50% 50%, rgba(234, 88, 12, 0.05) 0%, transparent 80%),
+    repeating-linear-gradient(0deg, rgba(163, 230, 53, 0.02) 0, rgba(163, 230, 53, 0.02) 1px, transparent 1px, transparent 2px),
+    linear-gradient(180deg, #292524 0%, #1c1917 100%);
 }
 
 html,
@@ -32,15 +139,13 @@ body {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--bg-void);
-  background-image:
-    radial-gradient(1200px circle at 10% -20%, rgba(34, 211, 238, 0.15), transparent 55%),
-    radial-gradient(900px circle at 90% 10%, rgba(245, 158, 11, 0.12), transparent 45%),
-    linear-gradient(180deg, #0a1118 0%, #0a0f14 60%, #070b10 100%);
+  background-image: var(--body-bg-image);
   color: var(--text-main);
   min-height: 100%;
   position: relative;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 body::before {
@@ -48,9 +153,9 @@ body::before {
   position: fixed;
   inset: 0;
   background-image:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 3px),
-    repeating-linear-gradient(90deg, rgba(34, 211, 238, 0.06) 0, rgba(34, 211, 238, 0.06) 1px, transparent 1px, transparent 90px);
-  opacity: 0.35;
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, var(--panel-border) 0, var(--panel-border) 1px, transparent 1px, transparent 90px);
+  opacity: 0.2;
   pointer-events: none;
   mix-blend-mode: screen;
   z-index: 0;
@@ -60,7 +165,7 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.65) 75%);
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 75%);
   pointer-events: none;
   z-index: 0;
 }
@@ -68,24 +173,28 @@ body::after {
 h1, h2, h3 {
   margin: 0;
   font-weight: 700;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-heading);
   letter-spacing: 0.04em;
+  color: var(--accent-primary);
+  text-transform: uppercase;
 }
 
 .glass-card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, rgba(18, 27, 35, 0.92), rgba(9, 13, 18, 0.92));
+  background: linear-gradient(160deg, var(--bg-panel), var(--bg-panel-strong));
   border: 1px solid var(--panel-border);
   border-radius: 1rem;
   box-shadow: var(--shadow);
+  transition: all 0.5s ease;
 }
+
 
 .glass-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 45%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 45%);
   pointer-events: none;
 }
 

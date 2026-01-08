@@ -1,8 +1,10 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
+import { ThemeService } from '../../services/theme.service';
+
 
 interface CharacterClass {
   id: string;
@@ -27,7 +29,7 @@ interface EnvironmentOption {
   templateUrl: './character-creation.component.html',
   styleUrl: './character-creation.component.css'
 })
-export class CharacterCreationComponent {
+export class CharacterCreationComponent implements OnInit {
   name: string = '';
   selectedClassId: string = 'warrior';
   selectedEnvironmentId: string = 'fantasy';
@@ -37,19 +39,20 @@ export class CharacterCreationComponent {
   totalSteps: number = 2;
 
   classes: CharacterClass[] = [
-    { id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: 'W', baseHp: 120, baseMana: 20 },
-    { id: 'mage', name: 'Mago', description: 'Erudito de las artes arcanas y hechizos poderosos.', icon: 'M', baseHp: 80, baseMana: 100 },
-    { id: 'archer', name: 'Arquero', description: 'Experto en combate a distancia y agilidad.', icon: 'A', baseHp: 100, baseMana: 40 },
-    { id: 'rogue', name: 'Picaro', description: 'Sombrio y letal, experto en sigilo y dagas.', icon: 'R', baseHp: 90, baseMana: 30 }
+    { id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: '🛡️', baseHp: 120, baseMana: 20 },
+    { id: 'mage', name: 'Mago', description: 'Erudito de las artes arcanas y hechizos poderosos.', icon: '🪄', baseHp: 80, baseMana: 100 },
+    { id: 'archer', name: 'Arquero', description: 'Experto en combate a distancia y agilidad.', icon: '🏹', baseHp: 100, baseMana: 40 },
+    { id: 'rogue', name: 'Picaro', description: 'Sombrio y letal, experto en sigilo y dagas.', icon: '🗡️', baseHp: 90, baseMana: 30 }
   ];
 
   environments: EnvironmentOption[] = [
-    { id: 'fantasy', name: 'Fantasia', description: 'Reinos magicos, criaturas miticas y hechizos antiguos.', icon: 'F' },
-    { id: 'realistic', name: 'Realista', description: 'Sin magia, decisiones humanas y consecuencias reales.', icon: 'R' },
-    { id: 'contemporary', name: 'Contemporaneo', description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.', icon: 'C' },
-    { id: 'sci-fi', name: 'Ciencia Ficcion', description: 'Naves, IA y fronteras del espacio profundo.', icon: 'SF' },
-    { id: 'post-apocalyptic', name: 'Postapocaliptico', description: 'Ruinas, supervivencia y facciones emergentes.', icon: 'PA' }
+    { id: 'fantasy', name: 'Fantasia', description: 'Reinos magicos, criaturas miticas y hechizos antiguos.', icon: '🏰' },
+    { id: 'realistic', name: 'Realista', description: 'Sin magia, decisiones humanas y consecuencias reales.', icon: '⚖️' },
+    { id: 'contemporary', name: 'Contemporaneo', description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.', icon: '🏙️' },
+    { id: 'sci-fi', name: 'Ciencia Ficcion', description: 'Naves, IA y fronteras del espacio profundo.', icon: '🚀' },
+    { id: 'post-apocalyptic', name: 'Postapocaliptico', description: 'Ruinas, supervivencia y facciones emergentes.', icon: '☢️' }
   ];
+
 
   stats = {
     strength: 10,
@@ -60,7 +63,15 @@ export class CharacterCreationComponent {
 
   isRolling: boolean = false;
 
-  constructor(private gameService: GameService, public router: Router) {}
+  constructor(
+    private gameService: GameService, 
+    private themeService: ThemeService,
+    public router: Router
+  ) {}
+
+  ngOnInit() {
+    this.themeService.setTheme(this.selectedEnvironmentId);
+  }
 
   get currentClass() {
     return this.classes.find(c => c.id === this.selectedClassId)!;
@@ -68,6 +79,11 @@ export class CharacterCreationComponent {
 
   get currentEnvironment() {
     return this.environments.find(env => env.id === this.selectedEnvironmentId)!;
+  }
+
+  selectEnvironment(envId: string) {
+    this.selectedEnvironmentId = envId;
+    this.themeService.setTheme(envId);
   }
 
   get avatarUrl() {
