@@ -108,13 +108,48 @@ export const getGameState = async (req: Request, res: Response) => {
 
 export const handlePlayerAction = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { action } = req.body;
+    const { action, type, systemAction, targetId } = req.body; // type: 'narrative' | 'system'
     
     if (!id) return res.status(400).json({ error: 'Session ID is required' });
 
     const state = await storageService.loadGame(id);
     if (!state) return res.status(404).json({ error: 'Game not found' });
 
+    // Handle System Actions (Deterministic)
+    if (type === 'system') {
+        const stateHelper = await import('../utils/state.helper.js');
+        let result: { newState: GameState, logs: string[], success: boolean } | null = null;
+        let actionDesc = '';
+
+        if (systemAction === 'equip') {
+            result = stateHelper.equipItem(state, targetId);
+            actionDesc = `Equipar item`;
+        } else if (systemAction === 'unequip') {
+            result = stateHelper.unequipItem(state, targetId); // targetId here is the slot name
+            actionDesc = `Desequipar item`;
+        }
+
+        if (result && result.success) {
+            // Apply updates
+            state.character = result.newState.character;
+            
+            // Add system log to history so AI knows what happened next turn
+            const systemMsg = `[SISTEMA]: ${result.logs.join('. ')}`;
+            state.narrativeHistory.push({ role: 'system', content: systemMsg });
+            
+            await storageService.saveGame(id, state);
+
+            return res.json({
+                narrative: result.logs.join('\n'), // Return the log as immediate feedback
+                suggestedActions: [], // No new suggestions from system action
+                gameState: state
+            });
+        } else {
+            return res.status(400).json({ error: result ? result.logs.join(', ') : 'Accion invalida' });
+        }
+    }
+
+    // Handle Narrative Actions (AI)
     // Add player action to history
     const userMessage: ChatMessage = { role: 'user', content: action };
     state.narrativeHistory.push(userMessage);
@@ -127,7 +162,6 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
         state.narrativeSummary = result.updatedSummary;
     }
 
-    // Update state if AI recommended changes
     // Update state if AI recommended changes
     const { newState, logs } = await import('../utils/state.helper.js').then(m => m.applyStateUpdate(state, result.updatedState || {}));
     

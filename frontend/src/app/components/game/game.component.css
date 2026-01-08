@@ -399,18 +399,52 @@ input:focus {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.equipment-section h3 {
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.section-header:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0.5rem;
+}
+
+.equipment-section h3,
+.inventory h3 {
   font-size: 0.95rem;
-  margin-bottom: 1rem;
+  margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   color: var(--accent-secondary);
+}
+
+.collapse-btn {
+  background: rgba(34, 211, 238, 0.15);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: var(--accent-cyan);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 30px;
+}
+
+.collapse-btn:hover {
+  background: rgba(34, 211, 238, 0.25);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
 }
 
 .equipment-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.8rem;
+  margin-top: 1rem;
 }
 
 .eq-slot {
@@ -453,6 +487,7 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  margin-top: 1rem;
 }
 
 .inv-item {
@@ -505,4 +540,28 @@ input:focus {
   text-align: center;
   font-size: 0.8rem;
   padding: 1rem;
+}
+
+.unequip-btn {
+  margin-left: 0.5rem;
+  background: rgba(244, 63, 94, 0.2);
+  border: 1px solid rgba(244, 63, 94, 0.5);
+  color: #f43f5e;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.unequip-btn:hover {
+  background: rgba(244, 63, 94, 0.4);
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.3);
 }

@@ -2260,5 +2260,219 @@
     },
     "narrativeSummary": "Testing equipment.",
     "updatedAt": "2026-01-08T14:51:49.617Z"
+  },
+  "49dbffc0-f463-4e28-8166-aa781a49ba91": {
+    "character": {
+      "name": "alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "avatarSeed": "fjrpce0i",
+      "backstory": "ex drogadicto con fuerte impulso a trolear",
+      "stats": {
+        "strength": 13,
+        "dexterity": 8,
+        "intelligence": 8,
+        "luck": 6
+      },
+      "inventory": [
+        {
+          "id": "staff_1",
+          "name": "Baston de Aprendiz",
+          "type": "weapon",
+          "description": "Canaliza magia basica.",
+          "stats": {
+            "intelligence": 1
+          }
+        },
+        {
+          "id": "potion_mana",
+          "name": "Pocion de Mana",
+          "type": "consumable",
+          "description": "Restaura mana."
+        }
+      ],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: alberto, un Mago. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        Trasfondo del personaje: ex drogadicto con fuerte impulso a trolear.\n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago ex-drogadicto con una gran resistencia y habilidades mágicas descomunales, ha decidido embarcarse en una misión épica en el mundo fantástico de la magia. Su objetivo inicial es encontrar un antiguo hechizo que le permita vencer su adicción al poder del malvado Dragón de Obsidiana, que ha sumido a los Reinos Mágicos en una era oscura."
+      }
+    ],
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "icon": "🏰",
+      "customRules": ""
+    },
+    "narrativeSummary": "Alberto, un mago ex-drogadicto, se encuentra en el mundo fantástico de la magia. Lleva una varita de cristal y pergaminos antiguos en su inventario pero aún no ha equipado nada.",
+    "updatedAt": "2026-01-08T14:56:07.731Z"
+  },
+  "1f609ac9-326c-4e47-9c79-6acf56eb9eb2": {
+    "character": {
+      "name": "Thorin",
+      "class": "Guerrero",
+      "hp": 120,
+      "maxHp": 120,
+      "mana": 20,
+      "maxMana": 20,
+      "avatarSeed": "j5sf7jd4",
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "luck": 10
+      },
+      "inventory": [],
+      "equipment": {
+        "mainHand": {
+          "id": "sword_1",
+          "name": "Espada de Hierro",
+          "type": "weapon",
+          "description": "Una espada confiable.",
+          "stats": {
+            "strength": 1
+          }
+        },
+        "body": {
+          "id": "shield_1",
+          "name": "Escudo de Madera",
+          "type": "armor",
+          "description": "Protege contra ataques basicos."
+        }
+      }
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: Thorin, un Guerrero. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "Thorin, un guerrero valiente y experimentado, se encuentra en la puerta del Reino Encantado, un lugar legendario repleto de magia y criaturas místicas. Se dice que el reino esconde una fuente de poder inimaginable, protegida por enigmas y monstruos terribles. Tu misión es explorar el reino, superar sus desafíos y encontrar la fuente de poder para tu pueblo."
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Espada de Hierro en mainHand"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Escudo de Madera en body"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Espada de Hierro"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Espada de Hierro en mainHand"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Espada de Hierro"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Escudo de Madera"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Espada de Hierro en mainHand"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Escudo de Madera en body"
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "undefined"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Escudo de Madera"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Espada de Hierro"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Espada de Hierro en mainHand"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Escudo de Madera en body"
+      }
+    ],
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "icon": "🏰",
+      "customRules": ""
+    },
+    "narrativeSummary": "Thorin, un guerrero valiente, llega al Reino Encantado con la misión de encontrar una fuente de poder mística para su pueblo. Equipado con una espada mágica y una poción de curación en su inventario, se dispone a explorar el reino lleno de magia y criaturas míticas.",
+    "updatedAt": "2026-01-08T22:30:49.730Z"
+  },
+  "b45a5e15-3b40-4671-86bf-61dc5274fe56": {
+    "character": {
+      "name": "Alberto",
+      "class": "Guerrero",
+      "hp": 120,
+      "maxHp": 120,
+      "mana": 20,
+      "maxMana": 20,
+      "avatarSeed": "aij3dlqa",
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "luck": 10
+      },
+      "inventory": [],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: Alberto, un Guerrero. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un valiente Guerrero, ha llegado al Reino Encantado, una tierra llena de magia y peligros inimaginables. Después de atravesar los portales encantados, Alberto se encuentra en una plaza de armas bulliciosa, donde comerciantes y mercenarios discuten sus próximos pasos. Un anciano le ofrece su ayuda: busca una reliquia perdida capaz de detener el crecimiento del malvado Imperio de las Sombras, que amenaza con oscurecer todo el reino."
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un valiente Guerrero, ha llegado al Reino Encantado, una tierra llena de magia y peligros inimaginables. Después de atravesar los portales encantados, Alberto se encuentra en una plaza de armas bulliciosa, donde comerciantes y mercenarios discuten sus próximos pasos. Un anciano le ofrece su ayuda: busca una reliquia perdida capaz de detener el crecimiento del malvado Imperio de las Sombras, que amenaza con oscurecer todo el reino.\n\n--- [SISTEMA]\nHP: +10 (120/120)\nInventario actualizado: Vacio"
+      }
+    ],
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "icon": "🏰",
+      "customRules": ""
+    },
+    "narrativeSummary": "Alberto ha llegado al Reino Encantado y está listo para aceptar una misión del anciano que lo ayuda a buscar una reliquia perdida.",
+    "updatedAt": "2026-01-08T22:28:39.586Z"
   }
 }

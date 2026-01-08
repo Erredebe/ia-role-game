@@ -75,4 +75,28 @@ export class GameService {
       this.loading.set(false);
     }
   }
+
+  async performSystemAction(systemAction: 'equip' | 'unequip', targetId: string) {
+    const id = this.currentId();
+    if (!id) throw new Error('No active session');
+
+    this.loading.set(true);
+    try {
+      const payload = {
+        action: '', // Not used for system actions but keeping schema
+        type: 'system',
+        systemAction,
+        targetId
+      };
+      
+      const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload));
+      this.state.set(response.gameState);
+      return response;
+    } catch (error: any) {
+        console.error('Error performing system action', error);
+        throw error;
+    } finally {
+        this.loading.set(false);
+    }
+  }
 }

@@ -86,3 +86,95 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
 
     return { newState, logs };
 };
+
+/**
+ * Deterministically equips an item from inventory.
+ * Automatically handles swapping if slot is occupied.
+ */
+export const equipItem = (state: GameState, itemId: string): { newState: GameState, logs: string[], success: boolean } => {
+    const newState = JSON.parse(JSON.stringify(state));
+    const logs: string[] = [];
+    
+    // Find item in inventory
+    const inventoryIndex = newState.character.inventory.findIndex((i: Item) => i.id === itemId);
+    if (inventoryIndex === -1) {
+        return { newState, logs: ['Item no encontrado en inventario.'], success: false };
+    }
+
+    const itemToEquip = newState.character.inventory[inventoryIndex];
+    let slot: keyof Equipment | undefined;
+
+    // Determine slot based on type
+    switch (itemToEquip.type) {
+        case 'weapon':
+            // Logic: if mainHand empty, use it. If full, check offHand? For now default to mainHand.
+            // Future: check if 2-handed, etc.
+            slot = 'mainHand'; 
+            break;
+        case 'armor':
+            // Simplification: armor type usually implies body/head. 
+            // We might need 'armorType' property or heuristic name check. 
+            // For now, let's assume 'armor' = body unless name says 'Casco', 'Yelmo', 'Hat'
+            if (itemToEquip.name.toLowerCase().match(/(casco|yelmo|sombrero|gorro|head|helmet)/)) {
+                slot = 'head';
+            } else {
+                slot = 'body';
+            }
+            break;
+        case 'accessory':
+            // Fill accessory1 first, then 2.
+            if (!newState.character.equipment.accessory1) slot = 'accessory1';
+            else if (!newState.character.equipment.accessory2) slot = 'accessory2';
+            else slot = 'accessory1'; // Swap 1 if both full
+            break;
+        default:
+            logs.push(`No se puede equipar items de tipo ${itemToEquip.type}`);
+            return { newState, logs, success: false };
+    }
+
+    if (!slot) {
+         logs.push('No se pudo determinar el slot para este item.');
+         return { newState, logs, success: false };
+    }
+
+    // Check if something is in the slot
+    const currentEquipped = newState.character.equipment[slot];
+
+    // 1. Remove item from inventory
+    newState.character.inventory.splice(inventoryIndex, 1);
+
+    // 2. If slot has item, move it to inventory
+    if (currentEquipped) {
+        newState.character.inventory.push(currentEquipped);
+        logs.push(`Has desequipado: ${currentEquipped.name}`);
+    }
+
+    // 3. Equip new item
+    newState.character.equipment[slot] = itemToEquip;
+    logs.push(`Has equipado: ${itemToEquip.name} en ${slot}`);
+
+    return { newState, logs, success: true };
+};
+
+/**
+ * Deterministically unequips an item from a slot.
+ */
+export const unequipItem = (state: GameState, slot: keyof Equipment): { newState: GameState, logs: string[], success: boolean } => {
+    const newState = JSON.parse(JSON.stringify(state));
+    const logs: string[] = [];
+
+    const item = newState.character.equipment[slot];
+    if (!item) {
+        return { newState, logs: ['No hay nada equipado en ese slot.'], success: false };
+    }
+
+    // Move to inventory
+    newState.character.inventory.push(item);
+    
+    // Clear slot
+    newState.character.equipment[slot] = undefined; // or delete key
+
+    logs.push(`Has desequipado: ${item.name}`);
+
+    return { newState, logs, success: true };
+};

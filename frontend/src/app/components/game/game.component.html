@@ -50,12 +50,18 @@
       </div>
 
       <div class="equipment-section">
-        <h3>Equipo</h3>
-        <div class="equipment-grid">
+        <div class="section-header" (click)="toggleEquipment()">
+          <h3>Equipo</h3>
+          <button class="collapse-btn" [class.collapsed]="equipmentCollapsed">
+            {{ equipmentCollapsed ? '▼' : '▲' }}
+          </button>
+        </div>
+        <div class="equipment-grid" *ngIf="!equipmentCollapsed">
           <div class="eq-slot" *ngFor="let slot of getEquipmentList()">
             <div class="slot-label">{{ slot.slot }}</div>
             <div class="slot-item" [class.empty]="!slot.item">
               <span *ngIf="slot.item">{{ slot.item.name }}</span>
+              <button class="unequip-btn" *ngIf="slot.item" (click)="unequipItem(slot.key)" title="Desequipar">×</button>
               <span *ngIf="!slot.item" class="placeholder">-</span>
             </div>
           </div>
@@ -63,8 +69,13 @@
       </div>
 
       <div class="inventory">
-        <h3>Mochila</h3>
-        <div class="inventory-list">
+        <div class="section-header" (click)="toggleInventory()">
+          <h3>Mochila</h3>
+          <button class="collapse-btn" [class.collapsed]="inventoryCollapsed">
+            {{ inventoryCollapsed ? '▼' : '▲' }}
+          </button>
+        </div>
+        <div class="inventory-list" *ngIf="!inventoryCollapsed">
           <div class="inv-item" *ngFor="let item of state()?.character?.inventory">
             <div class="item-info">
               <span class="item-name">{{ item.name }}</span>

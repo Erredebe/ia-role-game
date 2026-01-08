@@ -16,6 +16,8 @@ export class GameComponent implements OnInit {
   
   userInput: string = '';
   suggestedActions: string[] = [];
+  equipmentCollapsed: boolean = false;
+  inventoryCollapsed: boolean = false;
 
   constructor(
     public gameService: GameService,
@@ -62,15 +64,24 @@ export class GameComponent implements OnInit {
       return ['weapon', 'armor', 'accessory'].includes(item.type);
   }
 
-  equipItem(item: any) {
-      if (!this.gameService.state()) return;
-      // En un caso real, esto llamaría al backend. 
-      // Por ahora simularlo en frontend es complejo sin mutar el signal directamente de forma hacky 
-      // o añadir una acción 'equip' al backend.
-      // Vamos a enviar un comando de texto al juego para que la IA lo gestione O 
-      // implementar la lógica localmente si queremos actualización inmediata UI. 
-      // Para este prototipo, enviaremos la acción narrativa.
-      this.sendAction(`Me equipo ${item.name}`);
+  async equipItem(item: any) {
+      if (!this.gameService.state() || this.loading()) return;
+      await this.gameService.performSystemAction('equip', item.id);
+      this.scrollToBottom();
+  }
+
+  async unequipItem(slot: string) {
+      if (!this.gameService.state() || this.loading()) return;
+      await this.gameService.performSystemAction('unequip', slot);
+      this.scrollToBottom();
+  }
+
+  toggleEquipment() {
+      this.equipmentCollapsed = !this.equipmentCollapsed;
+  }
+
+  toggleInventory() {
+      this.inventoryCollapsed = !this.inventoryCollapsed;
   }
 
   async ngOnInit() {
