@@ -27,10 +27,10 @@ export class LMStudioService implements AIAdapter {
 
         try {
             const response = await axios.post(`${this.baseUrl}/chat/completions`, {
-                model: 'local-model',
+                model: 'dolphin3.0-llama3.1-8b',
                 messages: [systemPrompt, ...history],
                 temperature: 0.7,
-                response_format: { type: 'json_object' }
+                // response_format: { type: 'json_object' }
             });
 
             const content = response.data.choices[0].message.content;
