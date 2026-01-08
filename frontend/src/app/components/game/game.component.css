@@ -18,7 +18,7 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  background: linear-gradient(90deg, rgba(34, 211, 238, 0.08), rgba(245, 158, 11, 0.05));
+  background: linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.12), rgba(var(--accent-secondary-rgb), 0.08));
   border: 1px solid var(--panel-border);
 }
 
@@ -40,20 +40,20 @@
   font-size: 1.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  text-shadow: 0 0 18px rgba(34, 211, 238, 0.3);
+  text-shadow: 0 0 18px var(--accent-glow);
 }
 
 .location {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(8, 12, 16, 0.65);
+  background: var(--surface-soft);
   padding: 0.45rem 0.9rem;
   border-radius: 0.75rem;
   font-size: 0.85rem;
-  border: 1px solid rgba(34, 211, 238, 0.4);
-  color: var(--accent-cyan);
-  box-shadow: inset 0 0 12px rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.4);
+  color: var(--accent-primary);
+  box-shadow: inset 0 0 12px rgba(var(--accent-primary-rgb), 0.08);
 }
 
 .content-grid {
@@ -94,10 +94,10 @@
   height: 132px;
   margin: 0 auto 1rem;
   border-radius: 50%;
-  border: 2px solid rgba(34, 211, 238, 0.6);
-  box-shadow: 0 0 30px rgba(34, 211, 238, 0.35);
+  border: 2px solid rgba(var(--accent-primary-rgb), 0.6);
+  box-shadow: 0 0 30px var(--accent-glow);
   padding: 6px;
-  background: radial-gradient(circle at 30% 30%, rgba(34, 211, 238, 0.15), rgba(10, 15, 20, 0.9));
+  background: radial-gradient(circle at 30% 30%, rgba(var(--accent-primary-rgb), 0.18), var(--surface-solid));
   position: relative;
 }
 
@@ -106,7 +106,7 @@
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 1px solid rgba(163, 230, 53, 0.35);
+  border: 1px solid rgba(var(--accent-secondary-rgb), 0.35);
   opacity: 0.6;
   pointer-events: none;
 }
@@ -120,8 +120,8 @@
   margin-bottom: 1rem;
   padding: 0.7rem 0.9rem;
   border-radius: 0.75rem;
-  background: rgba(10, 15, 20, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
 }
 
 .stat-label {
@@ -136,7 +136,7 @@
 
 .progress-bg {
   height: 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-soft-strong);
   border-radius: 6px;
   overflow: hidden;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
@@ -163,7 +163,7 @@
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--accent-lime);
+  color: var(--accent-secondary);
 }
 
 .inventory ul {
@@ -176,11 +176,11 @@
 }
 
 .inventory li {
-  background: rgba(10, 15, 20, 0.75);
+  background: var(--surface-strong);
   padding: 0.5rem 0.7rem;
   border-radius: 0.65rem;
   font-size: 0.85rem;
-  border: 1px solid rgba(163, 230, 53, 0.25);
+  border: 1px solid rgba(var(--accent-secondary-rgb), 0.25);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -201,10 +201,10 @@
   flex-direction: column;
   gap: 1.5rem;
   min-height: 0;
-  background: linear-gradient(180deg, rgba(9, 14, 19, 0.8), rgba(11, 17, 23, 0.95));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, var(--surface-strong), var(--surface-solid));
+  border-bottom: 1px solid var(--border-soft);
   scrollbar-width: thin;
-  scrollbar-color: rgba(34, 211, 238, 0.4) rgba(12, 17, 23, 0.8);
+  scrollbar-color: rgba(var(--accent-primary-rgb), 0.4) var(--surface-solid);
 }
 
 .message {
@@ -221,18 +221,18 @@
   padding: 1rem 1.5rem;
   border-radius: 1rem;
   line-height: 1.5;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-soft);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
 }
 
 .user .bubble {
-  background: linear-gradient(180deg, rgba(9, 14, 19, 0.98), rgba(7, 10, 14, 0.95));
+  background: linear-gradient(180deg, var(--surface-solid), var(--surface-strong));
   color: var(--text-main);
-  border: 1px solid rgba(34, 211, 238, 0.45);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.45);
   border-bottom-right-radius: 0.4rem;
-  box-shadow: 0 0 18px rgba(34, 211, 238, 0.2);
+  box-shadow: 0 0 18px var(--accent-glow);
   letter-spacing: 0.02em;
 }
 
@@ -243,7 +243,7 @@
   left: 0;
   height: 2px;
   width: 100%;
-  background: linear-gradient(90deg, rgba(34, 211, 238, 0.9), rgba(163, 230, 53, 0.6));
+  background: linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.9), rgba(var(--accent-secondary-rgb), 0.6));
 }
 
 .user .bubble::after {
@@ -253,21 +253,21 @@
   top: 14px;
   width: 10px;
   height: 10px;
-  background: rgba(7, 10, 14, 0.95);
-  border: 1px solid rgba(34, 211, 238, 0.45);
+  background: var(--surface-solid);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.45);
   transform: rotate(45deg);
 }
 
 .assistant .bubble {
-  background: rgba(11, 17, 23, 0.92);
+  background: var(--surface-soft-strong);
   color: var(--text-main);
   border-bottom-left-radius: 0;
 }
 
 .chat-controls {
   padding: 1.5rem;
-  background: linear-gradient(90deg, rgba(34, 211, 238, 0.06), rgba(245, 158, 11, 0.05));
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.08), rgba(var(--accent-secondary-rgb), 0.06));
+  border-top: 1px solid var(--border-soft);
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -280,9 +280,9 @@
 }
 
 .suggestions button {
-  background: rgba(10, 16, 22, 0.7);
-  border: 1px solid rgba(34, 211, 238, 0.5);
-  color: var(--accent-cyan);
+  background: var(--surface-strong);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.5);
+  color: var(--accent-primary);
   padding: 0.45rem 1.1rem;
   border-radius: 0.6rem;
   font-size: 0.75rem;
@@ -293,8 +293,8 @@
 }
 
 .suggestions button:hover:not(:disabled) {
-  background: rgba(34, 211, 238, 0.2);
-  box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+  background: rgba(var(--accent-primary-rgb), 0.2);
+  box-shadow: 0 0 12px var(--accent-glow);
   transform: translateY(-1px);
 }
 
@@ -306,29 +306,29 @@
 
 input {
   flex: 1;
-  background: rgba(7, 11, 15, 0.9);
-  border: 1px solid rgba(34, 211, 238, 0.25);
+  background: var(--surface-solid);
+  border: 1px solid var(--border-strong);
   padding: 0.85rem 1.4rem;
   border-radius: 0.75rem;
   color: var(--text-main);
   outline: none;
   font-size: 1rem;
   letter-spacing: 0.03em;
-  box-shadow: inset 0 0 14px rgba(34, 211, 238, 0.08);
+  box-shadow: inset 0 0 14px rgba(var(--accent-primary-rgb), 0.08);
 }
 
 input::placeholder {
-  color: rgba(152, 167, 182, 0.8);
+  color: var(--text-muted);
 }
 
 input:focus {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 16px rgba(var(--accent-primary-rgb), 0.4);
 }
 
 .input-wrapper button {
-  background: linear-gradient(135deg, #22d3ee, #a3e635);
-  color: #0b1116;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: var(--accent-contrast);
   border: none;
   padding: 0.85rem 2.2rem;
   border-radius: 0.75rem;
@@ -336,7 +336,7 @@ input:focus {
   text-transform: uppercase;
   letter-spacing: 0.18em;
   cursor: pointer;
-  box-shadow: 0 12px 20px rgba(34, 211, 238, 0.25);
+  box-shadow: 0 12px 20px rgba(var(--accent-primary-rgb), 0.25);
 }
 
 .reset-btn {
@@ -396,7 +396,7 @@ input:focus {
 /* Equipment Styles */
 .equipment-section {
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .section-header {
@@ -410,7 +410,7 @@ input:focus {
 }
 
 .section-header:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface-soft);
   border-radius: 0.5rem;
 }
 
@@ -424,9 +424,9 @@ input:focus {
 }
 
 .collapse-btn {
-  background: rgba(34, 211, 238, 0.15);
-  border: 1px solid rgba(34, 211, 238, 0.3);
-  color: var(--accent-cyan);
+  background: rgba(var(--accent-primary-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.3);
+  color: var(--accent-primary);
   padding: 0.3rem 0.6rem;
   border-radius: 0.4rem;
   font-size: 0.7rem;
@@ -436,8 +436,8 @@ input:focus {
 }
 
 .collapse-btn:hover {
-  background: rgba(34, 211, 238, 0.25);
-  box-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+  background: rgba(var(--accent-primary-rgb), 0.25);
+  box-shadow: 0 0 8px rgba(var(--accent-primary-rgb), 0.3);
 }
 
 .equipment-grid {
@@ -459,8 +459,8 @@ input:focus {
 }
 
 .slot-item {
-  background: rgba(10, 16, 22, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--surface-strong);
+  border: 1px solid var(--border-soft);
   padding: 0.6rem;
   border-radius: 0.5rem;
   font-size: 0.8rem;
@@ -475,11 +475,11 @@ input:focus {
 
 .slot-item.empty {
   border-style: dashed;
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-soft);
 }
 
 .slot-item .placeholder {
-  color: rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
 }
 
 /* Inventory List Styles */
@@ -491,10 +491,10 @@ input:focus {
 }
 
 .inv-item {
-  background: rgba(10, 15, 20, 0.75);
+  background: var(--surface-strong);
   padding: 0.6rem 0.8rem;
   border-radius: 0.65rem;
-  border: 1px solid rgba(163, 230, 53, 0.25);
+  border: 1px solid rgba(var(--accent-secondary-rgb), 0.25);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -519,9 +519,9 @@ input:focus {
 }
 
 .equip-btn {
-  background: rgba(34, 211, 238, 0.15);
-  border: 1px solid rgba(34, 211, 238, 0.5);
-  color: var(--accent-cyan);
+  background: rgba(var(--accent-primary-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.5);
+  color: var(--accent-primary);
   padding: 0.3rem 0.6rem;
   border-radius: 0.4rem;
   font-size: 0.7rem;
@@ -531,7 +531,7 @@ input:focus {
 }
 
 .equip-btn:hover {
-  background: rgba(34, 211, 238, 0.3);
+  background: rgba(var(--accent-primary-rgb), 0.3);
 }
 
 .empty-msg {

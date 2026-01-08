@@ -2474,5 +2474,557 @@
     },
     "narrativeSummary": "Alberto ha llegado al Reino Encantado y está listo para aceptar una misión del anciano que lo ayuda a buscar una reliquia perdida.",
     "updatedAt": "2026-01-08T22:28:39.586Z"
+  },
+  "b579bcf8-ebce-4c14-b7fb-4a4891c50a05": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 110,
+      "maxMana": 110,
+      "avatarSeed": "jfruslpz",
+      "stats": {
+        "strength": 9,
+        "dexterity": 9,
+        "intelligence": 7,
+        "luck": 10
+      },
+      "inventory": [
+        {
+          "id": "staff_1",
+          "name": "Baston de Aprendiz",
+          "type": "weapon",
+          "description": "Canaliza magia basica.",
+          "stats": {
+            "intelligence": 1
+          }
+        },
+        {
+          "id": "potion_mana",
+          "name": "Pocion de Mana",
+          "type": "consumable",
+          "description": "Restaura mana."
+        }
+      ],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: Alberto, un Mago. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "En un reino mágico rodeado por montañas nevadas, Alberto, un joven mago de gran habilidad, ha sido llamado para cumplir con una misión crucial. La provincia de Eldoria está siendo asediada por criaturas mitológicas que amenazan la paz del reino. El Rey Mágico ha decidido confiar en el joven Alberto para investigar y poner fin a esta nueva plaga."
+      }
+    ],
+    "narrativeSummary": "Alberto, un mago experto en el uso de la varita de cristal y poseedor de pergaminos antiguos, se encuentra en el reino mágico de Galadriel, con la misión de investigar las criaturas que atacan Eldoria. Se dirige al bosque encantado cercano para buscar información.",
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "prompt": "Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.",
+      "classArchetypes": [
+        "Guerrero",
+        "Mago",
+        "Arquero",
+        "Picaro",
+        "Clerigo",
+        "Druida"
+      ],
+      "objectArchetypes": [
+        "espadas",
+        "arcos",
+        "armaduras",
+        "pergaminos",
+        "pociones",
+        "reliquias"
+      ],
+      "icon": "??",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-08T22:56:30.928Z"
+  },
+  "1b065ba7-673e-4d8c-a5d4-e0c61f5583c6": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 110,
+      "maxMana": 110,
+      "avatarSeed": "jfruslpz",
+      "stats": {
+        "strength": 9,
+        "dexterity": 9,
+        "intelligence": 7,
+        "luck": 10
+      },
+      "inventory": [
+        {
+          "id": "staff_1",
+          "name": "Baston de Aprendiz",
+          "type": "weapon",
+          "description": "Canaliza magia basica.",
+          "stats": {
+            "intelligence": 1
+          }
+        },
+        {
+          "id": "potion_mana",
+          "name": "Pocion de Mana",
+          "type": "consumable",
+          "description": "Restaura mana."
+        }
+      ],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: Alberto, un Mago. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago principiante pero con una gran curiosidad por los misterios del cosmos y las artes mágicas, se encuentra en la cuna del conocimiento: la Biblioteca de Eldoria, un lugar donde se dice que reposan los secretos más oscuros y poderosos de todo el mundo mágico. Su misión es encontrar el libro perdido del Hechizo Antiguo, una obra que podría otorgarle poderes inimaginables."
+      }
+    ],
+    "narrativeSummary": "Alberto ha llegado a la Biblioteca de Eldoria en busca del libro perdido del Hechizo Antiguo. Actualmente, su inventario contiene un Libro de Conjuros Básicos y una Poción de Salud Curativa. Su misión lo lleva a explorar el lugar en busca de pistas.",
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "prompt": "Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.",
+      "classArchetypes": [
+        "Guerrero",
+        "Mago",
+        "Arquero",
+        "Picaro",
+        "Clerigo",
+        "Druida"
+      ],
+      "objectArchetypes": [
+        "espadas",
+        "arcos",
+        "armaduras",
+        "pergaminos",
+        "pociones",
+        "reliquias"
+      ],
+      "icon": "??",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-08T22:56:37.029Z"
+  },
+  "55d4c870-87cb-462f-bb70-1ab80e17c507": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 110,
+      "maxMana": 110,
+      "avatarSeed": "jfruslpz",
+      "stats": {
+        "strength": 9,
+        "dexterity": 9,
+        "intelligence": 7,
+        "luck": 10
+      },
+      "inventory": [
+        {
+          "id": "potion_mana",
+          "name": "Pocion de Mana",
+          "type": "consumable",
+          "description": "Restaura mana."
+        }
+      ],
+      "equipment": {
+        "mainHand": {
+          "id": "staff_1",
+          "name": "Baston de Aprendiz",
+          "type": "weapon",
+          "description": "Canaliza magia basica.",
+          "stats": {
+            "intelligence": 1
+          }
+        }
+      }
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: Alberto, un Mago. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "En un reino olvidado por los dioses, Alberto, un joven mago ambicioso y dotado de una habilidad innata para la magia oscura, ha sido llamado a servir al oscuro Rey Zarathos. Su misión es recuperar el Pergamino de las Sombras, un artefacto perdido que le dará al rey poderes ilimitados sobre su ejército de sombras y asegurará su dominio sobre los reinos."
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Baston de Aprendiz en mainHand"
+      }
+    ],
+    "narrativeSummary": "Alberto, un mago oscuro al servicio del Rey Zarathos, se encuentra en una misión para recuperar el Pergamino de las Sombras. Su poder crece con cada acción oscura que realiza pero enfrenta la disminuciÃ³n de su vida y la posibilidad de perderse en la corrupciÃ³n de su varita. Sus opciones son explorar soledades en busca del artefacto, buscar aliados para derrocar al rey o intentar cambiar el curso de su destino.",
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "prompt": "Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.",
+      "classArchetypes": [
+        "Guerrero",
+        "Mago",
+        "Arquero",
+        "Picaro",
+        "Clerigo",
+        "Druida"
+      ],
+      "objectArchetypes": [
+        "espadas",
+        "arcos",
+        "armaduras",
+        "pergaminos",
+        "pociones",
+        "reliquias"
+      ],
+      "icon": "??",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-08T22:56:46.185Z"
+  },
+  "3fa21a43-4612-4e50-bb1f-c30962d8a382": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 110,
+      "maxMana": 110,
+      "avatarSeed": "jfruslpz",
+      "stats": {
+        "strength": 9,
+        "dexterity": 9,
+        "intelligence": 7,
+        "luck": 10
+      },
+      "inventory": [],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: Alberto, un Mago. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago principiante del Reino de Eldoria, se despierta en una celda oscura después de recibir un extraño mensaje en sueños que lo llama hacia una misión crucial. Mientras sale de la prisión, descubre que fue arrestado por los guardias del reino debido a una supuesta conexión con el oscuro Sacerdote de las Sombras, quien ha estado causando tumultos en todo el reino."
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Baston de Aprendiz en mainHand"
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto sale de prisión y decide encontrar al oscuro Sacerdote de las Sombras para resolver su misteriosa conexión con él.\n\n--- [SISTEMA]\nHP: +10 (80/80)\nInventario actualizado: Baston de Aprendiz\nEquipado mainHand: Baston de Aprendiz"
+      },
+      {
+        "role": "user",
+        "content": "Investigar más sobre el Sacerdote antes de buscarlo"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto decide investigar más sobre el oscuro Sacerdote de las Sombras en la biblioteca del reino para obtener información que pueda ayudarlo a comprender mejor su situación y prepararse para encontrarse con él.\n\n--- [SISTEMA]\nHP: +10 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n- Libro Antiguo de Enchantments\n\nEquipado mainHand: Baston de Aprendiz"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Baston de Aprendiz. Has equipado: Baston de Aprendiz en mainHand"
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto continúa su investigación en la biblioteca y encuentra información sobre el Sacerdote de las Sombras, un misterioso y poderoso individuo que utiliza la oscuridad para manipular a los débiles de mente. Decide ir al bosque sagrado para buscar más conocimiento del oscuro sacerdote.\n\n--- [SISTEMA]\nHP: +10 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n- Libro Antiguo de Enchantments\n\nEquipado mainHand: Baston de Aprendiz"
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto llega al bosque sagrado y se encuentra con un anciano sacerdote que le enseña sobre el equilibrio entre la luz y la oscuridad en este mundo. El anciano revela que el Sacerdote de las Sombras busca corromper ese equilibrio para obtener poder, pero su plan será detenido por Alberto.\n\n--- [SISTEMA]\nHP: +10 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n- Libro Antiguo de Enchantments\n\nEquipado mainHand: Baston de Aprendiz"
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, ahora bien preparado para enfrentarse al oscuro Sacerdote de las Sombras, se adentra en el corazón del reino para encontrarse con él. En su camino encuentra una ciudad abandonada y nota que algo no está bien.\n\n--- [SISTEMA]\nHP: +10 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n- Libro Antiguo de Enchantments\n\nEquipado mainHand: Baston de Aprendiz"
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto se adentra en la ciudad abandonada y encuentra un grupo de personas encerradas en una prisión, siendo controladas por hechizos oscuros. Con su bastón de aprendiz y el libro antiguo de encantamientos, consigue liberar a los prisioneros.\n\n--- [SISTEMA]\nHP: +10 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n- Libro Antiguo de Enchantments\n\nEquipado mainHand: Baston de Aprendiz"
+      },
+      {
+        "role": "user",
+        "content": "tirar todo el inventario"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago capturado por error y deseo de cumplir con una misteriosa misión, se encuentra libre. Decide buscar al oscuro Sacerdote de las Sombras para entender su situación.\n\n--- [SISTEMA]\nHP: +80 (80/80)\nInventario actualizado: Vacio\nDesequipado: mainHand"
+      },
+      {
+        "role": "user",
+        "content": "Liberar prisioneros en la ciudad abandonada"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto llega a la ciudad abandonada y encuentra un grupo de prisioneros encerrados. Utilizando sus habilidades mágicas, consigue liberarlos de los hechizos oscuros que los atenían.\n\n--- [SISTEMA]\nHP: +80 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha liberado a los prisioneros en la ciudad abandonada y continúa buscando al oscuro Sacerdote de las Sombras."
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Con una sensación de alivio por haber liberado a los prisioneros, Alberto sigue su búsqueda para encontrar al oscuro Sacerdote de las Sombras en la ciudad abandonada.\n\n--- [SISTEMA]\nHP: +80 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha liberado a los prisioneros en la ciudad abandonada y continúa buscando al oscuro Sacerdote de las Sombras."
+      },
+      {
+        "role": "user",
+        "content": "el inventario no se ha actualizado"
+      },
+      {
+        "role": "assistant",
+        "content": "Mis disculpas por el error anterior, aquí tienes la información corregida:\n\n--- [SISTEMA]\nHP: +80 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha liberado a los prisioneros en la ciudad abandonada y continúa buscando al oscuro Sacerdote de las Sombras."
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Con su bastón de aprendiz en mano, Alberto sigue explorando la ciudad abandonada, dispuesto a encontrar al oscuro Sacerdote de las Sombras que se rumorea esconde entre sus ruinas.\n\n--- [SISTEMA]\nHP: +80 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha liberado a los prisioneros en la ciudad abandonada y continúa buscando al oscuro Sacerdote de las Sombras, explorando las ruinas que se extienden más allá."
+      },
+      {
+        "role": "user",
+        "content": "que hay al rededor"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, con su bastón de aprendiz como única compañía, avanza por la ciudad abandonada en busca del oscuro Sacerdote de las Sombras. La atmósfera está cargada de misterio y peligro, mientras sus pasos resonan en los antiguos edificios que se desmoronan.\n\nAlrededor de él, Alberto encuentra ruinas cubiertas de una vegetación salvaje, que ha invadido la ciudad hace tiempo. Las paredes están adornadas con pinturas antiguas que narran historias de guerreros y magos que lucharon contra las fuerzas del mal hace muchos años.\n\nEn el horizonte, Alberto distingue lo que parece ser un templo en ruinas, sus torres altas se alzan hacia el cielo como desafiantes monumentos a los dioses olvidados. El mago siente una corriente de aire frío pasar por su espalda y teme que su misión no será fácil.\n\nSuggested Actions:\n1. Explorar el templo en ruinas.\n2. Regresar al pueblo para buscar información sobre el Sacerdote de las Sombras.\n3. Esconderse y observar la ciudad por si hay alguna señal de su presencia.\n\n--- [SISTEMA]\nHP: +80 (80/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha liberado a los prisioneros en la ciudad abandonada y continúa buscando al oscuro Sacerdote de las Sombras, encontrándose ahora en medio de ruinas antiguas con indicios de un templo cercano."
+      },
+      {
+        "role": "user",
+        "content": "me peleo con la primera persona que veo"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto se enfrenta a un misterioso personaje que encuentra en su camino por el templo abandonado. Este ser parece un guardián protector del lugar, y su presencia es tan imponente como el edificio mismo.\n\nEl combate inicia con la apariencia de ser un duelo entre magos: hechizos volan en todas direcciones mientras ambos rivales intentan superar al otro. La habilidad de Alberto se ve desafiada, pero su determinación para encontrar al oscuro Sacerdote no flaquea.\n\n--- [SISTEMA]\nHP: -5 (75/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha liberado a los prisioneros en la ciudad abandonada y, tras encontrar un guardián misterioso en el templo en ruinas, ha enfrentado a este ser en combate mágico. La batalla ha dejado a Alberto con menos energía pero sigue en búsqueda del oscuro Sacerdote de las Sombras."
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Con su bastón de aprendiz aún en mano y sus energías disminuidas, Alberto continúa luchando contra el guardián misterioso. La intensidad del combate es evidente mientras la magia fluye a través del área, creando una barrera protectora alrededor de los combatientes.\n\nCon cada hechizo lanzado y bloqueado, la fortaleza de ambos opONENTES se hace evidente. Sin embargo, en medio del caos mágico, Alberto empieza a notar una débil señal de luz brillante que parece surgir del bastón de aprendiz con cada ataque.\n\nLa intensidad del brillo aumenta gradualmente y, después de un último esfuerzo combinado de hechizos y habilidades físicas, la luz se hace más intensa y el guardián cae derrotado ante Alberto. Conmovido por esta victoria inesperada y con su bastón ahora resplandeciente, el mago siente una fuerza renovada para continuar su búsqueda.\n\n--- [SISTEMA]\nHP: -5 (70/80)\nInventario actualizado:\n- Baston de Aprendiz\n\nEquipado mainHand: Baston de Aprendiz\nResumen actualizado: Alberto ha enfrentado y vencido al guardián misterioso en el interior del templo abandonado, descubriendo un brillo intensificador en su bastón de aprendiz. Vencedor, pero aún con pocas fuerzas, sigue en búsqueda del oscuro Sacerdote de las Sombras y sus misteriosos designios."
+      }
+    ],
+    "narrativeSummary": "Alberto ha liberado a los prisioneros en la ciudad abandonada y continúa buscando al oscuro Sacerdote de las Sombras.",
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "prompt": "Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.",
+      "classArchetypes": [
+        "Guerrero",
+        "Mago",
+        "Arquero",
+        "Picaro",
+        "Clerigo",
+        "Druida"
+      ],
+      "objectArchetypes": [
+        "espadas",
+        "arcos",
+        "armaduras",
+        "pergaminos",
+        "pociones",
+        "reliquias"
+      ],
+      "icon": "??",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-08T23:01:21.104Z"
+  },
+  "45a7af39-d467-4c46-bdc2-a6776b0a4281": {
+    "character": {
+      "name": "asdasdasdasd",
+      "class": "Investigador",
+      "hp": 95,
+      "maxHp": 95,
+      "mana": 40,
+      "maxMana": 40,
+      "avatarSeed": "wwmjdk7v",
+      "stats": {
+        "strength": 12,
+        "dexterity": 10,
+        "intelligence": 8,
+        "luck": 7
+      },
+      "inventory": [
+        {
+          "id": "badge",
+          "name": "Credencial Oficial",
+          "type": "accessory",
+          "description": "Abre puertas y conversaciones."
+        },
+        {
+          "id": "notebook",
+          "name": "Cuaderno de Campo",
+          "type": "misc",
+          "description": "Registra pistas clave."
+        }
+      ],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: asdasdasdasd, un Investigador. \n        Ambientacion elegida: Realista. Sin magia, decisiones humanas y consecuencias reales..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "You wake up in a small, dimly lit room with stone walls and a single window that lets in a sliver of sunlight. The air is thick with the smell of dampness and decay. As you look around, you notice that your hands are bound by chains attached to a cold metal collar around your neck. Your mind is foggy, but you can recall fragments of your life before this place: your name is asdasdasd, and you're an Investigator. You've been brought here for reasons unknown, but you know you must escape and uncover the truth."
+      }
+    ],
+    "narrativeSummary": "You find yourself in a cold, damp room with stone walls and chains binding your hands. Your memory is foggy, but you know you must escape and investigate the circumstances of your confinement.",
+    "environment": {
+      "id": "realistic",
+      "name": "Realista",
+      "description": "Sin magia, decisiones humanas y consecuencias reales.",
+      "prompt": "Realismo estricto: no hay magia ni tecnologia imposible. Consecuencias fisicas creibles.",
+      "classArchetypes": [
+        "Soldado",
+        "Investigador",
+        "Medico",
+        "Explorador",
+        "Guardia"
+      ],
+      "objectArchetypes": [
+        "armas convencionales",
+        "botiquines",
+        "documentos",
+        "radios",
+        "linternas"
+      ],
+      "icon": "??",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-08T23:11:42.114Z"
+  },
+  "64f5cbab-1059-49b3-8ae7-a9f9f34c2034": {
+    "character": {
+      "name": "asdasdasdasd",
+      "class": "Investigador",
+      "hp": 95,
+      "maxHp": 95,
+      "mana": 40,
+      "maxMana": 40,
+      "avatarSeed": "wwmjdk7v",
+      "stats": {
+        "strength": 12,
+        "dexterity": 10,
+        "intelligence": 8,
+        "luck": 7
+      },
+      "inventory": [
+        {
+          "name": "Credencial Oficial",
+          "type": "accessory"
+        },
+        {
+          "name": "Espada",
+          "type": "weapon"
+        }
+      ],
+      "equipment": {
+        "accessory1": {
+          "name": "Credencial Oficial",
+          "type": "accessory"
+        },
+        "mainHand": {
+          "name": "Espada",
+          "type": "weapon"
+        }
+      }
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: asdasdasdasd, un Investigador. \n        Ambientacion elegida: Realista. Sin magia, decisiones humanas y consecuencias reales..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "El Investigador asdasdasdasd se encuentra en una pequeña ciudad costera, conocida como Puerto Esperanza. Se ha enterado de que en las cercanías se han encontrado restos de un barco hundido que, según la leyenda local, transportaba oro y artefactos de valor incalculable. La misión es explorar el lugar para verificar si hay algo de cierto y llevarse lo más valioso posible."
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has equipado: Credencial Oficial en accessory1"
+      },
+      {
+        "role": "user",
+        "content": "que veo?"
+      },
+      {
+        "role": "assistant",
+        "content": "Llegaste a Puerto Esperanza con la esperanza de encontrar oro y artefactos antiguos en las ruinas de un barco hundido.\n\n--- [SISTEMA]\nHP: +10 (95/95)\nInventario actualizado: Credencial Oficial, Espada\nEquipado mainHand: Espada\nEquipado accessory1: Credencial Oficial"
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: Has desequipado: Espada. Has equipado: Espada en mainHand"
+      }
+    ],
+    "narrativeSummary": "Has llegado a Puerto Esperanza con la espada en mano y tu credencial oficial en el bolsillo. Los rumores del barco hundido lleno de oro te impulsan hacia las ruinas.",
+    "environment": {
+      "id": "realistic",
+      "name": "Realista",
+      "description": "Sin magia, decisiones humanas y consecuencias reales.",
+      "prompt": "Realismo estricto: no hay magia ni tecnologia imposible. Consecuencias fisicas creibles.",
+      "classArchetypes": [
+        "Soldado",
+        "Investigador",
+        "Medico",
+        "Explorador",
+        "Guardia"
+      ],
+      "objectArchetypes": [
+        "armas convencionales",
+        "botiquines",
+        "documentos",
+        "radios",
+        "linternas"
+      ],
+      "icon": "??",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-08T23:12:42.498Z"
   }
 }

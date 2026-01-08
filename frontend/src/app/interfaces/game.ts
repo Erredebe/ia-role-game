@@ -50,6 +50,9 @@ export interface EnvironmentSetting {
     name: string;
     description: string;
     customRules?: string;
+    prompt?: string;
+    classArchetypes?: string[];
+    objectArchetypes?: string[];
 }
 
 export interface ChatMessage {

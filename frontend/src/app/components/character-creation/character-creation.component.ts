@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,6 +21,9 @@ interface EnvironmentOption {
   name: string;
   description: string;
   icon: string;
+  prompt: string;
+  classArchetypes: string[];
+  objectArchetypes: string[];
 }
 
 @Component({
@@ -43,41 +46,93 @@ export class CharacterCreationComponent implements OnInit {
 
   classes: CharacterClass[] = [
     { 
-      id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: '🛡️', baseHp: 120, baseMana: 20,
-      allowedEnvironments: ['fantasy', 'realistic', 'post-apocalyptic', 'sci-fi']
+      id: 'warrior', name: 'Guerrero', description: 'Frente de batalla y defensor del grupo.', icon: '??', baseHp: 120, baseMana: 20,
+      allowedEnvironments: ['fantasy', 'post-apocalyptic']
     },
     { 
-      id: 'mage', name: 'Mago', description: 'Erudito de las artes arcanas y hechizos poderosos.', icon: '🪄', baseHp: 80, baseMana: 100,
+      id: 'mage', name: 'Mago', description: 'Erudito de artes arcanas y hechizos poderosos.', icon: '??', baseHp: 80, baseMana: 110,
       allowedEnvironments: ['fantasy']
     },
     { 
-      id: 'archer', name: 'Arquero', description: 'Experto en combate a distancia y agilidad.', icon: '🏹', baseHp: 100, baseMana: 40,
-      allowedEnvironments: ['fantasy', 'realistic', 'post-apocalyptic']
+      id: 'archer', name: 'Arquero', description: 'Especialista en combate a distancia y rastreo.', icon: '??', baseHp: 100, baseMana: 40,
+      allowedEnvironments: ['fantasy', 'post-apocalyptic']
     },
     { 
-      id: 'rogue', name: 'Picaro', description: 'Sombrio y letal, experto en sigilo y dagas.', icon: '🗡️', baseHp: 90, baseMana: 30,
-      allowedEnvironments: ['fantasy', 'realistic', 'contemporary', 'post-apocalyptic']
+      id: 'rogue', name: 'Picaro', description: 'Sigilo, engaño y golpes precisos.', icon: '??', baseHp: 95, baseMana: 30,
+      allowedEnvironments: ['fantasy', 'contemporary', 'post-apocalyptic']
     },
     {
-      id: 'hacker', name: 'Hacker', description: 'Experto en sistemas y guerra digita.', icon: '💻', baseHp: 85, baseMana: 60,
+      id: 'soldier', name: 'Soldado', description: 'Entrenado en tacticas militares y combate directo.', icon: '??', baseHp: 115, baseMana: 20,
+      allowedEnvironments: ['realistic', 'contemporary', 'sci-fi', 'post-apocalyptic'] 
+    },
+    {
+      id: 'hacker', name: 'Hacker', description: 'Experto en intrusion, sistemas y guerra digital.', icon: '??', baseHp: 85, baseMana: 70,
       allowedEnvironments: ['contemporary', 'sci-fi']
     },
     {
-      id: 'pilot', name: 'Piloto', description: 'Maestro de vehiculos y naves.', icon: '✈️', baseHp: 100, baseMana: 30,
+      id: 'pilot', name: 'Piloto', description: 'As del volante y la navegacion en entornos hostiles.', icon: '??', baseHp: 100, baseMana: 35,
       allowedEnvironments: ['contemporary', 'sci-fi', 'post-apocalyptic']
     },
     {
-      id: 'soldier', name: 'Soldado', description: 'Entrenado en tacticas militares modernas.', icon: '🪖', baseHp: 110, baseMana: 20,
-      allowedEnvironments: ['realistic', 'contemporary', 'sci-fi', 'post-apocalyptic'] 
+      id: 'investigator', name: 'Investigador', description: 'Analista de pistas, crimen y conspiraciones.', icon: '??', baseHp: 95, baseMana: 40,
+      allowedEnvironments: ['realistic', 'contemporary']
+    },
+    {
+      id: 'medic', name: 'Medico', description: 'Soporte vital y tratamiento en campo.', icon: '??', baseHp: 90, baseMana: 60,
+      allowedEnvironments: ['realistic', 'sci-fi', 'post-apocalyptic']
+    },
+    {
+      id: 'mechanic', name: 'Mecanico', description: 'Reparaciones rapidas y dominio de dispositivos.', icon: '??', baseHp: 105, baseMana: 30,
+      allowedEnvironments: ['contemporary', 'sci-fi', 'post-apocalyptic']
     }
   ];
 
   environments: EnvironmentOption[] = [
-    { id: 'fantasy', name: 'Fantasia', description: 'Reinos magicos, criaturas miticas y hechizos antiguos.', icon: '🏰' },
-    { id: 'realistic', name: 'Realista', description: 'Sin magia, decisiones humanas y consecuencias reales.', icon: '⚖️' },
-    { id: 'contemporary', name: 'Contemporaneo', description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.', icon: '🏙️' },
-    { id: 'sci-fi', name: 'Ciencia Ficcion', description: 'Naves, IA y fronteras del espacio profundo.', icon: '🚀' },
-    { id: 'post-apocalyptic', name: 'Postapocaliptico', description: 'Ruinas, supervivencia y facciones emergentes.', icon: '☢️' }
+    { 
+      id: 'fantasy',
+      name: 'Fantasia',
+      description: 'Reinos magicos, criaturas miticas y hechizos antiguos.',
+      icon: '??',
+      prompt: 'Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.',
+      classArchetypes: ['Guerrero', 'Mago', 'Arquero', 'Picaro', 'Clerigo', 'Druida'],
+      objectArchetypes: ['espadas', 'arcos', 'armaduras', 'pergaminos', 'pociones', 'reliquias']
+    },
+    { 
+      id: 'realistic',
+      name: 'Realista',
+      description: 'Sin magia, decisiones humanas y consecuencias reales.',
+      icon: '??',
+      prompt: 'Realismo estricto: no hay magia ni tecnologia imposible. Consecuencias fisicas creibles.',
+      classArchetypes: ['Soldado', 'Investigador', 'Medico', 'Explorador', 'Guardia'],
+      objectArchetypes: ['armas convencionales', 'botiquines', 'documentos', 'radios', 'linternas']
+    },
+    { 
+      id: 'contemporary',
+      name: 'Contemporaneo',
+      description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.',
+      icon: '??',
+      prompt: 'Mundo actual urbano: tecnologia moderna, crimen organizado y corporaciones. Sin magia.',
+      classArchetypes: ['Hacker', 'Investigador', 'Piloto', 'Agente', 'Mecanico'],
+      objectArchetypes: ['smartphones', 'laptops', 'tarjetas de acceso', 'drones', 'vehiculos']
+    },
+    { 
+      id: 'sci-fi',
+      name: 'Ciencia Ficcion',
+      description: 'Naves, IA y fronteras del espacio profundo.',
+      icon: '??',
+      prompt: 'Futuro avanzado: IA, viajes espaciales, implantes y megacorporaciones. Tecnologia domina.',
+      classArchetypes: ['Piloto', 'Hacker', 'Soldado espacial', 'Ingeniero', 'Medico'],
+      objectArchetypes: ['rifles de plasma', 'implantes', 'nanobots', 'modulos de nave', 'data chips']
+    },
+    { 
+      id: 'post-apocalyptic',
+      name: 'Postapocaliptico',
+      description: 'Ruinas, supervivencia y facciones emergentes.',
+      icon: '??',
+      prompt: 'Mundo devastado: recursos escasos, facciones rivales y tecnologia reciclada.',
+      classArchetypes: ['Superviviente', 'Saqueador', 'Mecanico', 'Tirador', 'Medico de campo'],
+      objectArchetypes: ['chatarra', 'filtros de agua', 'municion', 'comida enlatada', 'radios rotas']
+    }
   ];
 
   stats = {
@@ -222,38 +277,111 @@ export class CharacterCreationComponent implements OnInit {
 
   public getInitialInventory(): Item[] {
     const items: Item[] = [];
+    const env = this.selectedEnvironmentId;
     const makeItem = (id: string, name: string, type: 'weapon'|'armor'|'accessory'|'consumable'|'misc', desc: string, stats?: any): Item => ({
       id, name, type, description: desc, stats
     });
 
     switch (this.selectedClassId) {
       case 'warrior': 
-        items.push(makeItem('sword_1', 'Espada de Hierro', 'weapon', 'Una espada confiable.', { strength: 1 }));
-        items.push(makeItem('shield_1', 'Escudo de Madera', 'armor', 'Protege contra ataques basicos.'));
+        if (env === 'post-apocalyptic') {
+          items.push(makeItem('scrap_blade', 'Hoja de Chatarra', 'weapon', 'Forjada con restos de metal.', { strength: 1 }));
+          items.push(makeItem('scrap_armor', 'Armadura Improvisada', 'armor', 'Placas viejas y cuero endurecido.'));
+        } else {
+          items.push(makeItem('sword_1', 'Espada de Hierro', 'weapon', 'Una espada confiable.', { strength: 1 }));
+          items.push(makeItem('shield_1', 'Escudo de Madera', 'armor', 'Protege contra ataques basicos.'));
+        }
         break;
       case 'mage': 
         items.push(makeItem('staff_1', 'Baston de Aprendiz', 'weapon', 'Canaliza magia basica.', { intelligence: 1 }));
         items.push(makeItem('potion_mana', 'Pocion de Mana', 'consumable', 'Restaura mana.'));
         break;
       case 'archer': 
-        items.push(makeItem('bow_1', 'Arco de Caza', 'weapon', 'Bueno para distancias medias.', { dexterity: 1 }));
-        items.push(makeItem('arrows', 'Carcaj', 'misc', 'Contiene flechas.'));
+        if (env === 'post-apocalyptic') {
+          items.push(makeItem('crossbow_1', 'Ballesta de Chatarra', 'weapon', 'Disparo silencioso y resistente.', { dexterity: 1 }));
+          items.push(makeItem('bolts', 'Virotes', 'misc', 'Municion para ballesta.'));
+        } else {
+          items.push(makeItem('bow_1', 'Arco de Caza', 'weapon', 'Bueno para distancias medias.', { dexterity: 1 }));
+          items.push(makeItem('arrows', 'Carcaj', 'misc', 'Contiene flechas.'));
+        }
         break;
       case 'rogue': 
-        items.push(makeItem('dagger_1', 'Daga Oxidada', 'weapon', 'Rapida y ligera.', { dexterity: 1 }));
-        items.push(makeItem('bomb_smoke', 'Bomba de Humo', 'consumable', 'Para huidas rapidas.'));
-        break;
-      case 'hacker':
-        items.push(makeItem('deck_1', 'CyberDeck Mk1', 'weapon', 'Herramienta de intrusion basica.', { intelligence: 2 }));
-        items.push(makeItem('stim_1', 'NeuroStim', 'consumable', 'Mejora la concentracion.'));
-        break;
-      case 'pilot':
-        items.push(makeItem('wrench', 'Llave Inglesa', 'weapon', 'Sirve para arreglar y golpear.', { strength: 1 }));
-        items.push(makeItem('jacket_flight', 'Chaqueta de Vuelo', 'armor', 'Estilosa y resistente.'));
+        if (env === 'contemporary') {
+          items.push(makeItem('tactical_knife', 'Cuchillo Tactico', 'weapon', 'Compacto y silencioso.', { dexterity: 1 }));
+          items.push(makeItem('lockpicks', 'Ganzuas', 'misc', 'Para accesos rapidos.'));
+        } else if (env === 'post-apocalyptic') {
+          items.push(makeItem('rust_knife', 'Cuchillo Oxidado', 'weapon', 'Ligero pero efectivo.', { dexterity: 1 }));
+          items.push(makeItem('smoke_bomb', 'Bomba de Humo', 'consumable', 'Cubre la retirada.'));
+        } else {
+          items.push(makeItem('dagger_1', 'Daga Oxidada', 'weapon', 'Rapida y ligera.', { dexterity: 1 }));
+          items.push(makeItem('bomb_smoke', 'Bomba de Humo', 'consumable', 'Para huidas rapidas.'));
+        }
         break;
       case 'soldier':
-        items.push(makeItem('rifle_1', 'Rifle de Asalto', 'weapon', 'Estandar militar.', { dexterity: 1 }));
-        items.push(makeItem('vest_1', 'Chaleco Kevlar', 'armor', 'Proteccion balistica.'));
+        if (env === 'sci-fi') {
+          items.push(makeItem('plasma_rifle', 'Rifle de Plasma', 'weapon', 'Estandar de infanteria espacial.', { dexterity: 1 }));
+          items.push(makeItem('tactical_visor', 'Visor Tactico', 'accessory', 'Mejora punteria y lectura del terreno.', { intelligence: 1 }));
+        } else if (env === 'post-apocalyptic') {
+          items.push(makeItem('scrap_rifle', 'Rifle Remendado', 'weapon', 'Arma fiable entre ruinas.', { dexterity: 1 }));
+          items.push(makeItem('scrap_vest', 'Chaleco de Placas', 'armor', 'Proteccion improvisada.'));
+        } else {
+          items.push(makeItem('rifle_1', 'Rifle de Asalto', 'weapon', 'Estandar militar.', { dexterity: 1 }));
+          items.push(makeItem('vest_1', 'Chaleco Kevlar', 'armor', 'Proteccion balistica.'));
+        }
+        break;
+      case 'hacker':
+        if (env === 'sci-fi') {
+          items.push(makeItem('quantum_deck', 'Quantum Deck', 'weapon', 'Terminal de intrusion avanzada.', { intelligence: 2 }));
+          items.push(makeItem('neural_patch', 'Parche Neural', 'consumable', 'Enfoca la mente y la memoria.'));
+        } else {
+          items.push(makeItem('deck_1', 'CyberDeck Mk1', 'weapon', 'Herramienta de intrusion basica.', { intelligence: 2 }));
+          items.push(makeItem('signal_jammer', 'Inhibidor de Senal', 'consumable', 'Corta comunicaciones cercanas.'));
+        }
+        break;
+      case 'pilot':
+        if (env === 'sci-fi') {
+          items.push(makeItem('nav_chip', 'Chip de Navegacion', 'accessory', 'Traza rutas seguras.', { intelligence: 1 }));
+          items.push(makeItem('plasma_wrench', 'Llave Plasma', 'weapon', 'Herramienta y arma de emergencia.', { strength: 1 }));
+        } else if (env === 'post-apocalyptic') {
+          items.push(makeItem('flare_gun', 'Pistola de Bengalas', 'weapon', 'Disuade amenazas a distancia.', { dexterity: 1 }));
+          items.push(makeItem('road_kit', 'Kit de Ruta', 'misc', 'Herramientas y repuestos basicos.'));
+        } else {
+          items.push(makeItem('wrench', 'Llave Inglesa', 'weapon', 'Sirve para arreglar y golpear.', { strength: 1 }));
+          items.push(makeItem('jacket_flight', 'Chaqueta de Vuelo', 'armor', 'Estilosa y resistente.'));
+        }
+        break;
+      case 'investigator':
+        if (env === 'contemporary') {
+          items.push(makeItem('access_card', 'Tarjeta de Acceso', 'accessory', 'Permite entrar a zonas restringidas.'));
+          items.push(makeItem('cam_phone', 'Telefono con Camara', 'misc', 'Recopila pruebas y notas.'));
+        } else {
+          items.push(makeItem('badge', 'Credencial Oficial', 'accessory', 'Abre puertas y conversaciones.'));
+          items.push(makeItem('notebook', 'Cuaderno de Campo', 'misc', 'Registra pistas clave.'));
+        }
+        break;
+      case 'medic':
+        if (env === 'sci-fi') {
+          items.push(makeItem('nano_medkit', 'Nano Kit Medico', 'consumable', 'Cura heridas con precision.'));
+          items.push(makeItem('bio_scanner', 'Bio Scanner', 'accessory', 'Diagnostico inmediato.', { intelligence: 1 }));
+        } else if (env === 'post-apocalyptic') {
+          items.push(makeItem('field_medkit', 'Botiquin de Campana', 'consumable', 'Atiende emergencias en ruta.'));
+          items.push(makeItem('water_filter', 'Filtro de Agua', 'misc', 'Purifica recursos escasos.'));
+        } else {
+          items.push(makeItem('medkit', 'Botiquin', 'consumable', 'Restaura salud basica.'));
+          items.push(makeItem('bandages', 'Vendajes', 'consumable', 'Cubre heridas y cortes.'));
+        }
+        break;
+      case 'mechanic':
+        if (env === 'sci-fi') {
+          items.push(makeItem('repair_drone', 'Drone de Reparacion', 'accessory', 'Asiste en arreglos complejos.', { intelligence: 1 }));
+          items.push(makeItem('plasma_cutter', 'Cortador Plasma', 'weapon', 'Abre puertas o combate.', { strength: 1 }));
+        } else if (env === 'post-apocalyptic') {
+          items.push(makeItem('scrap_tools', 'Herramientas de Chatarra', 'weapon', 'Resistentes y multiuso.', { strength: 1 }));
+          items.push(makeItem('reinforced_jacket', 'Chaqueta Reforzada', 'armor', 'Proteccion contra escombros.'));
+        } else {
+          items.push(makeItem('tool_belt', 'Cinturon de Herramientas', 'accessory', 'Acceso rapido a piezas.'));
+          items.push(makeItem('wrench_2', 'Llave Ajustable', 'weapon', 'Buena para reparar o golpear.', { strength: 1 }));
+        }
         break;
       default: 
         if (this.selectedClassId) {

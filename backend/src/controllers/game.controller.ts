@@ -3,23 +3,21 @@ import { LMStudioService } from '../services/lmstudio.service.js';
 import { StorageService } from '../services/storage.service.js';
 import { GameState, ChatMessage } from '../interfaces/game.interface.js';
 import { v4 as uuidv4 } from 'uuid';
+import { resolveEnvironment } from '../data/environment.presets.js';
 
 const aiService = new LMStudioService();
 const storageService = new StorageService();
 
-const normalizeEnvironment = (environment: any) => {
-    if (!environment) return undefined;
-    if (typeof environment === 'string') {
-        return { id: environment, name: environment, description: '' };
-    }
-    return environment;
-};
+const normalizeEnvironment = (environment: any) => resolveEnvironment(environment);
 
 export const createNewGame = async (req: Request, res: Response) => {
     const { character, environment } = req.body;
     const resolvedEnvironment = normalizeEnvironment(environment);
     // Extraer customRules del environment si viene ahí, o del body si se envía separado
     const customRules = resolvedEnvironment?.customRules || req.body.customRules;
+    if (resolvedEnvironment && customRules && !resolvedEnvironment.customRules) {
+        resolvedEnvironment.customRules = customRules;
+    }
     
     const initialState: GameState = {
         character: {
@@ -34,10 +32,15 @@ export const createNewGame = async (req: Request, res: Response) => {
         },
         location: 'El inicio de tu viaje',
         narrativeHistory: [],
-        environment: resolvedEnvironment,
-        customRules: customRules,
         narrativeSummary: 'La aventura comienza.'
     };
+
+    if (resolvedEnvironment) {
+        initialState.environment = resolvedEnvironment;
+    }
+    if (customRules !== undefined) {
+        initialState.customRules = customRules;
+    }
 
     const sessionId = uuidv4();
     
@@ -104,6 +107,21 @@ export const getGameState = async (req: Request, res: Response) => {
     const state = await storageService.loadGame(id);
     if (!state) return res.status(404).json({ error: 'Game not found' });
     res.json(state);
+};
+
+export const restoreGame = async (req: Request, res: Response) => {
+    const { id, state } = req.body || {};
+    if (!id || !state) return res.status(400).json({ error: 'Session ID and state are required' });
+
+    if (!state.narrativeSummary) {
+        state.narrativeSummary = 'La aventura comienza.';
+    }
+    if (!state.narrativeHistory) {
+        state.narrativeHistory = [];
+    }
+
+    await storageService.saveGame(id, state);
+    res.json({ sessionId: id, gameState: state });
 };
 
 export const handlePlayerAction = async (req: Request, res: Response) => {
