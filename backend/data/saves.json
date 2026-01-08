@@ -67,7 +67,7 @@
     "character": {
       "name": "Tester",
       "class": "Mago",
-      "hp": 55,
+      "hp": 50,
       "maxHp": 80,
       "mana": 100,
       "maxMana": 100,
@@ -85,7 +85,9 @@
           "description": "Un manuscrito escrito con tinta púrpura que habla de la Cámara de la Esfera, la Clave Olvidada y el Guardián del Umbral."
         },
         "manuscrito sobre la Cámara de la Esfera",
-        "Tomos Antiguos sobre la Cámara de la Esfera"
+        "Tomos Antiguos sobre la Cámara de la Esfera",
+        "Manuscrito antiguo",
+        "Tomos antiguos"
       ]
     },
     "location": "El inicio de tu viaje",
@@ -125,8 +127,192 @@
       {
         "role": "assistant",
         "content": "Tester busca en la biblioteca mágica y encuentra varios tomos antiguos relacionados con la Cámara de la Esfera."
+      },
+      {
+        "role": "user",
+        "content": "Investigar los tomos antiguos"
+      },
+      {
+        "role": "assistant",
+        "content": "Al investigar los tomos antiguos, Tester descubre información vital sobre las pruebas necesarias para acceder a la Cámara de la Esfera. También encuentra una pista clave que indica la ubicación de la primera prueba."
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Tester ha encontrado información vital en los tomos antiguos sobre las pruebas necesarias para acceder a la Cámara de la Esfera y una pista clave que indica la ubicación de la primera prueba."
       }
     ],
-    "updatedAt": "2026-01-08T08:33:43.937Z"
+    "updatedAt": "2026-01-08T08:37:33.516Z"
+  },
+  "3cc52e76-2015-48dd-8970-8a253afba2f3": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "stats": {
+        "strength": 12,
+        "dexterity": 10,
+        "intelligence": 11,
+        "luck": 12
+      },
+      "inventory": [
+        "Bastón rúnico",
+        "Poción de maná"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago apasionado y soñador con una chispa inusual en sus ojos color miel, se embarca en un viaje épico hacia el mundo de Elyria. Llega a la vibrante ciudadela de Eldoria, un bastión de luz y conocimiento, donde su fama como estudiante aventurero precede a sus palabras. La misión que lo ha traído aquí es clara: hallar el artefacto perdido de los antiguos, el Cáliz del Poder, que se dice puede cambiar el destino de Elyria y restaurar la paz a un mundo asolado por la guerra."
+      }
+    ],
+    "updatedAt": "2026-01-08T08:39:54.223Z"
+  },
+  "8304ef00-1f5b-464a-8401-04e4aef1ba19": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "stats": {
+        "strength": 12,
+        "dexterity": 10,
+        "intelligence": 11,
+        "luck": 12
+      },
+      "inventory": [
+        "Bastón rúnico",
+        "Poción de maná"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago experimentado y valiente, ha sido enviado a través de un portal mágico para investigar una amenaza en el reino oscuro de Calabozo. Al llegar al mundo de Calabozo, se encuentra ante la entrada de un oscuro castillo que emana una atmosfera ominosa. Antes de entrar, descubre que su magia está más débil de lo habitual."
+      }
+    ],
+    "updatedAt": "2026-01-08T08:39:57.179Z"
+  },
+  "7e8de9bd-860c-4dee-9491-a72ebaac4913": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "stats": {
+        "strength": 12,
+        "dexterity": 10,
+        "intelligence": 11,
+        "luck": 12
+      },
+      "inventory": [
+        "Bastón rúnico",
+        "Poción de maná"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago experto y poderoso, se encuentra en una plaza de mercado bulliciosa. La gente corre de un lado a otro, mientras otros intentan vender sus mercancías. Entre la multitud, Alberto observa con atención a los demás magos que practican su arte, algunos de ellos lo miran furtivamente y murmuran entre sí."
+      }
+    ],
+    "updatedAt": "2026-01-08T08:40:00.046Z"
+  },
+  "a02fdb57-28d5-4a0e-ad46-c5c306ddbbc9": {
+    "character": {
+      "name": "Alberto",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "stats": {
+        "strength": 12,
+        "dexterity": 10,
+        "intelligence": 11,
+        "luck": 12
+      },
+      "inventory": [
+        "Bastón rúnico",
+        "Poción de maná"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago principiante pero valiente, se encuentra en una gran plaza central del Reino de Eldoria. Se ha enterado de que hay un artefacto mágico oculto en la Cueva de las Sombras, que es rumoreado ser capaz de otorgar grandes poderes a su poseedor. Sin embargo, la plaza está llena de magos más experimentados y ambiciosos, todos buscando descubrirlo primero. La noticia de la cueva ha atraído tanto a aliados como a enemigos, y Alberto se da cuenta de que debe ser cuidadoso para no caer en manos equivocadas."
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto, un mago principiante pero valiente, está en una gran plaza central del Reino de Eldoria. Ha oído rumores sobre un artefacto mágico escondido en la Cueva de las Sombras, que se dice que puede otorgar grandes poderes a quien lo encuentre. La plaza está abarrotada de magos más experimentados y ambiciosos, todos buscando descubrirlo antes que nadie."
+      },
+      {
+        "role": "user",
+        "content": "Buscar por sí mismo la entrada a la Cueva de las Sombras y enfrentarse a los peligros que allí encontrare."
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto decide buscar por sí mismo la entrada a la Cueva de las Sombras, sabiendo que deberá enfrentarse a diversos peligros para encontrar el artefacto mágico.\n\n--- (+10 HP)"
+      },
+      {
+        "role": "user",
+        "content": "Explorar la plaza en busca de información"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto explora la plaza en busca de información sobre la Cueva de las Sombras."
+      },
+      {
+        "role": "user",
+        "content": "he conseguido info?"
+      },
+      {
+        "role": "assistant",
+        "content": "Mientras Alberto explora la plaza, se topa con un anciano que parece saber mucho acerca del lugar al cual está buscando. El anciano le dice que la entrada a la cueva es difícil de encontrar y que muchos han perdido sus vidas intentándolo. Sin embargo, también le da una pista sobre dónde buscar el pasaje secreto.\n\n-- (+5 HP por curación mágica recibida)"
+      },
+      {
+        "role": "user",
+        "content": "Continuar"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto decide seguir la pista que obtuvo del anciano y se adentra en un oscuro y estrecho corredor oculto detrás de las ruinas de una antigua torre al borde de la plaza. El aire es frío y húmedo, y puede sentir la presencia de something malvado acechando a su alrededor.\n\nLa oscuridad en el corredor empieza a disiparse gradualmente mientras se acerca a un gran portal de piedra cubierto de moho. La inscripción en la entrada del portal es incomprensible para él, pero se siente poderosa y temiblemente intrigante.\n\n¿Qué decide hacer Alberto?"
+      },
+      {
+        "role": "user",
+        "content": "que opciones tengo?"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto tiene varias opciones para proceder:\n\n1. Forzar el paso a través del portal de piedra.\n2. Investigar más acerca de la inscripción antes de cruzarlo.\n3. Regresar a la plaza y buscar otra fuente de información.\n\n¿Cuál es tu decisión?"
+      },
+      {
+        "role": "user",
+        "content": "1"
+      },
+      {
+        "role": "assistant",
+        "content": "Alberto decide forzar el paso a través del portal de piedra, sintiendo que podría ser la única oportunidad para descubrir el artefacto mágico. Al pasar por él, se encuentra en una vasta caverna con bóvedas altas y esculpidos en las paredes que parecen contar historias antiguas.\n\nMientras avanza a través de la caverna, Alberto nota que su magia se ha fortalecido inexplicablemente. Podría ser el efecto del portal o algo más misterioso. La oscuridad de la caverna comienza a desvanecerse gradualmente mientras avanza hacia un gran salón central.\n\nEn el centro del salón, hay un pedestal con una extraña urna de aspecto antigo. Parece que está esperando ser encontrado. ¿Qué decide hacer Alberto?"
+      }
+    ],
+    "updatedAt": "2026-01-08T08:42:13.472Z"
   }
 }

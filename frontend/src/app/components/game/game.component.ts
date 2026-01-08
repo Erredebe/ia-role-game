@@ -38,9 +38,20 @@ export class GameComponent implements OnInit {
     const text = action || this.userInput;
     if (!text || this.loading()) return;
 
+    // Optimistic update
+    const currentState = this.gameService.state();
+    if (currentState) {
+      this.gameService.state.set({
+        ...currentState,
+        narrativeHistory: [...currentState.narrativeHistory, { role: 'user', content: text }]
+      });
+    }
+
     this.userInput = '';
+    this.scrollToBottom();
+
     const response = await this.gameService.sendAction(text);
-    this.suggestedActions = response.suggestedActions;
+    this.suggestedActions = response.suggestedActions || [];
     this.scrollToBottom();
   }
 

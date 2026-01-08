@@ -72,12 +72,17 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
     const result = await aiService.generateNarrative(state.narrativeHistory);
 
     // Update state if AI recommended changes
+    let hpLog = '';
     if (result.updatedState) {
         if (result.updatedState.character?.hp !== undefined) {
+             const delta = result.updatedState.character.hp;
              state.character.hp = Math.max(0, Math.min(
                 state.character.maxHp, 
-                state.character.hp + result.updatedState.character.hp
+                state.character.hp + delta
             ));
+            if (delta !== 0) {
+                hpLog = ` (${delta > 0 ? '+' : ''}${delta} HP)`;
+            }
         }
         if (result.updatedState.character?.inventory) {
             const newItems = result.updatedState.character.inventory.map((item: any) => 
@@ -87,13 +92,16 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
         }
     }
 
+    // Add HP info to description if changed
+    const finalDescription = result.description + (hpLog ? `\n\n---${hpLog}` : '');
+
     // Add AI response to history
-    state.narrativeHistory.push({ role: 'assistant', content: result.description });
+    state.narrativeHistory.push({ role: 'assistant', content: finalDescription });
 
     await storageService.saveGame(id, state);
 
     res.json({
-        narrative: result.description,
+        narrative: finalDescription,
         suggestedActions: result.suggestedActions,
         gameState: state
     });
