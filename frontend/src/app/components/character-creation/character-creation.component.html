@@ -5,90 +5,125 @@
       <p>Define tu destino en este mundo</p>
     </header>
 
+    <div class="stepper">
+      <div class="step" [class.active]="currentStep === 1">
+        <div class="step-index">1</div>
+        <div class="step-label">Identidad</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" [class.active]="currentStep === 2">
+        <div class="step-index">2</div>
+        <div class="step-label">Universo y Atributos</div>
+      </div>
+    </div>
+
     <div class="main-steps">
       <!-- Step 1: Identity & Class -->
-      <section class="identity-step">
-        <div class="input-group">
-          <label>Nombre del Aventurero</label>
-          <input type="text" [(ngModel)]="name" placeholder="Ej: Arthas, Gandalf..." maxlength="20">
-        </div>
+      <section class="step-content" *ngIf="currentStep === 1">
+        <div class="step-form">
+          <div class="input-group">
+            <label>Nombre del Aventurero</label>
+            <input type="text" [(ngModel)]="name" placeholder="Ej: Arthas, Gandalf..." maxlength="20">
+          </div>
 
-        <div class="class-selection">
-          <label>Elige tu Clase</label>
-          <div class="class-grid">
-            <div class="class-card" 
-                 *ngFor="let c of classes" 
-                 [class.active]="selectedClassId === c.id"
-                 (click)="selectedClassId = c.id">
-              <span class="class-icon">{{ c.icon }}</span>
-              <div class="class-info">
-                <h4>{{ c.name }}</h4>
-                <p>{{ c.description }}</p>
+          <div class="input-group">
+            <label>Seed del Avatar</label>
+            <div class="input-with-button">
+              <input type="text" [(ngModel)]="avatarSeed" placeholder="Ej: hero-123">
+              <button type="button" (click)="randomizeAvatarSeed()">Randomizar</button>
+            </div>
+          </div>
+
+          <div class="class-selection">
+            <label>Elige tu Clase</label>
+            <div class="class-grid">
+              <div class="class-card" 
+                   *ngFor="let c of classes" 
+                   [class.active]="selectedClassId === c.id"
+                   (click)="selectedClassId = c.id">
+                <span class="class-icon">{{ c.icon }}</span>
+                <div class="class-info">
+                  <h4>{{ c.name }}</h4>
+                  <p>{{ c.description }}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="environment-selection">
-          <label>Tipo de Ambiente</label>
-          <div class="environment-grid">
-            <div class="environment-card" 
-                 *ngFor="let env of environments" 
-                 [class.active]="selectedEnvironmentId === env.id"
-                 (click)="selectedEnvironmentId = env.id">
-              <span class="environment-icon">{{ env.icon }}</span>
-              <div class="environment-info">
-                <h4>{{ env.name }}</h4>
-                <p>{{ env.description }}</p>
-              </div>
+        <div class="step-preview">
+          <div class="avatar-preview">
+            <div class="avatar-glow">
+              <img [src]="avatarUrl" alt="Preview">
             </div>
+            <h3>{{ name || '???' }}</h3>
+            <p class="class-badge">{{ currentClass.name }}</p>
+            <p class="environment-desc muted">Paso 2: elige tu universo y atributos</p>
           </div>
         </div>
       </section>
 
-      <!-- Step 2: Stats & Preview -->
-      <section class="preview-step">
-        <div class="avatar-preview">
-          <div class="avatar-glow">
-            <img [src]="avatarUrl" alt="Preview">
+      <!-- Step 2: Universe, Stats & Backstory -->
+      <section class="step-content" *ngIf="currentStep === 2">
+        <div class="step-form">
+          <div class="environment-selection">
+            <label>Tipo de Ambiente</label>
+            <div class="environment-grid">
+              <div class="environment-card" 
+                   *ngFor="let env of environments" 
+                   [class.active]="selectedEnvironmentId === env.id"
+                   (click)="selectedEnvironmentId = env.id">
+                <span class="environment-icon">{{ env.icon }}</span>
+                <div class="environment-info">
+                  <h4>{{ env.name }}</h4>
+                  <p>{{ env.description }}</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <h3>{{ name || '???' }}</h3>
-          <p class="class-badge">{{ currentClass.name }}</p>
-          <p class="environment-badge">{{ currentEnvironment.name }}</p>
-          <p class="environment-desc">{{ currentEnvironment.description }}</p>
+
+          <div class="stats-card glass-card">
+            <div class="stats-header">
+              <h3>Atributos</h3>
+              <button (click)="rollStats()" [disabled]="isRolling">LANZAR DADOS</button>
+            </div>
+            
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="label">FUE</span>
+                <span class="value" [class.rolling]="isRolling">{{ stats.strength }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">DES</span>
+                <span class="value" [class.rolling]="isRolling">{{ stats.dexterity }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">INT</span>
+                <span class="value" [class.rolling]="isRolling">{{ stats.intelligence }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">SUER</span>
+                <span class="value" [class.rolling]="isRolling">{{ stats.luck }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Pasado del Personaje (opcional)</label>
+            <textarea [(ngModel)]="backstory" placeholder="Ej: Exiliado de su reino, busca redencion..." rows="4" maxlength="600"></textarea>
+          </div>
         </div>
 
-        <div class="input-group">
-          <label>Seed del Avatar</label>
-          <div class="input-with-button">
-            <input type="text" [(ngModel)]="avatarSeed" placeholder="Ej: hero-123">
-            <button type="button" (click)="randomizeAvatarSeed()">Randomizar</button>
-          </div>
-        </div>
-
-        <div class="stats-card glass-card">
-          <div class="stats-header">
-            <h3>Atributos</h3>
-            <button (click)="rollStats()" [disabled]="isRolling">LANZAR DADOS</button>
-          </div>
-          
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="label">FUE</span>
-              <span class="value" [class.rolling]="isRolling">{{ stats.strength }}</span>
+        <div class="step-preview">
+          <div class="avatar-preview">
+            <div class="avatar-glow">
+              <img [src]="avatarUrl" alt="Preview">
             </div>
-            <div class="stat-item">
-              <span class="label">DES</span>
-              <span class="value" [class.rolling]="isRolling">{{ stats.dexterity }}</span>
-            </div>
-            <div class="stat-item">
-              <span class="label">INT</span>
-              <span class="value" [class.rolling]="isRolling">{{ stats.intelligence }}</span>
-            </div>
-            <div class="stat-item">
-              <span class="label">SUER</span>
-              <span class="value" [class.rolling]="isRolling">{{ stats.luck }}</span>
-            </div>
+            <h3>{{ name || '???' }}</h3>
+            <p class="class-badge">{{ currentClass.name }}</p>
+            <p class="environment-badge">{{ currentEnvironment.name }}</p>
+            <p class="environment-desc">{{ currentEnvironment.description }}</p>
+            <p class="backstory-preview" *ngIf="backstory.trim()">{{ backstory }}</p>
           </div>
         </div>
       </section>
@@ -96,7 +131,11 @@
 
     <footer class="creation-footer">
       <button class="cancel-btn" (click)="router.navigate(['/'])">Cancelar</button>
-      <button class="submit-btn" (click)="finishCreation()" [disabled]="!name">COMENZAR AVENTURA</button>
+      <div class="step-actions">
+        <button class="secondary-btn" *ngIf="currentStep === 2" (click)="previousStep()">Anterior</button>
+        <button class="submit-btn" *ngIf="currentStep === 1" (click)="nextStep()" [disabled]="!name.trim()">Siguiente</button>
+        <button class="submit-btn" *ngIf="currentStep === 2" (click)="finishCreation()" [disabled]="!name.trim()">COMENZAR AVENTURA</button>
+      </div>
     </footer>
   </div>
 </div>

@@ -32,6 +32,9 @@ export class CharacterCreationComponent {
   selectedClassId: string = 'warrior';
   selectedEnvironmentId: string = 'fantasy';
   avatarSeed: string = this.generateAvatarSeed();
+  backstory: string = '';
+  currentStep: number = 1;
+  totalSteps: number = 2;
 
   classes: CharacterClass[] = [
     { id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: 'W', baseHp: 120, baseMana: 20 },
@@ -72,6 +75,18 @@ export class CharacterCreationComponent {
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
   }
 
+  nextStep() {
+    if (this.currentStep === 1 && !this.name.trim()) {
+      alert('Por favor, elige un nombre!');
+      return;
+    }
+    this.currentStep = Math.min(this.currentStep + 1, this.totalSteps);
+  }
+
+  previousStep() {
+    this.currentStep = Math.max(this.currentStep - 1, 1);
+  }
+
   rollStats() {
     if (this.isRolling) return;
     this.isRolling = true;
@@ -107,11 +122,12 @@ export class CharacterCreationComponent {
   }
 
   async finishCreation() {
-    if (!this.name) {
+    if (!this.name.trim()) {
       alert('Por favor, elige un nombre!');
       return;
     }
 
+    const trimmedBackstory = this.backstory.trim();
     const character = {
       name: this.name,
       class: this.currentClass.name,
@@ -120,6 +136,7 @@ export class CharacterCreationComponent {
       mana: this.currentClass.baseMana,
       maxMana: this.currentClass.baseMana,
       avatarSeed: this.avatarSeed,
+      backstory: trimmedBackstory ? trimmedBackstory : undefined,
       stats: this.stats,
       inventory: this.getInitialInventory()
     };

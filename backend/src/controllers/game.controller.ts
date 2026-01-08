@@ -42,11 +42,15 @@ export const createNewGame = async (req: Request, res: Response) => {
     const environmentText = resolvedEnvironment
         ? `Ambientacion elegida: ${resolvedEnvironment.name}${resolvedEnvironment.description ? `. ${resolvedEnvironment.description}` : ''}.`
         : 'Ambientacion generica.';
+    const backstoryText = character?.backstory?.trim()
+        ? `Trasfondo del personaje: ${character.backstory.trim()}.`
+        : '';
 
     const greetingMsg: ChatMessage = { 
         role: 'system', 
         content: `El jugador ha creado un personaje: ${character.name}, un ${character.class}. 
         ${environmentText}
+        ${backstoryText}
         Comienza la aventura narrando su llegada al mundo o el inicio de su mision.` 
     };
     

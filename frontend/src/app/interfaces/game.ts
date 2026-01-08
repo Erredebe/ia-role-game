@@ -13,6 +13,7 @@ export interface Character {
     mana: number;
     maxMana: number;
     avatarSeed?: string;
+    backstory?: string;
     inventory: string[];
     stats: Stats;
 }
