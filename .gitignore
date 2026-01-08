@@ -1,0 +1,37 @@
+# Dependencias
+node_modules/
+.npm
+patch-package/
+.node_repl_history
+
+# Compilación y Salida
+backend/dist/
+frontend/dist/
+frontend/.angular/
+.tmp/
+out/
+
+# IDEs y Editores
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Variables de Entorno (IMPORTANTE)
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Otros
+.sass-cache/
+memory.dump
