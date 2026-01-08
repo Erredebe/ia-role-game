@@ -31,6 +31,7 @@ export class CharacterCreationComponent {
   name: string = '';
   selectedClassId: string = 'warrior';
   selectedEnvironmentId: string = 'fantasy';
+  avatarSeed: string = this.generateAvatarSeed();
 
   classes: CharacterClass[] = [
     { id: 'warrior', name: 'Guerrero', description: 'Maestro de las armas y la armadura pesada.', icon: 'W', baseHp: 120, baseMana: 20 },
@@ -67,7 +68,7 @@ export class CharacterCreationComponent {
   }
 
   get avatarUrl() {
-    const seed = `${this.selectedClassId}-${this.name || 'avatar'}`;
+    const seed = this.avatarSeed || this.name || 'avatar';
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
   }
 
@@ -118,6 +119,7 @@ export class CharacterCreationComponent {
       maxHp: this.currentClass.baseHp,
       mana: this.currentClass.baseMana,
       maxMana: this.currentClass.baseMana,
+      avatarSeed: this.avatarSeed,
       stats: this.stats,
       inventory: this.getInitialInventory()
     };
@@ -137,5 +139,13 @@ export class CharacterCreationComponent {
       case 'rogue': return ['Dagas gemelas', 'Bomba de humo'];
       default: return ['Cuerda'];
     }
+  }
+
+  randomizeAvatarSeed() {
+    this.avatarSeed = this.generateAvatarSeed();
+  }
+
+  private generateAvatarSeed(): string {
+    return Math.random().toString(36).slice(2, 10);
   }
 }

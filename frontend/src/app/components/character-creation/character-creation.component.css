@@ -60,6 +60,32 @@
   border-color: var(--neon-cyan);
 }
 
+.input-with-button {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.input-with-button button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-bright);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.input-with-button button:hover {
+  background: rgba(0, 255, 255, 0.08);
+  border-color: var(--neon-cyan);
+  transform: translateY(-1px);
+}
+
 .class-grid {
   display: grid;
   gap: 1rem;

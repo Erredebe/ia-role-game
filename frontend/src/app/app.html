@@ -14,7 +14,7 @@
     <aside class="sidebar glass-card">
       <div class="profile">
         <div class="avatar-glow">
-          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ state()?.character?.name }}" alt="Avatar">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ state()?.character?.avatarSeed || state()?.character?.name }}" alt="Avatar">
         </div>
         <h2>{{ state()?.character?.name }}</h2>
         <p class="subtitle">{{ state()?.character?.class }}</p>
