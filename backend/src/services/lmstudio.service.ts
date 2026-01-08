@@ -1,9 +1,10 @@
 ﻿import axios from 'axios';
 import { AIAdapter } from './ai.adapter.js';
-import { ChatMessage, GameAction, EnvironmentSetting } from '../interfaces/game.interface.js';
+import { ChatMessage, GameAction, EnvironmentImage, EnvironmentSetting } from '../interfaces/game.interface.js';
 
 export class LMStudioService implements AIAdapter {
     private readonly baseUrl = process.env.LM_STUDIO_URL || 'http://localhost:1234/v1';
+    private readonly imageModel = process.env.LM_STUDIO_IMAGE_MODEL;
 
     async generateNarrative(history: ChatMessage[], environment?: EnvironmentSetting, currentSummary?: string): Promise<GameAction> {
         const environmentContext = environment
@@ -78,6 +79,42 @@ export class LMStudioService implements AIAdapter {
                 description: 'La voz del destino se desvanece... (Error de conexion con la IA)',
                 suggestedActions: ['Reintentar']
             };
+        }
+    }
+
+    async generateEnvironmentImage(prompt: string): Promise<EnvironmentImage | null> {
+        const payload: {
+            prompt: string;
+            model?: string;
+            size?: string;
+            response_format?: string;
+        } = {
+            prompt,
+            size: '1024x1024',
+            response_format: 'b64_json'
+        };
+
+        if (this.imageModel) {
+            payload.model = this.imageModel;
+        }
+
+        try {
+            const response = await axios.post(`${this.baseUrl}/images/generations`, payload);
+            const imageData = response.data?.data?.[0];
+
+            if (!imageData) {
+                console.warn('LM Studio image generation returned empty data.');
+                return null;
+            }
+
+            return {
+                url: imageData.url,
+                base64: imageData.b64_json,
+                prompt
+            };
+        } catch (error: any) {
+            console.error('Error calling LM Studio image generation:', error.message);
+            return null;
         }
     }
 }
