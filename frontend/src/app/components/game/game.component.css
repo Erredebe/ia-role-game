@@ -392,3 +392,117 @@ input:focus {
     transform: translateY(0);
   }
 }
+
+/* Equipment Styles */
+.equipment-section {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.equipment-section h3 {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-secondary);
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.eq-slot {
+  position: relative;
+}
+
+.slot-label {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.slot-item {
+  background: rgba(10, 16, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--accent-primary);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.slot-item.empty {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.slot-item .placeholder {
+  color: rgba(255, 255, 255, 0.1);
+}
+
+/* Inventory List Styles */
+.inventory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.inv-item {
+  background: rgba(10, 15, 20, 0.75);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(163, 230, 53, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+.item-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.equip-btn {
+  background: rgba(34, 211, 238, 0.15);
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  color: var(--accent-cyan);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.equip-btn:hover {
+  background: rgba(34, 211, 238, 0.3);
+}
+
+.empty-msg {
+  font-style: italic;
+  color: var(--text-dim);
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 1rem;
+}

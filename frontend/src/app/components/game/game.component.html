@@ -42,20 +42,44 @@
         </div>
 
         <div class="character-stats-summary">
-            <div class="mini-stat"><span>FUE:</span> {{ state()?.character?.stats?.strength }}</div>
-            <div class="mini-stat"><span>DES:</span> {{ state()?.character?.stats?.dexterity }}</div>
-            <div class="mini-stat"><span>INT:</span> {{ state()?.character?.stats?.intelligence }}</div>
-            <div class="mini-stat"><span>LUCK:</span> {{ state()?.character?.stats?.luck }}</div>
+            <div class="mini-stat" title="Fuerza"><span>FUE:</span> {{ calculatedStats().strength }}</div>
+            <div class="mini-stat" title="Destreza"><span>DES:</span> {{ calculatedStats().dexterity }}</div>
+            <div class="mini-stat" title="Inteligencia"><span>INT:</span> {{ calculatedStats().intelligence }}</div>
+            <div class="mini-stat" title="Suerte"><span>SUER:</span> {{ calculatedStats().luck }}</div>
+        </div>
+      </div>
+
+      <div class="equipment-section">
+        <h3>Equipo</h3>
+        <div class="equipment-grid">
+          <div class="eq-slot" *ngFor="let slot of getEquipmentList()">
+            <div class="slot-label">{{ slot.slot }}</div>
+            <div class="slot-item" [class.empty]="!slot.item">
+              <span *ngIf="slot.item">{{ slot.item.name }}</span>
+              <span *ngIf="!slot.item" class="placeholder">-</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="inventory">
         <h3>Mochila</h3>
-        <ul>
-          <li *ngFor="let item of state()?.character?.inventory">
-            ⚔️ {{ item }}
-          </li>
-        </ul>
+        <div class="inventory-list">
+          <div class="inv-item" *ngFor="let item of state()?.character?.inventory">
+            <div class="item-info">
+              <span class="item-name">{{ item.name }}</span>
+              <span class="item-desc">{{ item.description }}</span>
+            </div>
+            <button class="equip-btn" 
+                    *ngIf="isEquippable(item)" 
+                    (click)="equipItem(item)">
+              Equipar
+            </button>
+          </div>
+          <div *ngIf="!state()?.character?.inventory?.length" class="empty-msg">
+            Mochila vacía
+          </div>
+        </div>
       </div>
     </aside>
 

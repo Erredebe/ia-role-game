@@ -18,6 +18,8 @@ const normalizeEnvironment = (environment: any) => {
 export const createNewGame = async (req: Request, res: Response) => {
     const { character, environment } = req.body;
     const resolvedEnvironment = normalizeEnvironment(environment);
+    // Extraer customRules del environment si viene ahí, o del body si se envía separado
+    const customRules = resolvedEnvironment?.customRules || req.body.customRules;
     
     const initialState: GameState = {
         character: {
@@ -33,6 +35,7 @@ export const createNewGame = async (req: Request, res: Response) => {
         location: 'El inicio de tu viaje',
         narrativeHistory: [],
         environment: resolvedEnvironment,
+        customRules: customRules,
         narrativeSummary: 'La aventura comienza.'
     };
 
@@ -42,6 +45,7 @@ export const createNewGame = async (req: Request, res: Response) => {
     const environmentText = resolvedEnvironment
         ? `Ambientacion elegida: ${resolvedEnvironment.name}${resolvedEnvironment.description ? `. ${resolvedEnvironment.description}` : ''}.`
         : 'Ambientacion generica.';
+    const rulesText = customRules ? `REGLAS TEMATICAS ESPECIALES DEL USUARIO: ${customRules}.` : '';
     const backstoryText = character?.backstory?.trim()
         ? `Trasfondo del personaje: ${character.backstory.trim()}.`
         : '';
@@ -50,21 +54,47 @@ export const createNewGame = async (req: Request, res: Response) => {
         role: 'system', 
         content: `El jugador ha creado un personaje: ${character.name}, un ${character.class}. 
         ${environmentText}
+        ${rulesText}
         ${backstoryText}
         Comienza la aventura narrando su llegada al mundo o el inicio de su mision.` 
     };
-    
-    const result = await aiService.generateNarrative([greetingMsg], resolvedEnvironment);
-    initialState.narrativeHistory.push({ role: 'assistant', content: result.description });
-    
-    await storageService.saveGame(sessionId, initialState);
 
-    res.json({ id: sessionId, state: initialState, suggestedActions: result.suggestedActions });
+    // Add system greeting to history
+    initialState.narrativeHistory.push(greetingMsg);
+    
+    // Call AI to generate first narrative
+    try {
+        const result = await aiService.generateNarrative(initialState.narrativeHistory, initialState.environment, initialState.narrativeSummary);
+        
+        // Update summary
+        if (result.updatedSummary) {
+            initialState.narrativeSummary = result.updatedSummary;
+        }
+        
+        // Add AI response (description) to history
+        initialState.narrativeHistory.push({ role: 'assistant', content: result.description });
+
+        await storageService.saveGame(sessionId, initialState);
+
+        res.json({
+            sessionId,
+            narrative: result.description,
+            suggestedActions: result.suggestedActions,
+            gameState: initialState
+        });
+    } catch (error) {
+        console.error('Error creating new game:', error);
+        res.status(500).json({ error: 'Failed to create game session' });
+    }
 };
 
 export const getGamesList = async (req: Request, res: Response) => {
-    const games = await storageService.listGames();
-    res.json(games);
+    try {
+        const games = await storageService.listGames();
+        res.json(games);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to list games' });
+    }
 };
 
 export const getGameState = async (req: Request, res: Response) => {
@@ -98,28 +128,15 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
     }
 
     // Update state if AI recommended changes
-    let hpLog = '';
-    if (result.updatedState) {
-        if (result.updatedState.character?.hp !== undefined) {
-             const delta = result.updatedState.character.hp;
-             state.character.hp = Math.max(0, Math.min(
-                state.character.maxHp, 
-                state.character.hp + delta
-            ));
-            if (delta !== 0) {
-                hpLog = ` (${delta > 0 ? '+' : ''}${delta} HP)`;
-            }
-        }
-        if (result.updatedState.character?.inventory) {
-            const newItems = result.updatedState.character.inventory.map((item: any) => 
-                typeof item === 'string' ? item : (item.name || item.item || JSON.stringify(item))
-            );
-            state.character.inventory = [...new Set([...state.character.inventory, ...newItems])];
-        }
-    }
-
-    // Add HP info to description if changed
-    const finalDescription = result.description + (hpLog ? `\n\n---${hpLog}` : '');
+    // Update state if AI recommended changes
+    const { newState, logs } = await import('../utils/state.helper.js').then(m => m.applyStateUpdate(state, result.updatedState || {}));
+    
+    // Assign back to state (object reference needs to be kept or properties copied)
+    state.character = newState.character;
+    // We could just assign other props if applyStateUpdate handled them, currently it mostly handles character
+    
+    const hpLog = logs.join('\n');
+    const finalDescription = result.description + (hpLog ? `\n\n--- [SISTEMA]\n${hpLog}` : '');
 
     // Add AI response to history
     state.narrativeHistory.push({ role: 'assistant', content: finalDescription });

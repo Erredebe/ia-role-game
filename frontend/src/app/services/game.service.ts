@@ -27,13 +27,20 @@ export class GameService {
   async createNewGame(character: any, environment?: any): Promise<{id: string, state: GameState}> {
     this.loading.set(true);
     try {
-      const response = await firstValueFrom(this.http.post<{id: string, state: GameState}>(`${this.apiUrl}/new`, { character, environment }));
-      this.currentId.set(response.id);
-      this.state.set(response.state);
-      if (response.state.environment) {
-        this.themeService.setTheme(response.state.environment.id);
+      const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/new`, { character, environment }));
+      const id = response.id || response.sessionId;
+      const state = response.state || response.gameState;
+
+      if (!id || !state) {
+        throw new Error('Respuesta invalida al crear partida');
       }
-      return response;
+
+      this.currentId.set(id);
+      this.state.set(state);
+      if (state.environment) {
+        this.themeService.setTheme(state.environment.id);
+      }
+      return { id, state };
     } finally {
       this.loading.set(false);
     }

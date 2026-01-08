@@ -9,6 +9,10 @@ export class LMStudioService implements AIAdapter {
         const environmentContext = environment
             ? `Ambientacion actual: ${environment.name}${environment.description ? `. ${environment.description}` : ''}.`
             : 'Ambientacion actual: generica.';
+        
+        const rulesContext = environment?.customRules 
+            ? `REGLAS DEL CAMPAÑA (IMPORTANTE): ${environment.customRules}` 
+            : '';
 
         const summaryContext = currentSummary
             ? `RESUMEN DE LO OCURRIDO HASTA AHORA: ${currentSummary}`
@@ -23,21 +27,25 @@ export class LMStudioService implements AIAdapter {
                 "suggestedActions": ["Accion 1", "Accion 2", "Accion 3"],
                 "updatedState": {
                     "character": {
-                        "hp": 0,
-                        "inventory": []
+                        "hp": -5,
+                        "inventory": [{"name": "Espada", "type": "weapon"}],
+                        "equipment": {"mainHand": {"name": "Espada", "type": "weapon"}}
                     }
                 },
-                "updatedSummary": "Resumen actualizado de la historia en 1-2 frases incluyendo lo ultimo ocurrido.",
+                "updatedSummary": "Resumen actualizado...",
                 "type": "narrative"
             }
-            "hp" es un cambio relativo (ej: -10 por dano, 5 por curacion).
-            "updatedSummary" debe condensar la historia previa + el nuevo evento para mantener el contexto a largo plazo.
-            Manten la narrativa inmersiva y emocionante.`
+            "hp" es un cambio relativo.
+            IMPORTANTISIMO:
+            1. Si el inventario cambia, devuelve la LISTA COMPLETA nueva (añade lo nuevo, quita lo que ya no esta).
+            2. Si se EQUIPA algo, debe aparecer en "equipment" (slot correspondiente) Y desaparecer de "inventory" (si estaba ahi).
+            3. Si se DESEQUIPA, debe desaparecer de "equipment" (null) Y aparecer en "inventory".
+            4. "updatedSummary" debe condensar la historia previa + el nuevo evento.`
         };
 
         const environmentMessage: ChatMessage = {
             role: 'system',
-            content: `${environmentContext}\n${summaryContext}`
+            content: `${environmentContext}\n${rulesContext}\n${summaryContext}`
         };
 
         // Limit history to last 10 messages to save context window, trusting the summary

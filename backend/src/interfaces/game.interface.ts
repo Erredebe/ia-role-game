@@ -3,6 +3,7 @@ export interface GameState {
     location: string;
     narrativeHistory: ChatMessage[];
     environment?: EnvironmentSetting;
+    customRules?: string;
     narrativeSummary: string; // Resumen acumulativo de la historia
 }
 
@@ -15,8 +16,27 @@ export interface Character {
     maxMana: number;
     avatarSeed?: string;
     backstory?: string;
-    inventory: string[];
+    inventory: Item[];
+    equipment: Equipment;
     stats: Stats;
+}
+
+export interface Item {
+    id: string;
+    name: string;
+    type: 'weapon' | 'armor' | 'accessory' | 'consumable' | 'misc';
+    description: string;
+    stats?: Partial<Stats>;
+    icon?: string;
+}
+
+export interface Equipment {
+    head?: Item;
+    body?: Item;
+    mainHand?: Item;
+    offHand?: Item;
+    accessory1?: Item;
+    accessory2?: Item;
 }
 
 export interface Stats {
@@ -30,6 +50,7 @@ export interface EnvironmentSetting {
     id: string;
     name: string;
     description: string;
+    customRules?: string;
 }
 
 export interface ChatMessage {
