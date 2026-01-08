@@ -1,39 +1,87 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;600;700&display=swap');
 
 :root {
-  --bg-dark: #0f172a;
-  --bg-card: #1e293b;
-  --primary: #38bdf8;
-  --accent: #f472b6;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --glass: rgba(30, 41, 59, 0.7);
+  --bg-void: #0a0f14;
+  --bg-void-2: #0b1318;
+  --bg-panel: #121b23;
+  --bg-panel-strong: #0f171f;
+  --accent-cyan: #22d3ee;
+  --accent-amber: #f59e0b;
+  --accent-lime: #a3e635;
+  --text-main: #e6f0f7;
+  --text-muted: #98a7b6;
+  --panel-border: rgba(34, 211, 238, 0.18);
+  --panel-glow: rgba(34, 211, 238, 0.25);
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Outfit', sans-serif;
-  background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+  font-family: 'Rajdhani', sans-serif;
+  background-color: var(--bg-void);
+  background-image:
+    radial-gradient(1200px circle at 10% -20%, rgba(34, 211, 238, 0.15), transparent 55%),
+    radial-gradient(900px circle at 90% 10%, rgba(245, 158, 11, 0.12), transparent 45%),
+    linear-gradient(180deg, #0a1118 0%, #0a0f14 60%, #070b10 100%);
   color: var(--text-main);
-  min-height: 100vh;
+  min-height: 100%;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(34, 211, 238, 0.06) 0, rgba(34, 211, 238, 0.06) 1px, transparent 1px, transparent 90px);
+  opacity: 0.35;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.65) 75%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 h1, h2, h3 {
   margin: 0;
   font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.04em;
 }
 
 .glass-card {
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(18, 27, 35, 0.92), rgba(9, 13, 18, 0.92));
+  border: 1px solid var(--panel-border);
   border-radius: 1rem;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 45%);
+  pointer-events: none;
 }
 
 .nav-glow {
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 25px var(--panel-glow);
 }
 
 * {
