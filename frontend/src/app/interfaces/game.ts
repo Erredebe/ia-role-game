@@ -12,6 +12,7 @@ export interface Character {
     maxHp: number;
     mana: number;
     maxMana: number;
+    avatarSeed?: string;
     inventory: string[];
     stats: Stats;
 }

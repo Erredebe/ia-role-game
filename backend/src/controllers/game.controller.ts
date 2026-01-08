@@ -22,6 +22,7 @@ export const createNewGame = async (req: Request, res: Response) => {
     const initialState: GameState = {
         character: {
             ...character,
+            avatarSeed: character.avatarSeed,
             hp: character.hp || 100,
             maxHp: character.hp || 100,
             mana: character.mana || 50,
@@ -134,4 +135,3 @@ export const resetGame = async (req: Request, res: Response) => {
     // For now simple reload or delete? Let's just return 400 as it's handled differently now
     res.status(400).json({ message: 'Use Create New Game instead' });
 };
-

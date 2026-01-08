@@ -58,6 +58,14 @@
           <p class="environment-desc">{{ currentEnvironment.description }}</p>
         </div>
 
+        <div class="input-group">
+          <label>Seed del Avatar</label>
+          <div class="input-with-button">
+            <input type="text" [(ngModel)]="avatarSeed" placeholder="Ej: hero-123">
+            <button type="button" (click)="randomizeAvatarSeed()">Randomizar</button>
+          </div>
+        </div>
+
         <div class="stats-card glass-card">
           <div class="stats-header">
             <h3>Atributos</h3>
