@@ -5,10 +5,14 @@ import { ChatMessage, GameAction, EnvironmentSetting } from '../interfaces/game.
 export class LMStudioService implements AIAdapter {
     private readonly baseUrl = process.env.LM_STUDIO_URL || 'http://localhost:1234/v1';
 
-    async generateNarrative(history: ChatMessage[], environment?: EnvironmentSetting): Promise<GameAction> {
+    async generateNarrative(history: ChatMessage[], environment?: EnvironmentSetting, currentSummary?: string): Promise<GameAction> {
         const environmentContext = environment
             ? `Ambientacion actual: ${environment.name}${environment.description ? `. ${environment.description}` : ''}.`
             : 'Ambientacion actual: generica.';
+
+        const summaryContext = currentSummary
+            ? `RESUMEN DE LO OCURRIDO HASTA AHORA: ${currentSummary}`
+            : 'Inicio de la aventura.';
 
         const systemPrompt: ChatMessage = {
             role: 'system',
@@ -23,21 +27,26 @@ export class LMStudioService implements AIAdapter {
                         "inventory": []
                     }
                 },
+                "updatedSummary": "Resumen actualizado de la historia en 1-2 frases incluyendo lo ultimo ocurrido.",
                 "type": "narrative"
             }
             "hp" es un cambio relativo (ej: -10 por dano, 5 por curacion).
+            "updatedSummary" debe condensar la historia previa + el nuevo evento para mantener el contexto a largo plazo.
             Manten la narrativa inmersiva y emocionante.`
         };
 
         const environmentMessage: ChatMessage = {
             role: 'system',
-            content: environmentContext
+            content: `${environmentContext}\n${summaryContext}`
         };
+
+        // Limit history to last 10 messages to save context window, trusting the summary
+        const limitedHistory = history.slice(-10);
 
         try {
             const response = await axios.post(`${this.baseUrl}/chat/completions`, {
                 model: 'dolphin3.0-llama3.1-8b',
-                messages: [systemPrompt, environmentMessage, ...history],
+                messages: [systemPrompt, environmentMessage, ...limitedHistory],
                 temperature: 0.7,
                 // response_format: { type: 'json_object' }
             });

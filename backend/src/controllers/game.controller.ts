@@ -31,7 +31,8 @@ export const createNewGame = async (req: Request, res: Response) => {
         },
         location: 'El inicio de tu viaje',
         narrativeHistory: [],
-        environment: resolvedEnvironment
+        environment: resolvedEnvironment,
+        narrativeSummary: 'La aventura comienza.'
     };
 
     const sessionId = uuidv4();
@@ -84,7 +85,12 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
     state.narrativeHistory.push(userMessage);
 
     // Call AI
-    const result = await aiService.generateNarrative(state.narrativeHistory, state.environment);
+    const result = await aiService.generateNarrative(state.narrativeHistory, state.environment, state.narrativeSummary);
+
+    // Update summary if provided
+    if (result.updatedSummary) {
+        state.narrativeSummary = result.updatedSummary;
+    }
 
     // Update state if AI recommended changes
     let hpLog = '';

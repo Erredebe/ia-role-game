@@ -3,6 +3,7 @@ export interface GameState {
     location: string;
     narrativeHistory: ChatMessage[];
     environment?: EnvironmentSetting;
+    narrativeSummary: string; // Resumen acumulativo de la historia
 }
 
 export interface Character {
@@ -39,4 +40,5 @@ export interface GameAction {
     description: string;
     suggestedActions?: string[];
     updatedState?: Partial<GameState>;
+    updatedSummary?: string; // Nuevo resumen narrativo sugerido por la IA
 }

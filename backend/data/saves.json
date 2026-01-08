@@ -431,5 +431,56 @@
       "icon": "R"
     },
     "updatedAt": "2026-01-08T09:00:05.970Z"
+  },
+  "5a76af77-129c-4322-aed5-74c19081ca0d": {
+    "character": {
+      "name": "TestHero",
+      "class": "Guerrero",
+      "hp": 120,
+      "maxHp": 120,
+      "mana": 20,
+      "maxMana": 20,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "luck": 10
+      },
+      "inventory": [
+        "Espada ancha",
+        "Escudo de madera"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "En un reino mágico antiguo, TestHero, un guerrero audaz, ha llegado a la ciudadela de Eldoria para cumplir con su misión. La ciudad está protegida por tres portales guardados por criaturas míticas que deben ser vencidas en combate. Cada criatura posee habilidades únicas y poderes mágicos que hacen que el reino sea un lugar peligroso y lleno de desafíos."
+      },
+      {
+        "role": "user",
+        "content": "Miro a mi alrededor"
+      },
+      {
+        "role": "assistant",
+        "content": "Miras a tu alrededor, observando la majestuosidad de la ciudadela de Eldoria y sus portales guardianes."
+      },
+      {
+        "role": "user",
+        "content": "Grito fuertemente"
+      },
+      {
+        "role": "assistant",
+        "content": "TestHero grita fuerte en el área central de la ciudadela de Eldoria para captar la atención de las criaturas que vigilan los tres portales."
+      }
+    ],
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "icon": "F"
+    },
+    "narrativeSummary": "TestHero ha llegado a la ciudadela de Eldoria y está listo para enfrentar las criaturas míticas que protegen los tres portales. Ha gritado fuerte para capturar su atención.",
+    "updatedAt": "2026-01-08T09:24:15.301Z"
   }
 }
