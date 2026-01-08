@@ -8,8 +8,17 @@
   --accent-cyan: #22d3ee;
   --accent-amber: #f59e0b;
   --accent-lime: #a3e635;
+  --accent-purple: #bc13fe;
+  
+  --neon-cyan: var(--accent-cyan);
+  --neon-purple: var(--accent-purple);
+  --neon-amber: var(--accent-amber);
+  
   --text-main: #e6f0f7;
+  --text-bright: #ffffff;
   --text-muted: #98a7b6;
+  --text-dim: #718096;
+  
   --panel-border: rgba(34, 211, 238, 0.18);
   --panel-glow: rgba(34, 211, 238, 0.25);
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.55);

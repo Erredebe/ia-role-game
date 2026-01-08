@@ -19,6 +19,7 @@ export interface Stats {
     strength: number;
     dexterity: number;
     intelligence: number;
+    luck: number;
 }
 
 export interface ChatMessage {

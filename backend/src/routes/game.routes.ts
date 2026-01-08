@@ -1,10 +1,18 @@
 import { Router } from 'express';
-import { getGameState, handlePlayerAction, resetGame } from '../controllers/game.controller.js';
+import { 
+    createNewGame, 
+    getGamesList, 
+    getGameState, 
+    handlePlayerAction, 
+    resetGame 
+} from '../controllers/game.controller.js';
 
 const router = Router();
 
-router.get('/state', getGameState);
-router.post('/action', handlePlayerAction);
-router.post('/reset', resetGame);
+router.get('/list', getGamesList);
+router.post('/new', createNewGame);
+router.get('/:id/state', getGameState);
+router.post('/:id/action', handlePlayerAction);
+router.post('/:id/reset', resetGame);
 
 export default router;

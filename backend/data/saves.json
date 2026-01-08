@@ -1,0 +1,132 @@
+{
+  "60ca06d0-38af-4cc3-95e7-7750163210e4": {
+    "character": {
+      "name": "Alberto",
+      "class": "Guerrero",
+      "hp": 120,
+      "maxHp": 120,
+      "mana": 20,
+      "maxMana": 20,
+      "stats": {
+        "strength": 10,
+        "dexterity": 14,
+        "intelligence": 12,
+        "luck": 13
+      },
+      "inventory": [
+        "Espada ancha",
+        "Escudo de madera"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "La voz del destino se desvanece... (Error de conexión con la IA)"
+      }
+    ],
+    "updatedAt": "2026-01-08T08:27:09.332Z"
+  },
+  "4999b175-da2e-46ac-a07a-4d0022e71341": {
+    "character": {
+      "name": "Alberto",
+      "class": "Guerrero",
+      "hp": 120,
+      "maxHp": 120,
+      "mana": 20,
+      "maxMana": 20,
+      "stats": {
+        "strength": 10,
+        "dexterity": 14,
+        "intelligence": 12,
+        "luck": 13
+      },
+      "inventory": [
+        "Espada ancha",
+        "Escudo de madera"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "La voz del destino se desvanece... (Error de conexión con la IA)"
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "¡Hola! Bienvenido a una nueva aventura de rol. En un mundo mágico, te encuentras en medio de un oscuro yermo. A tu alrededor, se extienden vastas praderas espinosas y lejanos bosques que prometen misterios por descubrir. El viento trae consigo el eco de una antigua leyenda sobre un tesoro oculto en una fortaleza abandonada."
+      }
+    ],
+    "updatedAt": "2026-01-08T08:27:17.938Z"
+  },
+  "37ed9b5a-0754-45b9-bc80-f1025ee38ebd": {
+    "character": {
+      "name": "Tester",
+      "class": "Mago",
+      "hp": 55,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "stats": {
+        "strength": 6,
+        "dexterity": 4,
+        "intelligence": 17,
+        "luck": 14
+      },
+      "inventory": [
+        "Bastón rúnico",
+        "Poción de maná",
+        {
+          "name": "manuscrito antiguo",
+          "description": "Un manuscrito escrito con tinta púrpura que habla de la Cámara de la Esfera, la Clave Olvidada y el Guardián del Umbral."
+        },
+        "manuscrito sobre la Cámara de la Esfera",
+        "Tomos Antiguos sobre la Cámara de la Esfera"
+      ]
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "assistant",
+        "content": "Tester, un mago experimentado en las artes oscuras, se encuentra en una antigua librería de rarezas y misterios. La tienda está llena de polvo y sombras, con estantes que parecen inclinarse bajo el peso de los tomos antiguos y proyectan sombras que danzan sobre las paredes. De repente, se escucha un suave crujido al moverse, seguido por una voz gutural que te llama desde la oscuridad: \"Tester, he oído rumores de tu fama en el mundo mágico. Aquí tienes una tarea para ti, pero prepárate, porque esta misión puede costarte más de lo que imaginas.\" La voz procede de debajo de un estante polvoriento, donde se encuentra un antiguo manuscrito envuelto en cuero."
+      },
+      {
+        "role": "user",
+        "content": "Examino el manuscrito"
+      },
+      {
+        "role": "assistant",
+        "content": "El manuscrito es grueso y está escrito con una tinta púrpura oscuro que parece humedecharse a medida que lo tomas entre tus manos. La escritura es intrincada, pero puedes discernir algunas palabras clave: 'Cámara de la Esfera', 'Clave Olvidada' y 'Guardián del Umbral'. Sientes una chispazón en el aire al tocarlo, como si la historia misma se estuviera despiertando."
+      },
+      {
+        "role": "user",
+        "content": "Buscar información sobre la Cámara de la Esfera"
+      },
+      {
+        "role": "assistant",
+        "content": "Tester ha descubierto que la Cámara de la Esfera es un lugar mágico perdido en las profundidades del tiempo, mencionado en varias leyendas antiguas. Se dice que alberga tesoros inimaginables y conocimientos olvidados por los dioses mismos. Sin embargo, está protegida por una serie de pruebas diseñadas para poner a prueba la sabiduría, el valor y la magia del más destrozado aventurero."
+      },
+      {
+        "role": "user",
+        "content": "Buscar aliados en la comunidad mágica local"
+      },
+      {
+        "role": "assistant",
+        "content": "Tester ha decidido buscar aliados entre la comunidad mágica local para desentrañar los secretos de la Cámara de la Esfera."
+      },
+      {
+        "role": "user",
+        "content": "Buscar consejo en la biblioteca mágica"
+      },
+      {
+        "role": "assistant",
+        "content": "Tester busca en la biblioteca mágica y encuentra varios tomos antiguos relacionados con la Cámara de la Esfera."
+      }
+    ],
+    "updatedAt": "2026-01-08T08:33:43.937Z"
+  }
+}

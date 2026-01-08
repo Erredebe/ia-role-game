@@ -34,9 +34,27 @@ export class LMStudioService implements AIAdapter {
             });
 
             const content = response.data.choices[0].message.content;
-            return JSON.parse(content) as GameAction;
-        } catch (error) {
-            console.error('Error calling LM Studio:', error);
+            
+            // Clean content if it's wrapped in markdown code blocks
+            let jsonContent = content;
+            if (content.includes('```json')) {
+                jsonContent = content.split('```json')[1].split('```')[0].trim();
+            } else if (content.includes('```')) {
+                jsonContent = content.split('```')[1].split('```')[0].trim();
+            }
+
+            try {
+                return JSON.parse(jsonContent) as GameAction;
+            } catch (parseError) {
+                console.warn('AI returned non-JSON content, attempting fallback:', content);
+                return {
+                    type: 'narrative',
+                    description: content,
+                    suggestedActions: ['Continuar']
+                };
+            }
+        } catch (error: any) {
+            console.error('Error calling LM Studio:', error.message);
             return {
                 type: 'narrative',
                 description: 'La voz del destino se desvanece... (Error de conexión con la IA)',

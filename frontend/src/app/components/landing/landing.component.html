@@ -1,0 +1,26 @@
+<div class="landing-container">
+  <div class="hero glass-card">
+    <h1>IA ROLE GAME</h1>
+    <p>Embárcate en una aventura única guiada por Inteligencia Artificial</p>
+    
+    <div class="actions">
+      <button class="primary-btn" (click)="newGame()">NUEVA PARTIDA</button>
+    </div>
+  </div>
+
+  <div class="saves-section" *ngIf="savedGames.length > 0">
+    <h2>Continuar Partida</h2>
+    <div class="save-list">
+      <div class="save-card glass-card" *ngFor="let game of savedGames" (click)="continueGame(game.id)">
+        <div class="save-info">
+          <h3>{{ game.characterName }}</h3>
+          <p>{{ game.characterClass }}</p>
+          <span class="date">{{ game.updatedAt | date:'short' }}</span>
+        </div>
+        <div class="save-action">
+          <button>RETOMAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

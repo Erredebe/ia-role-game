@@ -1,0 +1,76 @@
+<div class="creation-container">
+  <div class="creation-layout glass-card">
+    <header class="creation-header">
+      <h1>Crea tu Héroe</h1>
+      <p>Define tu destino en este mundo de fantasía</p>
+    </header>
+
+    <div class="main-steps">
+      <!-- Step 1: Identity & Class -->
+      <section class="identity-step">
+        <div class="input-group">
+          <label>Nombre del Aventurero</label>
+          <input type="text" [(ngModel)]="name" placeholder="Ej: Arthas, Gandalf..." maxlength="20">
+        </div>
+
+        <div class="class-selection">
+          <label>Elige tu Clase</label>
+          <div class="class-grid">
+            <div class="class-card" 
+                 *ngFor="let c of classes" 
+                 [class.active]="selectedClassId === c.id"
+                 (click)="selectedClassId = c.id">
+              <span class="class-icon">{{ c.icon }}</span>
+              <div class="class-info">
+                <h4>{{ c.name }}</h4>
+                <p>{{ c.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 2: Stats & Preview -->
+      <section class="preview-step">
+        <div class="avatar-preview">
+          <div class="avatar-glow">
+            <img [src]="avatarUrl" alt="Preview">
+          </div>
+          <h3>{{ name || '???' }}</h3>
+          <p class="class-badge">{{ currentClass.name }}</p>
+        </div>
+
+        <div class="stats-card glass-card">
+          <div class="stats-header">
+            <h3>Atributos</h3>
+            <button (click)="rollStats()" [disabled]="isRolling">🎲 LANZAR DADOS</button>
+          </div>
+          
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="label">FUE</span>
+              <span class="value" [class.rolling]="isRolling">{{ stats.strength }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">DES</span>
+              <span class="value" [class.rolling]="isRolling">{{ stats.dexterity }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">INT</span>
+              <span class="value" [class.rolling]="isRolling">{{ stats.intelligence }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">SUER</span>
+              <span class="value" [class.rolling]="isRolling">{{ stats.luck }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="creation-footer">
+      <button class="cancel-btn" (click)="router.navigate(['/'])">Cancelar</button>
+      <button class="submit-btn" (click)="finishCreation()" [disabled]="!name">COMENZAR AVENTURA</button>
+    </footer>
+  </div>
+</div>

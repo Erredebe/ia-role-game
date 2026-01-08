@@ -11,13 +11,31 @@ export class GameService {
   
   // State using Angular Signals
   state = signal<GameState | null>(null);
+  currentId = signal<string | null>(null);
   loading = signal<boolean>(false);
 
   constructor(private http: HttpClient) {}
 
-  async fetchState() {
+  async listGames() {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/list`));
+  }
+
+  async createNewGame(character: any) {
+    this.loading.set(true);
     try {
-      const state = await firstValueFrom(this.http.get<GameState>(`${this.apiUrl}/state`));
+      const response = await firstValueFrom(this.http.post<{id: string, state: GameState}>(`${this.apiUrl}/new`, { character }));
+      this.currentId.set(response.id);
+      this.state.set(response.state);
+      return response;
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async fetchState(id: string) {
+    try {
+      const state = await firstValueFrom(this.http.get<GameState>(`${this.apiUrl}/${id}/state`));
+      this.currentId.set(id);
       this.state.set(state);
     } catch (error) {
       console.error('Error fetching state', error);
@@ -25,9 +43,12 @@ export class GameService {
   }
 
   async sendAction(action: string) {
+    const id = this.currentId();
+    if (!id) throw new Error('No active session');
+
     this.loading.set(true);
     try {
-      const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/action`, { action }));
+      const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, { action }));
       this.state.set(response.gameState);
       return response;
     } catch (error) {
@@ -35,15 +56,6 @@ export class GameService {
       throw error;
     } finally {
       this.loading.set(false);
-    }
-  }
-
-  async resetGame() {
-    try {
-      const response = await firstValueFrom(this.http.post<{state: GameState}>(`${this.apiUrl}/reset`, {}));
-      this.state.set(response.state);
-    } catch (error) {
-      console.error('Error resetting game', error);
     }
   }
 }
