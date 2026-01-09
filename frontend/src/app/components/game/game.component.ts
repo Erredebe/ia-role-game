@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation, computed } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
-import { ChatMessage, Item, Equipment } from '../../interfaces/game';
+import { SpeechService } from '../../services/speech.service';
+import { ChatMessage, Item, Equipment, GameState } from '../../interfaces/game';
 import { CharacterPanelComponent } from './character-panel/character-panel.component';
 import { ChatPanelComponent } from './chat-panel/chat-panel.component';
 
@@ -26,7 +27,7 @@ const EQUIPMENT_SLOTS: Array<{ label: string; key: EquipmentSlotKey }> = [
   styleUrl: './game.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
   @ViewChild(ChatPanelComponent) private chatPanel?: ChatPanelComponent;
 
   userInput: string = '';
@@ -34,9 +35,15 @@ export class GameComponent implements OnInit {
   equipmentCollapsed: boolean = false;
   inventoryCollapsed: boolean = false;
   isSaving: boolean = false;
+  ttsEnabled: boolean = true;
+  ttsSpeaking: boolean = false;
+  ttsPaused: boolean = false;
+  private lastSpokenText: string | null = null;
+  private ttsUnsubscribe?: () => void;
 
   constructor(
     public gameService: GameService,
+    private speechService: SpeechService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -102,11 +109,20 @@ export class GameComponent implements OnInit {
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    this.speechService.loadVoices();
+    this.ttsUnsubscribe = this.speechService.onStateChange(() => this.syncTtsState());
+    this.syncTtsState();
     if (id) {
       await this.gameService.fetchState(id);
       this.extractSuggestions();
+      this.speakLatestNarrativeFromState(this.gameService.state());
       this.scrollToBottom();
     }
+  }
+
+  ngOnDestroy() {
+    this.ttsUnsubscribe?.();
+    this.speechService.stop();
   }
 
   async sendAction(action?: string) {
@@ -127,6 +143,7 @@ export class GameComponent implements OnInit {
 
     const response = await this.gameService.sendAction(text);
     this.suggestedActions = response.suggestedActions || [];
+    this.speakNarrativeIfNew(response.narrative);
     this.scrollToBottom();
   }
 
@@ -149,6 +166,28 @@ export class GameComponent implements OnInit {
   resetGame() {
     // Navigate to landing to reset
     this.goToLanding();
+  }
+
+  toggleTtsAuto() {
+    this.ttsEnabled = !this.ttsEnabled;
+    if (!this.ttsEnabled) {
+      this.speechService.stop();
+    }
+    this.syncTtsState();
+  }
+
+  toggleTtsPause() {
+    if (this.ttsPaused) {
+      this.speechService.resume();
+    } else {
+      this.speechService.pause();
+    }
+    this.syncTtsState();
+  }
+
+  stopTts() {
+    this.speechService.stop();
+    this.syncTtsState();
   }
 
   private extractSuggestions() {
@@ -218,5 +257,35 @@ export class GameComponent implements OnInit {
 
   private scrollToBottom() {
     this.chatPanel?.scrollToBottom();
+  }
+
+  private speakNarrative(text: string) {
+    this.speakNarrativeIfNew(text);
+  }
+
+  private speakNarrativeIfNew(text: string) {
+    if (!this.ttsEnabled) return;
+    const normalized = text.trim();
+    if (!normalized) return;
+    if (this.lastSpokenText === normalized) return;
+    this.speechService.speak(normalized, { lang: 'es-ES', rate: 1, pitch: 1 });
+    this.lastSpokenText = normalized;
+    this.syncTtsState();
+  }
+
+  private speakLatestNarrativeFromState(state: GameState | null) {
+    if (!state?.narrativeHistory?.length) return;
+    for (let i = state.narrativeHistory.length - 1; i >= 0; i -= 1) {
+      const message = state.narrativeHistory[i];
+      if (message.role === 'assistant') {
+        this.speakNarrativeIfNew(message.content);
+        return;
+      }
+    }
+  }
+
+  private syncTtsState() {
+    this.ttsSpeaking = this.speechService.isSpeaking();
+    this.ttsPaused = this.speechService.isPaused();
   }
 }

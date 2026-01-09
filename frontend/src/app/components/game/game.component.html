@@ -33,6 +33,12 @@
       [suggestedActions]="suggestedActions"
       [loading]="loading()"
       [(userInput)]="userInput"
+      [ttsEnabled]="ttsEnabled"
+      [ttsSpeaking]="ttsSpeaking"
+      [ttsPaused]="ttsPaused"
+      (toggleTts)="toggleTtsAuto()"
+      (togglePauseTts)="toggleTtsPause()"
+      (stopTts)="stopTts()"
       (sendAction)="sendAction($event)"
     >
     </app-chat-panel>

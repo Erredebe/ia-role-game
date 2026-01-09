@@ -17,9 +17,15 @@ export class ChatPanelComponent {
   @Input() suggestedActions: string[] = [];
   @Input() loading: boolean = false;
   @Input() userInput: string = '';
+  @Input() ttsEnabled: boolean = true;
+  @Input() ttsSpeaking: boolean = false;
+  @Input() ttsPaused: boolean = false;
 
   @Output() userInputChange = new EventEmitter<string>();
   @Output() sendAction = new EventEmitter<string | undefined>();
+  @Output() toggleTts = new EventEmitter<void>();
+  @Output() togglePauseTts = new EventEmitter<void>();
+  @Output() stopTts = new EventEmitter<void>();
 
   scrollToBottom() {
     setTimeout(() => {
