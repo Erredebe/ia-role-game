@@ -7,7 +7,8 @@ import { ChatMessage } from '../../../interfaces/game';
   selector: 'app-chat-panel',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './chat-panel.component.html'
+  templateUrl: './chat-panel.component.html',
+  styleUrl: './chat-panel.component.css'
 })
 export class ChatPanelComponent {
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

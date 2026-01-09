@@ -8,7 +8,8 @@ type EquipmentSlotKey = keyof Equipment;
   selector: 'app-character-panel',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './character-panel.component.html'
+  templateUrl: './character-panel.component.html',
+  styleUrl: './character-panel.component.css'
 })
 export class CharacterPanelComponent {
   @Input() character?: Character | null;

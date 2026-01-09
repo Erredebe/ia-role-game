@@ -1,4 +1,4 @@
-<main class="chat-area glass-card">
+﻿<main class="chat-area glass-card">
   <div class="messages" #scrollContainer>
     <div *ngFor="let msg of displayHistory"
          [class]="'message ' + msg.role">
@@ -27,7 +27,7 @@
              [(ngModel)]="userInput"
              (ngModelChange)="userInputChange.emit($event)"
              (keyup.enter)="sendAction.emit()"
-             placeholder="Escribe tu próximo movimiento..."
+             placeholder="Escribe tu proximo movimiento..."
              [disabled]="loading">
       <button (click)="sendAction.emit()" [disabled]="loading">
         {{ loading ? '...' : 'ENVIAR' }}
@@ -35,3 +35,4 @@
     </div>
   </div>
 </main>
+
