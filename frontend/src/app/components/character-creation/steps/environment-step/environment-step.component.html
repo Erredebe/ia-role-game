@@ -1,0 +1,36 @@
+<section class="step-content">
+  <div class="step-form">
+    <div class="environment-selection">
+      <label>Elige tu Universo</label>
+      <div class="environment-grid">
+        <div class="environment-card"
+             *ngFor="let env of environments"
+             [class.active]="selectedEnvironmentId === env.id"
+             (click)="selectEnvironment.emit(env.id)">
+          <span class="environment-icon">{{ env.icon }}</span>
+          <div class="environment-info">
+            <h4>{{ env.name }}</h4>
+            <p>{{ env.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Reglas o Tematica Personalizada <small>(Opcional)</small></label>
+      <p class="input-hint">Define censura, tono especifico, o reglas especiales del mundo.</p>
+      <textarea [(ngModel)]="customRules"
+                (ngModelChange)="customRulesChange.emit($event)"
+                placeholder="Ej: Mundo sin metal, horror cosmico, tono humoristico..."
+                rows="3"></textarea>
+    </div>
+  </div>
+
+  <div class="step-preview center-preview">
+     <div class="environment-preview-card">
+        <h3>{{ currentEnvironment.name }}</h3>
+        <p>{{ currentEnvironment.description }}</p>
+        <div class="environment-icon-large">{{ currentEnvironment.icon }}</div>
+     </div>
+  </div>
+</section>

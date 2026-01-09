@@ -1,0 +1,59 @@
+<section class="step-content">
+  <div class="step-form">
+    <div class="stats-card glass-card">
+      <div class="stats-header">
+        <h3>Atributos Base</h3>
+        <button (click)="rollStats.emit()" [disabled]="isRolling">LANZAR DADOS</button>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="label">FUE</span>
+          <span class="value" [class.rolling]="isRolling">{{ stats.strength }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">DES</span>
+          <span class="value" [class.rolling]="isRolling">{{ stats.dexterity }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">INT</span>
+          <span class="value" [class.rolling]="isRolling">{{ stats.intelligence }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">SUER</span>
+          <span class="value" [class.rolling]="isRolling">{{ stats.luck }}</span>
+        </div>
+      </div>
+      <p class="stats-note" *ngIf="currentClass">
+        Bonificadores de Clase: HP {{currentClass.baseHp}} / Mana {{currentClass.baseMana}}
+      </p>
+    </div>
+
+    <div class="input-group">
+      <label>Historia de Fondo <small>(Opcional)</small></label>
+      <textarea [(ngModel)]="backstory"
+                (ngModelChange)="backstoryChange.emit($event)"
+                placeholder="Origen de tu personaje..."
+                rows="4"
+                maxlength="600"></textarea>
+    </div>
+  </div>
+
+  <div class="step-preview">
+     <div class="summary-card">
+       <h3>Resumen Final</h3>
+       <ul class="summary-list">
+         <li><strong>Nombre:</strong> {{ name }}</li>
+         <li><strong>Universo:</strong> {{ currentEnvironment.name }}</li>
+         <li><strong>Clase:</strong> {{ currentClass?.name }}</li>
+         <li><strong>Reglas:</strong> {{ customRules ? 'Personalizadas' : 'Estandar' }}</li>
+       </ul>
+       <div class="inventory-preview" *ngIf="currentClass">
+         <h4>Inventario Inicial</h4>
+         <div class="inventory-tags">
+           <span class="item-tag" *ngFor="let item of initialInventory">{{ item.name }}</span>
+         </div>
+       </div>
+     </div>
+  </div>
+</section>

@@ -1,30 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { ThemeService } from '../../services/theme.service';
 import { Item } from '../../interfaces/game';
-
-interface CharacterClass {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  baseHp: number;
-  baseMana: number;
-  allowedEnvironments: string[];
-}
-
-interface EnvironmentOption {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  prompt: string;
-  classArchetypes: string[];
-  objectArchetypes: string[];
-}
+import { CharacterClass, EnvironmentOption } from './character-creation.types';
+import { EnvironmentStepComponent } from './steps/environment-step/environment-step.component';
+import { ClassStepComponent } from './steps/class-step/class-step.component';
+import { SummaryStepComponent } from './steps/summary-step/summary-step.component';
 
 const DEFAULT_STATS = {
   strength: 10,
@@ -53,9 +37,16 @@ const makeItem = (
 @Component({
   selector: 'app-character-creation',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    EnvironmentStepComponent,
+    ClassStepComponent,
+    SummaryStepComponent
+  ],
   templateUrl: './character-creation.component.html',
-  styleUrl: './character-creation.component.css'
+  styleUrl: './character-creation.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class CharacterCreationComponent implements OnInit {
   name: string = '';
@@ -67,6 +58,7 @@ export class CharacterCreationComponent implements OnInit {
   
   currentStep: number = 1;
   readonly totalSteps: number = 3;
+  isCreating: boolean = false;
 
   readonly classes: CharacterClass[] = [
     { 
@@ -263,6 +255,8 @@ export class CharacterCreationComponent implements OnInit {
     }
     
     if (!this.currentClass) return;
+    if (this.isCreating) return;
+    this.isCreating = true;
 
     const trimmedBackstory = this.backstory.trim();
     const character = {
@@ -284,9 +278,13 @@ export class CharacterCreationComponent implements OnInit {
       customRules: this.customRules
     };
 
-    const response = await this.gameService.createNewGame(character, environment);
-    if (response) {
-      this.router.navigate(['/game', response.id]);
+    try {
+      const response = await this.gameService.createNewGame(character, environment);
+      if (response) {
+        this.router.navigate(['/game', response.id]);
+      }
+    } finally {
+      this.isCreating = false;
     }
   }
 

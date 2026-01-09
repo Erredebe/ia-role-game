@@ -1,4 +1,4 @@
-<div class="main-container">
+﻿<div class="main-container">
   <!-- Header -->
   <header class="header glass-card nav-glow">
     <h1>IA ROLE GAME</h1>
@@ -10,126 +10,24 @@
   </header>
 
   <div class="content-grid">
-    <!-- Sidebar: Character Plate -->
-    <aside class="sidebar glass-card">
-      <div class="profile">
-        <div class="avatar-glow">
-          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ state()?.character?.avatarSeed || state()?.character?.name }}" alt="Avatar">
-        </div>
-        <h2>{{ state()?.character?.name }}</h2>
-        <p class="subtitle">{{ state()?.character?.class }}</p>
-      </div>
+    <app-character-panel
+      [character]="character()"
+      [calculatedStats]="calculatedStats()"
+      [equipmentList]="getEquipmentList()"
+      [equipmentCollapsed]="equipmentCollapsed"
+      [inventoryCollapsed]="inventoryCollapsed"
+      (toggleEquipment)="toggleEquipment()"
+      (toggleInventory)="toggleInventory()"
+      (equipItem)="equipItem($event)"
+      (unequipItem)="unequipItem($event)">
+    </app-character-panel>
 
-      <div class="stats">
-        <div class="stat-bar">
-          <div class="stat-label">
-            <span>HP</span>
-            <span>{{ state()?.character?.hp }}/{{ state()?.character?.maxHp }}</span>
-          </div>
-          <div class="progress-bg">
-            <div class="progress-fill hp" [style.width.%]="(state()?.character?.hp || 0) / (state()?.character?.maxHp || 1) * 100"></div>
-          </div>
-        </div>
-
-        <div class="stat-bar">
-          <div class="stat-label">
-            <span>MANA</span>
-            <span>{{ state()?.character?.mana }}/{{ state()?.character?.maxMana }}</span>
-          </div>
-          <div class="progress-bg">
-            <div class="progress-fill mana" [style.width.%]="(state()?.character?.mana || 0) / (state()?.character?.maxMana || 1) * 100"></div>
-          </div>
-        </div>
-
-        <div class="character-stats-summary">
-            <div class="mini-stat" title="Fuerza"><span>FUE:</span> {{ calculatedStats().strength }}</div>
-            <div class="mini-stat" title="Destreza"><span>DES:</span> {{ calculatedStats().dexterity }}</div>
-            <div class="mini-stat" title="Inteligencia"><span>INT:</span> {{ calculatedStats().intelligence }}</div>
-            <div class="mini-stat" title="Suerte"><span>SUER:</span> {{ calculatedStats().luck }}</div>
-        </div>
-      </div>
-
-      <div class="equipment-section">
-        <div class="section-header" (click)="toggleEquipment()">
-          <h3>Equipo</h3>
-          <button class="collapse-btn" [class.collapsed]="equipmentCollapsed">
-            {{ equipmentCollapsed ? '▼' : '▲' }}
-          </button>
-        </div>
-        <div class="equipment-grid" *ngIf="!equipmentCollapsed">
-          <div class="eq-slot" *ngFor="let slot of getEquipmentList()">
-            <div class="slot-label">{{ slot.slot }}</div>
-            <div class="slot-item" [class.empty]="!slot.item">
-              <span *ngIf="slot.item">{{ slot.item.name }}</span>
-              <button class="unequip-btn" *ngIf="slot.item" (click)="unequipItem(slot.key)" title="Desequipar">×</button>
-              <span *ngIf="!slot.item" class="placeholder">-</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="inventory">
-        <div class="section-header" (click)="toggleInventory()">
-          <h3>Mochila</h3>
-          <button class="collapse-btn" [class.collapsed]="inventoryCollapsed">
-            {{ inventoryCollapsed ? '▼' : '▲' }}
-          </button>
-        </div>
-        <div class="inventory-list" *ngIf="!inventoryCollapsed">
-          <div class="inv-item" *ngFor="let item of state()?.character?.inventory">
-            <div class="item-info">
-              <span class="item-name">{{ item.name }}</span>
-              <span class="item-desc">{{ item.description }}</span>
-            </div>
-            <button class="equip-btn" 
-                    *ngIf="isEquippable(item)" 
-                    (click)="equipItem(item)">
-              Equipar
-            </button>
-          </div>
-          <div *ngIf="!state()?.character?.inventory?.length" class="empty-msg">
-            Mochila vacía
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main: Chat -->
-    <main class="chat-area glass-card">
-      <div class="messages" #scrollContainer>
-        <div *ngFor="let msg of displayHistory()" 
-             [class]="'message ' + msg.role">
-          <div class="bubble">
-            <span *ngIf="msg.role === 'system'" class="system-tag">Sistema</span>
-            <p>{{ msg.content }}</p>
-          </div>
-        </div>
-        <div *ngIf="loading()" class="message assistant">
-          <div class="bubble typing">
-            <span>.</span><span>.</span><span>.</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-controls">
-        <div class="suggestions">
-          <button *ngFor="let action of suggestedActions" 
-                  (click)="sendAction(action)"
-                  [disabled]="loading()">
-            {{ action }}
-          </button>
-        </div>
-        <div class="input-wrapper">
-          <input type="text" 
-                 [(ngModel)]="userInput" 
-                 (keyup.enter)="sendAction()"
-                 placeholder="Escribe tu próximo movimiento..."
-                 [disabled]="loading()">
-          <button (click)="sendAction()" [disabled]="loading()">
-            {{ loading() ? '...' : 'ENVIAR' }}
-          </button>
-        </div>
-      </div>
-    </main>
+    <app-chat-panel
+      [displayHistory]="displayHistory()"
+      [suggestedActions]="suggestedActions"
+      [loading]="loading()"
+      [(userInput)]="userInput"
+      (sendAction)="sendAction($event)">
+    </app-chat-panel>
   </div>
 </div>

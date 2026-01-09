@@ -1,0 +1,37 @@
+<main class="chat-area glass-card">
+  <div class="messages" #scrollContainer>
+    <div *ngFor="let msg of displayHistory"
+         [class]="'message ' + msg.role">
+      <div class="bubble">
+        <span *ngIf="msg.role === 'system'" class="system-tag">Sistema</span>
+        <p>{{ msg.content }}</p>
+      </div>
+    </div>
+    <div *ngIf="loading" class="message assistant">
+      <div class="bubble typing">
+        <span>.</span><span>.</span><span>.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-controls">
+    <div class="suggestions">
+      <button *ngFor="let action of suggestedActions"
+              (click)="sendAction.emit(action)"
+              [disabled]="loading">
+        {{ action }}
+      </button>
+    </div>
+    <div class="input-wrapper">
+      <input type="text"
+             [(ngModel)]="userInput"
+             (ngModelChange)="userInputChange.emit($event)"
+             (keyup.enter)="sendAction.emit()"
+             placeholder="Escribe tu próximo movimiento..."
+             [disabled]="loading">
+      <button (click)="sendAction.emit()" [disabled]="loading">
+        {{ loading ? '...' : 'ENVIAR' }}
+      </button>
+    </div>
+  </div>
+</main>

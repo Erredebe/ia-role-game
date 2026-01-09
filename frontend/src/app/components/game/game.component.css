@@ -65,11 +65,21 @@
   min-height: 0;
 }
 
+app-character-panel,
+app-chat-panel {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+
 .sidebar {
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .profile {
@@ -191,6 +201,7 @@
   padding: 0;
   overflow: hidden;
   min-height: 0;
+  height: 100%;
 }
 
 .messages {

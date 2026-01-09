@@ -1,9 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild, signal, computed } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { ChatMessage, Item, Equipment } from '../../interfaces/game';
+import { CharacterPanelComponent } from './character-panel/character-panel.component';
+import { ChatPanelComponent } from './chat-panel/chat-panel.component';
 
 type EquipmentSlotKey = keyof Equipment;
 
@@ -19,12 +21,13 @@ const EQUIPMENT_SLOTS: Array<{ label: string; key: EquipmentSlotKey }> = [
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CharacterPanelComponent, ChatPanelComponent],
   templateUrl: './game.component.html',
-  styleUrl: './game.component.css'
+  styleUrl: './game.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @ViewChild(ChatPanelComponent) private chatPanel?: ChatPanelComponent;
   
   userInput: string = '';
   suggestedActions: string[] = [];
@@ -192,10 +195,6 @@ export class GameComponent implements OnInit {
   }
 
   private scrollToBottom() {
-    setTimeout(() => {
-      if (this.scrollContainer) {
-        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-      }
-    }, 100);
+    this.chatPanel?.scrollToBottom();
   }
 }

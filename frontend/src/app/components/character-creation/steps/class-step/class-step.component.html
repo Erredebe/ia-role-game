@@ -1,0 +1,51 @@
+<section class="step-content">
+  <div class="step-form">
+    <div class="input-group">
+      <label>Nombre del Aventurero</label>
+      <input type="text"
+             [(ngModel)]="name"
+             (ngModelChange)="nameChange.emit($event)"
+             placeholder="Tu nombre..."
+             maxlength="20">
+    </div>
+
+    <div class="input-group">
+      <label>Apariencia</label>
+      <div class="input-with-button">
+        <input type="text"
+               [(ngModel)]="avatarSeed"
+               (ngModelChange)="avatarSeedChange.emit($event)"
+               placeholder="Seed...">
+        <button type="button" (click)="randomizeAvatarSeed.emit()">Randomizar</button>
+      </div>
+    </div>
+
+    <div class="class-selection">
+      <label>Clase Disponibles en {{ currentEnvironment.name }}</label>
+      <div class="class-grid">
+        <div class="class-card"
+             *ngFor="let c of availableClasses"
+             [class.active]="selectedClassId === c.id"
+             (click)="selectClass.emit(c.id)">
+          <span class="class-icon">{{ c.icon }}</span>
+          <div class="class-info">
+            <h4>{{ c.name }}</h4>
+            <p>{{ c.description }}</p>
+          </div>
+        </div>
+      </div>
+      <p *ngIf="availableClasses.length === 0" class="warning-text">No hay clases disponibles para este entorno.</p>
+    </div>
+  </div>
+
+  <div class="step-preview">
+    <div class="avatar-preview">
+      <div class="avatar-glow">
+        <img [src]="avatarUrl" alt="Preview">
+      </div>
+      <h3>{{ name || '???' }}</h3>
+      <p class="class-badge" *ngIf="currentClass">{{ currentClass.name }}</p>
+      <p class="environment-badge">{{ currentEnvironment.name }}</p>
+    </div>
+  </div>
+</section>

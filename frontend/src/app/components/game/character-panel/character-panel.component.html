@@ -1,0 +1,100 @@
+<aside class="sidebar glass-card">
+  <div class="profile">
+    <div class="avatar-glow">
+      <img
+        src="https://api.dicebear.com/7.x/avataaars/svg?seed={{
+          character?.avatarSeed || character?.name
+        }}"
+        alt="Avatar"
+      />
+    </div>
+    <h2>{{ character?.name }}</h2>
+    <p class="subtitle">{{ character?.class }}</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-bar">
+      <div class="stat-label">
+        <span>HP</span>
+        <span>{{ character?.hp }}/{{ character?.maxHp }}</span>
+      </div>
+      <div class="progress-bg">
+        <div
+          class="progress-fill hp"
+          [style.width.%]="((character?.hp || 0) / (character?.maxHp || 1)) * 100"
+        ></div>
+      </div>
+    </div>
+
+    <div class="stat-bar">
+      <div class="stat-label">
+        <span>MANA</span>
+        <span>{{ character?.mana }}/{{ character?.maxMana }}</span>
+      </div>
+      <div class="progress-bg">
+        <div
+          class="progress-fill mana"
+          [style.width.%]="((character?.mana || 0) / (character?.maxMana || 1)) * 100"
+        ></div>
+      </div>
+    </div>
+
+    <div class="character-stats-summary">
+      <div class="mini-stat" title="Fuerza"><span>FUE:</span> {{ calculatedStats.strength }}</div>
+      <div class="mini-stat" title="Destreza">
+        <span>DES:</span> {{ calculatedStats.dexterity }}
+      </div>
+      <div class="mini-stat" title="Inteligencia">
+        <span>INT:</span> {{ calculatedStats.intelligence }}
+      </div>
+      <div class="mini-stat" title="Suerte"><span>SUER:</span> {{ calculatedStats.luck }}</div>
+    </div>
+  </div>
+
+  <div class="equipment-section">
+    <div class="section-header" (click)="toggleEquipment.emit()">
+      <h3>Equipo</h3>
+      <button class="collapse-btn" [class.collapsed]="equipmentCollapsed">
+        {{ equipmentCollapsed ? '▼' : '▲' }}
+      </button>
+    </div>
+    <div class="equipment-grid" *ngIf="!equipmentCollapsed">
+      <div class="eq-slot" *ngFor="let slot of equipmentList">
+        <div class="slot-label">{{ slot.slot }}</div>
+        <div class="slot-item" [class.empty]="!slot.item">
+          <span *ngIf="slot.item">{{ slot.item.name }}</span>
+          <button
+            class="unequip-btn"
+            *ngIf="slot.item"
+            (click)="unequipItem.emit(slot.key)"
+            title="Desequipar"
+          >
+            ✖
+          </button>
+          <span *ngIf="!slot.item" class="placeholder">-</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inventory">
+    <div class="section-header" (click)="toggleInventory.emit()">
+      <h3>Mochila</h3>
+      <button class="collapse-btn" [class.collapsed]="inventoryCollapsed">
+        {{ inventoryCollapsed ? '▼' : '▲' }}
+      </button>
+    </div>
+    <div class="inventory-list" *ngIf="!inventoryCollapsed">
+      <div class="inv-item" *ngFor="let item of character?.inventory">
+        <div class="item-info">
+          <span class="item-name">{{ item.name }}</span>
+          <span class="item-desc">{{ item.description }}</span>
+        </div>
+        <button class="equip-btn" *ngIf="isEquippable(item)" (click)="equipItem.emit(item)">
+          Equipar
+        </button>
+      </div>
+      <div *ngIf="!character?.inventory?.length" class="empty-msg">Mochila vacía</div>
+    </div>
+  </div>
+</aside>

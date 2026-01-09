@@ -426,6 +426,12 @@
   gap: 1rem;
 }
 
+.creation-status {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
 .cancel-btn {
   background: transparent;
   border: none;
