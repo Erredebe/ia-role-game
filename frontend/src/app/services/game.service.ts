@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GameState, ActionResponse } from '../interfaces/game';
+import { GameState, ActionResponse, SystemAction } from '../interfaces/game';
 import { firstValueFrom } from 'rxjs';
 import { ThemeService } from './theme.service';
 
@@ -21,11 +21,11 @@ export class GameService {
     private themeService: ThemeService
   ) {}
 
-  async listGames() {
+  async listGames(): Promise<LocalSaveSummary[]> {
     const saves = this.readLocalSaves();
     return Object.values(saves)
-      .filter((entry: any) => entry && entry.state)
-      .map((entry: any) => ({
+      .filter(entry => entry && entry.state)
+      .map(entry => ({
         id: entry.id,
         characterName: entry.characterName,
         characterClass: entry.characterClass,
@@ -35,8 +35,7 @@ export class GameService {
   }
 
   async createNewGame(character: any, environment?: any): Promise<{id: string, state: GameState}> {
-    this.loading.set(true);
-    try {
+    return this.withLoading(async () => {
       const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/new`, { character, environment }));
       const id = response.id || response.sessionId;
       const state = response.state || response.gameState;
@@ -45,16 +44,9 @@ export class GameService {
         throw new Error('Respuesta invalida al crear partida');
       }
 
-      this.currentId.set(id);
-      this.state.set(state);
-      if (state.environment) {
-        this.themeService.setTheme(state.environment.id);
-      }
-      this.saveLocalGame(id, state);
+      this.applyState(id, state);
       return { id, state };
-    } finally {
-      this.loading.set(false);
-    }
+    });
   }
 
   async fetchState(id: string) {
@@ -63,12 +55,7 @@ export class GameService {
       try {
         const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/restore`, { id, state: localState }));
         const state = response.gameState || localState;
-        this.currentId.set(id);
-        this.state.set(state);
-        if (state.environment) {
-          this.themeService.setTheme(state.environment.id);
-        }
-        this.saveLocalGame(id, state);
+        this.applyState(id, state);
         return;
       } catch (error) {
         console.error('Error restoring state', error);
@@ -77,12 +64,7 @@ export class GameService {
 
     try {
       const state = await firstValueFrom(this.http.get<GameState>(`${this.apiUrl}/${id}/state`));
-      this.currentId.set(id);
-      this.state.set(state);
-      if (state.environment) {
-        this.themeService.setTheme(state.environment.id);
-      }
-      this.saveLocalGame(id, state);
+      this.applyState(id, state);
     } catch (error) {
       console.error('Error fetching state', error);
     }
@@ -92,26 +74,21 @@ export class GameService {
     const id = this.currentId();
     if (!id) throw new Error('No active session');
 
-    this.loading.set(true);
-    try {
+    return this.withLoading(async () => {
       const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, { action }));
-      this.state.set(response.gameState);
-      this.saveLocalGame(id, response.gameState);
+      this.applyState(id, response.gameState);
       return response;
-    } catch (error) {
+    }).catch(error => {
       console.error('Error sending action', error);
       throw error;
-    } finally {
-      this.loading.set(false);
-    }
+    });
   }
 
-  async performSystemAction(systemAction: 'equip' | 'unequip', targetId: string) {
+  async performSystemAction(systemAction: SystemAction, targetId: string) {
     const id = this.currentId();
     if (!id) throw new Error('No active session');
 
-    this.loading.set(true);
-    try {
+    return this.withLoading(async () => {
       const payload = {
         action: '', // Not used for system actions but keeping schema
         type: 'system',
@@ -120,18 +97,33 @@ export class GameService {
       };
       
       const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload));
-      this.state.set(response.gameState);
-      this.saveLocalGame(id, response.gameState);
+      this.applyState(id, response.gameState);
       return response;
-    } catch (error: any) {
-        console.error('Error performing system action', error);
-        throw error;
+    }).catch((error: any) => {
+      console.error('Error performing system action', error);
+      throw error;
+    });
+  }
+
+  private applyState(id: string, state: GameState) {
+    this.currentId.set(id);
+    this.state.set(state);
+    if (state.environment) {
+      this.themeService.setTheme(state.environment.id);
+    }
+    this.saveLocalGame(id, state);
+  }
+
+  private async withLoading<T>(task: () => Promise<T>): Promise<T> {
+    this.loading.set(true);
+    try {
+      return await task();
     } finally {
-        this.loading.set(false);
+      this.loading.set(false);
     }
   }
 
-  private readLocalSaves(): Record<string, any> {
+  private readLocalSaves(): Record<string, LocalSaveEntry> {
     if (typeof localStorage === 'undefined') return {};
     try {
       const raw = localStorage.getItem(this.localStorageKey);
@@ -142,7 +134,7 @@ export class GameService {
     }
   }
 
-  private writeLocalSaves(saves: Record<string, any>) {
+  private writeLocalSaves(saves: Record<string, LocalSaveEntry>) {
     if (typeof localStorage === 'undefined') return;
     localStorage.setItem(this.localStorageKey, JSON.stringify(saves));
   }
@@ -164,4 +156,19 @@ export class GameService {
     const saves = this.readLocalSaves();
     return saves[id]?.state || null;
   }
+}
+
+interface LocalSaveEntry {
+  id: string;
+  characterName: string;
+  characterClass: string;
+  updatedAt: string;
+  state: GameState;
+}
+
+export interface LocalSaveSummary {
+  id: string;
+  characterName: string;
+  characterClass: string;
+  updatedAt: string;
 }

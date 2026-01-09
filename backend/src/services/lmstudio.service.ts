@@ -4,8 +4,10 @@ import { ChatMessage, GameAction, EnvironmentSetting } from '../interfaces/game.
 
 export class LMStudioService implements AIAdapter {
     private readonly baseUrl = process.env.LM_STUDIO_URL || 'http://localhost:1234/v1';
+    private readonly model = process.env.LM_STUDIO_MODEL || 'dolphin3.0-llama3.1-8b';
+    private readonly historyLimit = 10;
 
-    private tryParseJson(content: string): GameAction | null {
+    private parseJsonPayload(content: string): GameAction | null {
         const raw = content.trim();
 
         if (!raw) return null;
@@ -47,32 +49,8 @@ export class LMStudioService implements AIAdapter {
         return null;
     }
 
-    async generateNarrative(history: ChatMessage[], environment?: EnvironmentSetting, currentSummary?: string): Promise<GameAction> {
-        const environmentContext = environment
-            ? `Ambientacion actual: ${environment.name}${environment.description ? `. ${environment.description}` : ''}.`
-            : 'Ambientacion actual: generica.';
-
-        const guideContext = environment?.prompt
-            ? `GUIA DE AMBIENTACION: ${environment.prompt}`
-            : '';
-
-        const classContext = environment?.classArchetypes?.length
-            ? `CLASES COMUNES: ${environment.classArchetypes.join(', ')}.`
-            : '';
-
-        const objectContext = environment?.objectArchetypes?.length
-            ? `OBJETOS COMUNES: ${environment.objectArchetypes.join(', ')}.`
-            : '';
-
-        const rulesContext = environment?.customRules
-            ? `REGLAS DEL CAMPANA (IMPORTANTE): ${environment.customRules}`
-            : '';
-
-        const summaryContext = currentSummary
-            ? `RESUMEN DE LO OCURRIDO HASTA AHORA: ${currentSummary}`
-            : 'Inicio de la aventura.';
-
-        const systemPrompt: ChatMessage = {
+    private buildSystemPrompt(): ChatMessage {
+        return {
             role: 'system',
             content: `Eres un Maestro de Calabozo experto. Tu objetivo es narrar una aventura de rol.
             IMPORTANTE: Debes responder EXCLUSIVAMENTE en formato JSON valido con la siguiente estructura (sin texto adicional):
@@ -97,18 +75,47 @@ export class LMStudioService implements AIAdapter {
             4. "updatedSummary" debe condensar la historia previa + el nuevo evento.
             5. Evita anacronismos: respeta la ambientacion, clases y objetos coherentes con el mundo.`
         };
+    }
 
-        const environmentMessage: ChatMessage = {
+    private buildEnvironmentMessage(environment?: EnvironmentSetting, currentSummary?: string): ChatMessage {
+        const environmentContext = environment
+            ? `Ambientacion actual: ${environment.name}${environment.description ? `. ${environment.description}` : ''}.`
+            : 'Ambientacion actual: generica.';
+
+        const sections = [
+            environmentContext,
+            environment?.prompt ? `GUIA DE AMBIENTACION: ${environment.prompt}` : '',
+            environment?.classArchetypes?.length ? `CLASES COMUNES: ${environment.classArchetypes.join(', ')}.` : '',
+            environment?.objectArchetypes?.length ? `OBJETOS COMUNES: ${environment.objectArchetypes.join(', ')}.` : '',
+            environment?.customRules ? `REGLAS DEL CAMPANA (IMPORTANTE): ${environment.customRules}` : '',
+            currentSummary ? `RESUMEN DE LO OCURRIDO HASTA AHORA: ${currentSummary}` : 'Inicio de la aventura.'
+        ];
+
+        return {
             role: 'system',
-            content: `${environmentContext}\n${guideContext}\n${classContext}\n${objectContext}\n${rulesContext}\n${summaryContext}`
+            content: sections.filter(Boolean).join('\n')
         };
+    }
 
-        // Limit history to last 10 messages to save context window, trusting the summary
-        const limitedHistory = history.slice(-10);
+    private normalizeAction(payload: GameAction): GameAction {
+        return {
+            ...payload,
+            type: payload.type || 'narrative',
+            suggestedActions: payload.suggestedActions || [],
+            updatedState: payload.updatedState || {}
+        };
+    }
+
+    async generateNarrative(history: ChatMessage[], environment?: EnvironmentSetting, currentSummary?: string): Promise<GameAction> {
+        const systemPrompt = this.buildSystemPrompt();
+        const environmentMessage = this.buildEnvironmentMessage(environment, currentSummary);
+
+        // Limit history to last messages to save context window, trusting the summary.
+        const limitedHistory = history.slice(-this.historyLimit);
 
         try {
             const payload = {
-                model: 'dolphin3.0-llama3.1-8b',
+                model: this.model,
                 messages: [systemPrompt, environmentMessage, ...limitedHistory],
                 temperature: 0.7,
                 response_format: { type: 'json_object' }
@@ -126,25 +133,25 @@ export class LMStudioService implements AIAdapter {
 
             const content = response.data.choices[0].message.content;
 
-            const parsed = this.tryParseJson(content);
+            const parsed = this.parseJsonPayload(content);
             if (parsed) {
-                if (!parsed.suggestedActions) parsed.suggestedActions = [];
-                if (!parsed.updatedState) parsed.updatedState = {};
-                return parsed;
+                return this.normalizeAction(parsed);
             }
 
             console.warn('AI returned non-JSON content, attempting fallback:', content);
             return {
                 type: 'narrative',
                 description: content,
-                suggestedActions: ['Continuar']
+                suggestedActions: ['Continuar'],
+                updatedState: {}
             };
         } catch (error: any) {
             console.error('Error calling LM Studio:', error.message);
             return {
                 type: 'narrative',
                 description: 'La voz del destino se desvanece... (Error de conexion con la IA)',
-                suggestedActions: ['Reintentar']
+                suggestedActions: ['Reintentar'],
+                updatedState: {}
             };
         }
     }

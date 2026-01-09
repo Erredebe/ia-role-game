@@ -1,58 +1,76 @@
-# Juego de Rol con IA
+﻿# IA Role Game
 
-¡Bienvenido a la Mazmorra de Inteligencia Artificial! Este proyecto es un juego de rol narrativo e interactivo de vanguardia, donde una IA (Maestro de Calabozo) guía tu historia basándose en tus decisiones.
+Interactive narrative RPG powered by a local language model. The backend acts as the dungeon master and the frontend renders a live character sheet with inventory, equipment, and suggested actions.
 
-## 🌟 Características Destacadas
+## Features
 
-- **Narrativa Evolutiva**: La IA genera la historia basándose en tus acciones previas.
-- **Ficha de Personaje en Vivo**: Visualización dinámica de Salud (HP), Maná e Inventario que se actualizan según los eventos de la historia.
-- **Acciones Sugeridas**: La IA propone tres caminos posibles para agilizar la partida, aunque siempre puedes escribir tu propia acción.
-- **Estética Gamer Premium**: Interfaz moderna con efectos de cristal (glassmorphism), tipografía futurista y diseño responsivo.
-- **Arquitectura Escalable**: Separación limpia entre Backend y Frontend con el uso de Signals, TypeScript y Patrones de Diseño.
+- Narrative generated from player actions and summary memory
+- Live character sheet (HP, mana, stats, inventory, equipment)
+- Deterministic equip/unequip actions with inventory sync
+- Modern UI with theme presets per environment
+- Clear separation between backend and frontend
 
-## 🛠️ Tecnologías
+## Tech Stack
 
-- **Backend**: Node.js, Express, TypeScript, Axios (Comunicación con IA).
-- **Frontend**: Angular 18+, Signals (Estado Reactivo), CSS Moderno, DiceBear Avatars.
-- **IA**: Compatible con LM Studio (Soporta modelos tipo OpenAI API).
+- Backend: Node.js, Express, TypeScript, Axios
+- Frontend: Angular (Signals), TypeScript, CSS
+- AI: LM Studio (OpenAI-compatible local server)
 
-## 🚀 Instalación y Uso
+## Requirements
 
-### Requisitos Previos
+- Node.js + npm
+- LM Studio running a local model (default: http://localhost:1234/v1)
 
-1.  **LM Studio**: Instalado y con un modelo de lenguaje cargado (ej. Llama 3 o Mistral).
-2.  **Servidor Local de IA**: Inicia el servidor local en LM Studio (generalmente en el puerto `1234`).
+## Setup
 
-### Configuración del Proyecto
+Install dependencies in each workspace:
 
-1.  Clona el repositorio.
-2.  Instala las dependencias en la raíz:
-    ```bash
-    npm install
-    ```
+```bash
+npm install
+cd backend && npm install
+cd ../frontend && npm install
+```
 
-### Ejecutar la Aplicación
+Run both apps:
 
-Desde la carpeta raíz, simplemente ejecuta:
 ```bash
 npm run dev
 ```
-Este comando iniciará simultáneamente:
-- **Frontend**: `http://localhost:4200`
-- **Backend**: `http://localhost:3000`
 
-## 🕹️ Cómo Jugar
+Endpoints:
+- Frontend: http://localhost:4200
+- Backend: http://localhost:3000
+- Health: http://localhost:3000/health
 
-1.  Una vez iniciada la aplicación, verás tu ficha de personaje a la izquierda.
-2.  El Maestro de Calabozo iniciará la narrativa en el chat.
-3.  Utiliza los **botones de sugerencia** para actuar rápido o **escribe tu propia acción** en el cuadro de texto.
-4.  Observa cómo cambian tus estadísticas y tu inventario según lo que sucede en el mundo.
+## Configuration
 
-## 📐 Estructura del Código
+Optional environment variables:
+- `LM_STUDIO_URL` (default: http://localhost:1234/v1)
+- `LM_STUDIO_MODEL` (default: dolphin3.0-llama3.1-8b)
+- `PORT` (default: 3000)
 
-- `/backend`: Lógica del servidor, controladores y servicio de adaptador para la IA.
-- `/frontend`: Componentes de Angular, servicios de estado con Signals y estilos visuales.
-- `/package.json`: Script raíz para ejecución concurrente.
+## Data Flow
 
----
-© 2026 - IA Role Game
+1. Player sends action from the UI.
+2. Backend calls LM Studio with story history + summary.
+3. AI returns JSON updates (narrative + state changes).
+4. Backend applies changes with `applyStateUpdate` and saves the session.
+5. Frontend updates signals and localStorage.
+
+## Inventory and Equipment Rules
+
+- Equipped items must not remain in inventory.
+- Unequip moves the item back to inventory.
+- AI updates must send the full inventory list when inventory changes.
+
+## API Summary
+
+- `GET /api/game/list` list saved games (in memory)
+- `POST /api/game/new` create a new game
+- `POST /api/game/restore` restore a saved game state
+- `GET /api/game/:id/state` fetch current state
+- `POST /api/game/:id/action` send player or system actions
+
+## Storage Notes
+
+Backend storage is in-memory and resets on restart. The frontend mirrors saves in localStorage.

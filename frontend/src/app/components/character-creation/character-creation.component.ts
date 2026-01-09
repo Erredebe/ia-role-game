@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { ThemeService } from '../../services/theme.service';
-import { Item, Equipment } from '../../interfaces/game';
+import { Item } from '../../interfaces/game';
 
 interface CharacterClass {
   id: string;
@@ -26,6 +26,30 @@ interface EnvironmentOption {
   objectArchetypes: string[];
 }
 
+const DEFAULT_STATS = {
+  strength: 10,
+  dexterity: 10,
+  intelligence: 10,
+  luck: 10
+};
+
+const ROLL_DURATION_MS = 800;
+const ROLL_INTERVAL_MS = 50;
+
+const makeItem = (
+  id: string,
+  name: string,
+  type: 'weapon'|'armor'|'accessory'|'consumable'|'misc',
+  description: string,
+  stats?: any
+): Item => ({
+  id,
+  name,
+  type,
+  description,
+  stats
+});
+
 @Component({
   selector: 'app-character-creation',
   standalone: true,
@@ -42,9 +66,9 @@ export class CharacterCreationComponent implements OnInit {
   backstory: string = '';
   
   currentStep: number = 1;
-  totalSteps: number = 3;
+  readonly totalSteps: number = 3;
 
-  classes: CharacterClass[] = [
+  readonly classes: CharacterClass[] = [
     { 
       id: 'warrior', name: 'Guerrero', description: 'Frente de batalla y defensor del grupo.', icon: '⚔️', baseHp: 120, baseMana: 20,
       allowedEnvironments: ['fantasy', 'post-apocalyptic']
@@ -87,7 +111,7 @@ export class CharacterCreationComponent implements OnInit {
     }
   ];
 
-  environments: EnvironmentOption[] = [
+  readonly environments: EnvironmentOption[] = [
     { 
       id: 'fantasy',
       name: 'Fantasia',
@@ -135,12 +159,7 @@ export class CharacterCreationComponent implements OnInit {
     }
   ];
 
-  stats = {
-    strength: 10,
-    dexterity: 10,
-    intelligence: 10,
-    luck: 10
-  };
+  stats = { ...DEFAULT_STATS };
 
   isRolling: boolean = false;
 
@@ -208,7 +227,7 @@ export class CharacterCreationComponent implements OnInit {
     this.isRolling = true;
 
     const startTime = Date.now();
-    const duration = 800;
+    const duration = ROLL_DURATION_MS;
 
     const interval = setInterval(() => {
       this.stats = {
@@ -228,7 +247,7 @@ export class CharacterCreationComponent implements OnInit {
         };
         this.isRolling = false;
       }
-    }, 50);
+    }, ROLL_INTERVAL_MS);
   }
 
   private roll3d6(): number {
@@ -278,10 +297,6 @@ export class CharacterCreationComponent implements OnInit {
   public getInitialInventory(): Item[] {
     const items: Item[] = [];
     const env = this.selectedEnvironmentId;
-    const makeItem = (id: string, name: string, type: 'weapon'|'armor'|'accessory'|'consumable'|'misc', desc: string, stats?: any): Item => ({
-      id, name, type, description: desc, stats
-    });
-
     switch (this.selectedClassId) {
       case 'warrior': 
         if (env === 'post-apocalyptic') {

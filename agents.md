@@ -1,58 +1,38 @@
-# Juego de Rol con IA
+﻿# IA Role Game - Agent Notes
 
-¡Bienvenido a la Mazmorra de Inteligencia Artificial! Este proyecto es un juego de rol narrativo e interactivo de vanguardia, donde una IA (Maestro de Calabozo) guía tu historia basándose en tus decisiones.
+## Project Overview
 
-## 🌟 Características Destacadas
+Narrative RPG where the backend acts as a dungeon master through a local LLM. The frontend shows the story, character sheet, inventory, and equipment, with system actions for equip/unequip.
 
-- **Narrativa Evolutiva**: La IA genera la historia basándose en tus acciones previas.
-- **Ficha de Personaje en Vivo**: Visualización dinámica de Salud (HP), Maná e Inventario que se actualizan según los eventos de la historia.
-- **Acciones Sugeridas**: La IA propone tres caminos posibles para agilizar la partida, aunque siempre puedes escribir tu propia acción.
-- **Estética Gamer Premium**: Interfaz moderna con efectos de cristal (glassmorphism), tipografía futurista y diseño responsivo.
-- **Arquitectura Escalable**: Separación limpia entre Backend y Frontend con el uso de Signals, TypeScript y Patrones de Diseño.
+## Quick Commands
 
-## 🛠️ Tecnologías
-
-- **Backend**: Node.js, Express, TypeScript, Axios (Comunicación con IA).
-- **Frontend**: Angular 18+, Signals (Estado Reactivo), CSS Moderno, DiceBear Avatars.
-- **IA**: Compatible con LM Studio (Soporta modelos tipo OpenAI API).
-
-## 🚀 Instalación y Uso
-
-### Requisitos Previos
-
-1.  **LM Studio**: Instalado y con un modelo de lenguaje cargado (ej. Llama 3 o Mistral).
-2.  **Servidor Local de IA**: Inicia el servidor local en LM Studio (generalmente en el puerto `1234`).
-
-### Configuración del Proyecto
-
-1.  Clona el repositorio.
-2.  Instala las dependencias en la raíz:
-    ```bash
-    npm install
-    ```
-
-### Ejecutar la Aplicación
-
-Desde la carpeta raíz, simplemente ejecuta:
 ```bash
 npm run dev
 ```
-Este comando iniciará simultáneamente:
-- **Frontend**: `http://localhost:4200`
-- **Backend**: `http://localhost:3000`
 
-## 🕹️ Cómo Jugar
+Subprojects:
+- Backend: `cd backend && npm run dev`
+- Frontend: `cd frontend && npm start`
 
-1.  Una vez iniciada la aplicación, verás tu ficha de personaje a la izquierda.
-2.  El Maestro de Calabozo iniciará la narrativa en el chat.
-3.  Utiliza los **botones de sugerencia** para actuar rápido o **escribe tu propia acción** en el cuadro de texto.
-4.  Observa cómo cambian tus estadísticas y tu inventario según lo que sucede en el mundo.
+## Architecture
 
-## 📐 Estructura del Código
+- Backend: Express API + LM Studio adapter + in-memory storage.
+- Frontend: Angular Signals for state, localStorage for client persistence.
 
-- `/backend`: Lógica del servidor, controladores y servicio de adaptador para la IA.
-- `/frontend`: Componentes de Angular, servicios de estado con Signals y estilos visuales.
-- `/package.json`: Script raíz para ejecución concurrente.
+## Critical Invariants
 
----
-© 2026 - IA Role Game
+- Equipped items must not remain in inventory.
+- Unequip moves the item back to inventory.
+- When AI updates inventory, it must send the full list.
+
+## Key Files
+
+- `backend/src/controllers/game.controller.ts` API flow and session lifecycle.
+- `backend/src/services/lmstudio.service.ts` AI prompt and response parsing.
+- `backend/src/utils/state.helper.ts` inventory/equipment reconciliation.
+- `frontend/src/app/services/game.service.ts` API calls + localStorage sync.
+- `frontend/src/app/components/game/game.component.ts` UI actions and stat totals.
+
+## Storage Notes
+
+Backend state resets on restart. Frontend caches saves in localStorage.

@@ -1,10 +1,12 @@
+export type SystemAction = 'equip' | 'unequip';
+
 export interface GameState {
     character: Character;
     location: string;
     narrativeHistory: ChatMessage[];
     environment?: EnvironmentSetting;
     customRules?: string;
-    narrativeSummary: string; // Resumen acumulativo de la historia
+    narrativeSummary: string; // Accumulated story summary.
 }
 
 export interface Character {

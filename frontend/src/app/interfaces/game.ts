@@ -1,9 +1,12 @@
+export type SystemAction = 'equip' | 'unequip';
+
 export interface GameState {
     character: Character;
     location: string;
     narrativeHistory: ChatMessage[];
     environment?: EnvironmentSetting;
     customRules?: string;
+    narrativeSummary?: string;
 }
 
 export interface Character {

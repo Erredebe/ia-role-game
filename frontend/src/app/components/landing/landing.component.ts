@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { GameService } from '../../services/game.service';
+import { GameService, LocalSaveSummary } from '../../services/game.service';
 
 @Component({
   selector: 'app-landing',
@@ -11,7 +11,7 @@ import { GameService } from '../../services/game.service';
   styleUrl: './landing.component.css'
 })
 export class LandingComponent implements OnInit {
-  savedGames: any[] = [];
+  savedGames: LocalSaveSummary[] = [];
 
   constructor(private gameService: GameService, private router: Router) {}
 

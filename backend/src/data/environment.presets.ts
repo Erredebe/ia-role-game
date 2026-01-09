@@ -49,6 +49,16 @@ export const ENVIRONMENT_PRESETS: Record<string, EnvironmentPreset> = {
   }
 };
 
+const mergeEnvironment = (base: EnvironmentSetting, preset: EnvironmentPreset): EnvironmentSetting => ({
+  ...preset,
+  ...base,
+  name: base.name || preset.name,
+  description: base.description || preset.description,
+  prompt: base.prompt || preset.prompt,
+  classArchetypes: base.classArchetypes || preset.classArchetypes,
+  objectArchetypes: base.objectArchetypes || preset.objectArchetypes
+});
+
 export const resolveEnvironment = (environment?: EnvironmentSetting | string): EnvironmentSetting | undefined => {
   if (!environment) return undefined;
 
@@ -60,13 +70,5 @@ export const resolveEnvironment = (environment?: EnvironmentSetting | string): E
   const preset = ENVIRONMENT_PRESETS[base.id];
   if (!preset) return base;
 
-  return {
-    ...preset,
-    ...base,
-    name: base.name || preset.name,
-    description: base.description || preset.description,
-    prompt: base.prompt || preset.prompt,
-    classArchetypes: base.classArchetypes || preset.classArchetypes,
-    objectArchetypes: base.objectArchetypes || preset.objectArchetypes
-  };
+  return mergeEnvironment(base, preset);
 };

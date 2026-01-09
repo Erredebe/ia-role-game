@@ -3,7 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../../services/game.service';
-import { ChatMessage } from '../../interfaces/game';
+import { ChatMessage, Item, Equipment } from '../../interfaces/game';
+
+type EquipmentSlotKey = keyof Equipment;
+
+const EQUIPMENT_SLOTS: Array<{ label: string; key: EquipmentSlotKey }> = [
+  { label: 'Cabeza', key: 'head' },
+  { label: 'Cuerpo', key: 'body' },
+  { label: 'Mano Princ.', key: 'mainHand' },
+  { label: 'Mano Sec.', key: 'offHand' },
+  { label: 'Accesorios', key: 'accessory1' },
+  { label: 'Accesorios', key: 'accessory2' }
+];
 
 @Component({
   selector: 'app-game',
@@ -26,11 +37,12 @@ export class GameComponent implements OnInit {
   ) {}
 
   state = computed(() => this.gameService.state());
+  character = computed(() => this.state()?.character);
   loading = computed(() => this.gameService.loading());
   displayHistory = computed(() => this.buildDisplayHistory(this.state()?.narrativeHistory || []));
 
   calculatedStats = computed(() => {
-    const character = this.state()?.character;
+    const character = this.character();
     if (!character) return { strength: 0, dexterity: 0, intelligence: 0, luck: 0 };
 
     const stats = { ...character.stats };
@@ -50,29 +62,26 @@ export class GameComponent implements OnInit {
   });
 
   getEquipmentList() {
-    const eq = this.state()?.character?.equipment;
+    const eq = this.character()?.equipment;
     if (!eq) return [];
-    return [
-      { slot: 'Cabeza', item: eq.head, key: 'head' },
-      { slot: 'Cuerpo', item: eq.body, key: 'body' },
-      { slot: 'Mano Princ.', item: eq.mainHand, key: 'mainHand' },
-      { slot: 'Mano Sec.', item: eq.offHand, key: 'offHand' },
-      { slot: 'Accesorios', item: eq.accessory1, key: 'accessory1' },
-      { slot: 'Accesorios', item: eq.accessory2, key: 'accessory2' }
-    ];
+    return EQUIPMENT_SLOTS.map(slot => ({
+      slot: slot.label,
+      item: eq[slot.key],
+      key: slot.key
+    }));
   }
 
-  isEquippable(item: any): boolean {
+  isEquippable(item: Item): boolean {
       return ['weapon', 'armor', 'accessory'].includes(item.type);
   }
 
-  async equipItem(item: any) {
+  async equipItem(item: Item) {
       if (!this.gameService.state() || this.loading()) return;
       await this.gameService.performSystemAction('equip', item.id);
       this.scrollToBottom();
   }
 
-  async unequipItem(slot: string) {
+  async unequipItem(slot: EquipmentSlotKey) {
       if (!this.gameService.state() || this.loading()) return;
       await this.gameService.performSystemAction('unequip', slot);
       this.scrollToBottom();

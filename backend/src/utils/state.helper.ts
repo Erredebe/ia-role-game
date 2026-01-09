@@ -1,5 +1,9 @@
 import { GameState, Item, Equipment } from '../interfaces/game.interface.js';
 
+// Deep clone so we can mutate safely without side effects.
+const cloneState = <T>(value: T): T => JSON.parse(JSON.stringify(value));
+
+// Coerce loose item payloads into the Item shape used by the game state.
 const normalizeItem = (item: any): Item => {
     if (typeof item === 'string') {
         return { id: item, name: item, type: 'misc', description: '' };
@@ -20,6 +24,20 @@ const normalizeItem = (item: any): Item => {
 
 const normalizeName = (value: string | undefined): string => (value || '').trim().toLowerCase();
 
+// Normalize inventory input (strings or objects) into Item objects.
+const normalizeInventory = (inventory: any): Item[] =>
+    Array.isArray(inventory) ? inventory.map((item: any) => normalizeItem(item)) : [];
+
+const getInventoryNames = (inventory: Item[]): string[] =>
+    inventory.map((item: Item) => item.name).sort();
+
+const logInventoryChange = (logs: string[], before: string[], after: string[]): void => {
+    if (JSON.stringify(before) !== JSON.stringify(after)) {
+        logs.push(`Inventario actualizado: ${after.join(', ') || 'Vacio'}`);
+    }
+};
+
+// Match by id when present, otherwise name + type.
 const itemsMatch = (left: Item, right: Item): boolean => {
     if (left.id && right.id && left.id === right.id) return true;
 
@@ -41,17 +59,87 @@ const removeFirstMatch = (inventory: Item[], item: Item): void => {
     if (index !== -1) inventory.splice(index, 1);
 };
 
+const ensureEquipment = (state: GameState): Equipment => {
+    if (!state.character.equipment) state.character.equipment = {};
+    return state.character.equipment;
+};
+
+// Apply a delta while keeping values in bounds.
+const applyBoundedDelta = (current: number, delta: number, max: number): number =>
+    Math.max(0, Math.min(max, current + delta));
+
+// Resolve which slot an item should occupy based on type and current equipment.
+const resolveEquipSlot = (item: Item, equipment: Equipment): keyof Equipment | undefined => {
+    switch (item.type) {
+        case 'weapon':
+            return 'mainHand';
+        case 'armor': {
+            const name = normalizeName(item.name);
+            return name.match(/(casco|yelmo|sombrero|gorro|head|helmet)/) ? 'head' : 'body';
+        }
+        case 'accessory':
+            if (!equipment.accessory1) return 'accessory1';
+            if (!equipment.accessory2) return 'accessory2';
+            return 'accessory1';
+        default:
+            return undefined;
+    }
+};
+
+// Apply equipment updates and keep inventory consistent when it is not authoritative.
+const applyEquipmentUpdates = (
+    equipment: Equipment,
+    updates: Equipment,
+    inventory: Item[],
+    logs: string[],
+    inventoryProvided: boolean
+): void => {
+    for (const [slot, item] of Object.entries(updates)) {
+        if (item === null) {
+            const equippedItem = equipment[slot as keyof Equipment];
+            if (equippedItem) {
+                delete equipment[slot as keyof Equipment];
+                logs.push(`Desequipado: ${slot}`);
+                if (!inventoryProvided && !inventoryHasItem(inventory, equippedItem)) {
+                    inventory.push(equippedItem);
+                }
+            }
+            continue;
+        }
+
+        if (item === undefined) continue;
+
+        const normalizedItem = normalizeItem(item);
+        const currentEquipped = equipment[slot as keyof Equipment];
+        if (currentEquipped && !inventoryProvided && !inventoryHasItem(inventory, currentEquipped)) {
+            inventory.push(currentEquipped);
+        }
+
+        equipment[slot as keyof Equipment] = normalizedItem;
+        logs.push(`Equipado ${slot}: ${normalizedItem.name}`);
+    }
+};
+
+// Ensure equipped items do not remain in the inventory list.
+const syncInventoryWithEquipment = (inventory: Item[], equipment: Equipment): void => {
+    for (const equippedItem of Object.values(equipment)) {
+        if (equippedItem) {
+            removeFirstMatch(inventory, equippedItem);
+        }
+    }
+};
+
 /**
  * Applies updates from the AI (partial GameState) to the current GameState.
  * Explicitly handles complex objects like Inventory and Equipment.
  */
 export const applyStateUpdate = (currentState: GameState, updatedState: Partial<GameState>): { newState: GameState, logs: string[] } => {
-    const newState = JSON.parse(JSON.stringify(currentState)); // Deep copy to avoid mutation issues
+    const newState = cloneState(currentState);
     const logs: string[] = [];
 
     if (!updatedState) return { newState, logs };
 
-    const oldInventoryNames = newState.character.inventory.map((i: Item) => i.name).sort();
+    const oldInventoryNames = getInventoryNames(newState.character.inventory);
     const inventoryProvided = updatedState.character?.inventory !== undefined;
     const equipmentUpdate = updatedState.character?.equipment;
     const equipmentProvided = equipmentUpdate !== undefined;
@@ -63,10 +151,7 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
         // Wait, prompt says: "hp" es un cambio relativo (ej: -10 por dano, 5 por curacion).
         
         const oldHp = newState.character.hp;
-        newState.character.hp = Math.max(0, Math.min(
-            newState.character.maxHp,
-            oldHp + delta
-        ));
+        newState.character.hp = applyBoundedDelta(oldHp, delta, newState.character.maxHp);
         
         if (delta !== 0) {
             logs.push(`HP: ${delta > 0 ? '+' : ''}${delta} (${newState.character.hp}/${newState.character.maxHp})`);
@@ -77,66 +162,27 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
     // Strategy: If AI provides inventory, we assume it's the NEW list (taking into account items removed/added).
     // The AI prompt will be updated to instruct "inventory" should be the COMPLETE new list if changed.
     if (inventoryProvided) {
-        const newInventory = Array.isArray(updatedState.character?.inventory)
-            ? updatedState.character.inventory.map((item: any) => normalizeItem(item))
-            : [];
-        newState.character.inventory = newInventory;
+        newState.character.inventory = normalizeInventory(updatedState.character?.inventory);
     }
 
     // 3. Handle Equipment
     // Strategy: Merge updates. If AI sends "head": { ... }, replace head. 
     if (equipmentUpdate && typeof equipmentUpdate === 'object') {
-        if (!newState.character.equipment) newState.character.equipment = {};
-        
-        const equipmentUpdates = equipmentUpdate as Equipment; // Partial<Equipment> actually
-
-        for (const [slot, item] of Object.entries(equipmentUpdates)) {
-            // If item is null/undefined in update, implies unequip? Or just ignore? 
-            // Usually JSON won't have undefined keys. If explicit null, we unequip.
-            // If it has object, we equip.
-            
-            // Allow null to clear slot
-            if (item === null) {
-                const equippedItem = newState.character.equipment[slot as keyof Equipment];
-                if (equippedItem) {
-                    newState.character.equipment[slot as keyof Equipment] = undefined;
-                    logs.push(`Desequipado: ${slot}`);
-                    if (!inventoryProvided && !inventoryHasItem(newState.character.inventory, equippedItem)) {
-                        newState.character.inventory.push(equippedItem);
-                    }
-                }
-            } else if (item !== undefined) {
-                const normalizedItem = normalizeItem(item);
-                const currentEquipped = newState.character.equipment[slot as keyof Equipment];
-                if (currentEquipped && !inventoryProvided && !inventoryHasItem(newState.character.inventory, currentEquipped)) {
-                    newState.character.inventory.push(currentEquipped);
-                }
-                newState.character.equipment[slot as keyof Equipment] = normalizedItem;
-                logs.push(`Equipado ${slot}: ${normalizedItem.name}`);
-            }
-        }
+        const equipment = ensureEquipment(newState);
+        applyEquipmentUpdates(equipment, equipmentUpdate as Equipment, newState.character.inventory, logs, inventoryProvided);
     }
 
     if ((inventoryProvided || equipmentProvided) && newState.character.equipment) {
-        for (const equippedItem of Object.values(newState.character.equipment)) {
-            if (equippedItem) {
-                removeFirstMatch(newState.character.inventory, equippedItem);
-            }
-        }
+        syncInventoryWithEquipment(newState.character.inventory, newState.character.equipment);
     }
 
-    const finalInventoryNames = newState.character.inventory.map((i: Item) => i.name).sort();
-    if (JSON.stringify(oldInventoryNames) !== JSON.stringify(finalInventoryNames)) {
-        logs.push(`Inventario actualizado: ${finalInventoryNames.join(', ') || 'Vacio'}`);
-    }
+    const finalInventoryNames = getInventoryNames(newState.character.inventory);
+    logInventoryChange(logs, oldInventoryNames, finalInventoryNames);
 
     // 4. Handle other simple fields if necessary (mana, stats, etc - not strictly requested but good for future)
     if (updatedState.character?.mana !== undefined) {
          const delta = updatedState.character.mana;
-         newState.character.mana = Math.max(0, Math.min(
-            newState.character.maxMana, 
-            newState.character.mana + delta
-        ));
+         newState.character.mana = applyBoundedDelta(newState.character.mana, delta, newState.character.maxMana);
     }
 
     return { newState, logs };
@@ -147,8 +193,9 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
  * Automatically handles swapping if slot is occupied.
  */
 export const equipItem = (state: GameState, itemId: string): { newState: GameState, logs: string[], success: boolean } => {
-    const newState = JSON.parse(JSON.stringify(state));
+    const newState = cloneState(state);
     const logs: string[] = [];
+    const equipment = ensureEquipment(newState);
     
     // Find item in inventory
     const inventoryIndex = newState.character.inventory.findIndex((i: Item) => i.id === itemId);
@@ -157,43 +204,18 @@ export const equipItem = (state: GameState, itemId: string): { newState: GameSta
     }
 
     const itemToEquip = newState.character.inventory[inventoryIndex];
-    let slot: keyof Equipment | undefined;
-
-    // Determine slot based on type
-    switch (itemToEquip.type) {
-        case 'weapon':
-            // Logic: if mainHand empty, use it. If full, check offHand? For now default to mainHand.
-            // Future: check if 2-handed, etc.
-            slot = 'mainHand'; 
-            break;
-        case 'armor':
-            // Simplification: armor type usually implies body/head. 
-            // We might need 'armorType' property or heuristic name check. 
-            // For now, let's assume 'armor' = body unless name says 'Casco', 'Yelmo', 'Hat'
-            if (itemToEquip.name.toLowerCase().match(/(casco|yelmo|sombrero|gorro|head|helmet)/)) {
-                slot = 'head';
-            } else {
-                slot = 'body';
-            }
-            break;
-        case 'accessory':
-            // Fill accessory1 first, then 2.
-            if (!newState.character.equipment.accessory1) slot = 'accessory1';
-            else if (!newState.character.equipment.accessory2) slot = 'accessory2';
-            else slot = 'accessory1'; // Swap 1 if both full
-            break;
-        default:
-            logs.push(`No se puede equipar items de tipo ${itemToEquip.type}`);
-            return { newState, logs, success: false };
+    if (!itemToEquip) {
+        return { newState, logs: ['Item no encontrado en inventario.'], success: false };
     }
+    const slot = resolveEquipSlot(itemToEquip, equipment);
 
     if (!slot) {
-         logs.push('No se pudo determinar el slot para este item.');
-         return { newState, logs, success: false };
+        logs.push(`No se puede equipar items de tipo ${itemToEquip.type}`);
+        return { newState, logs, success: false };
     }
 
     // Check if something is in the slot
-    const currentEquipped = newState.character.equipment[slot];
+    const currentEquipped = equipment[slot];
 
     // 1. Remove item from inventory
     newState.character.inventory.splice(inventoryIndex, 1);
@@ -205,7 +227,7 @@ export const equipItem = (state: GameState, itemId: string): { newState: GameSta
     }
 
     // 3. Equip new item
-    newState.character.equipment[slot] = itemToEquip;
+    equipment[slot] = itemToEquip;
     logs.push(`Has equipado: ${itemToEquip.name} en ${slot}`);
 
     return { newState, logs, success: true };
@@ -215,10 +237,11 @@ export const equipItem = (state: GameState, itemId: string): { newState: GameSta
  * Deterministically unequips an item from a slot.
  */
 export const unequipItem = (state: GameState, slot: keyof Equipment): { newState: GameState, logs: string[], success: boolean } => {
-    const newState = JSON.parse(JSON.stringify(state));
+    const newState = cloneState(state);
     const logs: string[] = [];
+    const equipment = ensureEquipment(newState);
 
-    const item = newState.character.equipment[slot];
+    const item = equipment[slot];
     if (!item) {
         return { newState, logs: ['No hay nada equipado en ese slot.'], success: false };
     }
@@ -227,7 +250,7 @@ export const unequipItem = (state: GameState, slot: keyof Equipment): { newState
     newState.character.inventory.push(item);
     
     // Clear slot
-    newState.character.equipment[slot] = undefined; // or delete key
+    delete equipment[slot];
 
     logs.push(`Has desequipado: ${item.name}`);
 
