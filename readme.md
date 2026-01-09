@@ -73,4 +73,5 @@ Optional environment variables:
 
 ## Storage Notes
 
-Backend storage is in-memory and resets on restart. The frontend mirrors saves in localStorage.
+Backend saves are persisted on disk at `data/saves.json` (configurable with `GAME_SAVES_PATH`).
+The frontend lists and loads saves from the backend only.

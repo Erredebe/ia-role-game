@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { ChatMessage, Item, Equipment } from '../../interfaces/game';
 import { CharacterPanelComponent } from './character-panel/character-panel.component';
@@ -33,10 +33,12 @@ export class GameComponent implements OnInit {
   suggestedActions: string[] = [];
   equipmentCollapsed: boolean = false;
   inventoryCollapsed: boolean = false;
+  isSaving: boolean = false;
 
   constructor(
     public gameService: GameService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   state = computed(() => this.gameService.state());
@@ -126,6 +128,20 @@ export class GameComponent implements OnInit {
     const response = await this.gameService.sendAction(text);
     this.suggestedActions = response.suggestedActions || [];
     this.scrollToBottom();
+  }
+
+  async saveGame() {
+    if (this.isSaving) return;
+    this.isSaving = true;
+    try {
+      await this.gameService.saveCurrentGame();
+    } finally {
+      this.isSaving = false;
+    }
+  }
+
+  goToLanding() {
+    this.router.navigate(['/']);
   }
 
   private extractSuggestions() {

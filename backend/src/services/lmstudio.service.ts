@@ -12,6 +12,8 @@ export class LMStudioService implements AIAdapter {
   private readonly model =
     process.env.LM_STUDIO_MODEL || "dolphin3.0-llama3.1-8b";
   private readonly historyLimit = 10;
+  private jsonModeSupported = true;
+  private jsonModeWarned = false;
 
   private parseJsonPayload(content: string): GameAction | null {
     const raw = content.trim();
@@ -128,6 +130,21 @@ export class LMStudioService implements AIAdapter {
     };
   }
 
+  private isJsonModeUnsupported(error: any): boolean {
+    const message =
+      error?.response?.data?.error?.message ||
+      error?.response?.data?.message ||
+      error?.message ||
+      "";
+    const payload = error?.response?.data || {};
+    const combined = `${message} ${JSON.stringify(payload)}`.toLowerCase();
+    return (
+      combined.includes("response_format") ||
+      combined.includes("json mode") ||
+      combined.includes("json_object")
+    );
+  }
+
   async generateNarrative(
     history: ChatMessage[],
     environment?: EnvironmentSetting,
@@ -147,25 +164,40 @@ export class LMStudioService implements AIAdapter {
         model: this.model,
         messages: [systemPrompt, environmentMessage, ...limitedHistory],
         temperature: 0.7,
-        response_format: { type: "json_object" },
-      };
+      } as any;
+
+      const payloadWithJson = this.jsonModeSupported
+        ? { ...payload, response_format: { type: "json_object" } }
+        : payload;
 
       let response;
       try {
         response = await axios.post(
           `${this.baseUrl}/chat/completions`,
-          payload
+          payloadWithJson
         );
       } catch (requestError) {
-        const fallbackPayload = { ...payload } as any;
-        delete fallbackPayload.response_format;
-        console.warn(
-          "JSON mode not supported, retrying without response_format."
-        );
-        response = await axios.post(
-          `${this.baseUrl}/chat/completions`,
-          fallbackPayload
-        );
+        if (this.jsonModeSupported) {
+          try {
+            response = await axios.post(
+              `${this.baseUrl}/chat/completions`,
+              payload
+            );
+            if (this.isJsonModeUnsupported(requestError)) {
+              this.jsonModeSupported = false;
+              if (!this.jsonModeWarned) {
+                console.warn(
+                  "LM Studio no soporta response_format; deshabilitando modo JSON."
+                );
+                this.jsonModeWarned = true;
+              }
+            }
+          } catch {
+            throw requestError;
+          }
+        } else {
+          throw requestError;
+        }
       }
 
       const content = response.data.choices[0].message.content;

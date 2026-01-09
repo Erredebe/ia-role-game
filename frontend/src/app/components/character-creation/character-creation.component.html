@@ -1,7 +1,7 @@
 ﻿<div class="creation-container">
   <div class="creation-layout glass-card">
     <header class="creation-header">
-      <h1>Crea tu Héroe</h1>
+      <h1>Crea tu Partida</h1>
       <p>Define tu destino en este mundo</p>
     </header>
 
@@ -29,7 +29,8 @@
         [selectedEnvironmentId]="selectedEnvironmentId"
         [currentEnvironment]="currentEnvironment"
         [(customRules)]="customRules"
-        (selectEnvironment)="selectEnvironment($event)">
+        (selectEnvironment)="selectEnvironment($event)"
+      >
       </app-character-creation-environment-step>
 
       <app-character-creation-class-step
@@ -44,7 +45,8 @@
         (nameChange)="name = $event"
         (avatarSeedChange)="avatarSeed = $event"
         (randomizeAvatarSeed)="randomizeAvatarSeed()"
-        (selectClass)="selectedClassId = $event">
+        (selectClass)="selectedClassId = $event"
+      >
       </app-character-creation-class-step>
 
       <app-character-creation-summary-step
@@ -58,26 +60,37 @@
         [customRules]="customRules"
         [initialInventory]="initialInventory"
         (rollStats)="rollStats()"
-        (backstoryChange)="backstory = $event">
+        (backstoryChange)="backstory = $event"
+      >
       </app-character-creation-summary-step>
     </div>
 
     <footer class="creation-footer">
       <button class="cancel-btn" (click)="router.navigate(['/'])">Cancelar</button>
       <div class="step-actions">
-        <button class="secondary-btn" *ngIf="currentStep > 1" (click)="previousStep()">Anterior</button>
+        <button class="secondary-btn" *ngIf="currentStep > 1" (click)="previousStep()">
+          Anterior
+        </button>
         <span class="creation-status" *ngIf="isCreating">Creando partida...</span>
-        
-        <button class="submit-btn" *ngIf="currentStep < 3" (click)="nextStep()" 
-          [disabled]="(currentStep === 2 && !selectedClassId) || (currentStep === 2 && !name)">
+
+        <button
+          class="submit-btn"
+          *ngIf="currentStep < 3"
+          (click)="nextStep()"
+          [disabled]="(currentStep === 2 && !selectedClassId) || (currentStep === 2 && !name)"
+        >
           Siguiente
         </button>
-        
-        <button class="submit-btn" *ngIf="currentStep === 3" (click)="finishCreation()" [disabled]="!name.trim() || isCreating">
+
+        <button
+          class="submit-btn"
+          *ngIf="currentStep === 3"
+          (click)="finishCreation()"
+          [disabled]="!name.trim() || isCreating"
+        >
           {{ isCreating ? 'CREANDO...' : 'COMENZAR AVENTURA' }}
         </button>
       </div>
     </footer>
   </div>
 </div>
-

@@ -1,12 +1,17 @@
 ﻿<div class="main-container">
   <!-- Header -->
   <header class="header glass-card nav-glow">
-    <h1>IA ROLE GAME</h1>
+    <h1>RDB- IA ROLE GAME</h1>
     <div class="location">
-      <span class="icon">📍</span>
+      <span class="icon">&#x1F4CD;</span>
       {{ state()?.location || 'Explorando...' }}
     </div>
-    <button routerLink="/" class="reset-btn">Menú Principal</button>
+    <div class="header-actions">
+      <button class="save-btn" (click)="saveGame()" [disabled]="isSaving || loading()">
+        {{ isSaving ? 'GUARDANDO...' : 'GUARDAR' }}
+      </button>
+      <button class="reset-btn" (click)="goToLanding()">Menu Principal</button>
+    </div>
   </header>
 
   <div class="content-grid">
@@ -19,7 +24,8 @@
       (toggleEquipment)="toggleEquipment()"
       (toggleInventory)="toggleInventory()"
       (equipItem)="equipItem($event)"
-      (unequipItem)="unequipItem($event)">
+      (unequipItem)="unequipItem($event)"
+    >
     </app-character-panel>
 
     <app-chat-panel
@@ -27,7 +33,8 @@
       [suggestedActions]="suggestedActions"
       [loading]="loading()"
       [(userInput)]="userInput"
-      (sendAction)="sendAction($event)">
+      (sendAction)="sendAction($event)"
+    >
     </app-chat-panel>
   </div>
 </div>

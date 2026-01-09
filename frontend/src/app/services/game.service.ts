@@ -9,7 +9,6 @@ import { ThemeService } from './theme.service';
 })
 export class GameService {
   private apiUrl = 'http://localhost:3000/api/game';
-  private readonly localStorageKey = 'ia-role-game-saves';
   
   // State using Angular Signals
   state = signal<GameState | null>(null);
@@ -22,16 +21,23 @@ export class GameService {
   ) {}
 
   async listGames(): Promise<LocalSaveSummary[]> {
-    const saves = this.readLocalSaves();
-    return Object.values(saves)
-      .filter(entry => entry && entry.state)
-      .map(entry => ({
-        id: entry.id,
-        characterName: entry.characterName,
-        characterClass: entry.characterClass,
-        updatedAt: entry.updatedAt
-      }))
-      .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+    try {
+      const response = await firstValueFrom(
+        this.http.get<LocalSaveSummary[]>(`${this.apiUrl}/list`)
+      );
+      const entries = Array.isArray(response) ? response : [];
+      return entries
+        .map(entry => ({
+          id: entry.id,
+          characterName: entry.characterName || 'Sin nombre',
+          characterClass: entry.characterClass || 'Sin clase',
+          updatedAt: entry.updatedAt
+        }))
+        .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+    } catch (error) {
+      console.error('Error listing games', error);
+      return [];
+    }
   }
 
   async createNewGame(character: any, environment?: any): Promise<{id: string, state: GameState}> {
@@ -50,18 +56,6 @@ export class GameService {
   }
 
   async fetchState(id: string) {
-    const localState = this.getLocalState(id);
-    if (localState) {
-      try {
-        const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/restore`, { id, state: localState }));
-        const state = response.gameState || localState;
-        this.applyState(id, state);
-        return;
-      } catch (error) {
-        console.error('Error restoring state', error);
-      }
-    }
-
     try {
       const state = await firstValueFrom(this.http.get<GameState>(`${this.apiUrl}/${id}/state`));
       this.applyState(id, state);
@@ -105,13 +99,30 @@ export class GameService {
     });
   }
 
+  async saveCurrentGame(): Promise<boolean> {
+    const id = this.currentId();
+    const state = this.state();
+    if (!id || !state) return false;
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post<any>(`${this.apiUrl}/restore`, { id, state })
+      );
+      const savedState = response.gameState || state;
+      this.applyState(id, savedState);
+      return true;
+    } catch (error) {
+      console.error('Error saving game', error);
+      return false;
+    }
+  }
+
   private applyState(id: string, state: GameState) {
     this.currentId.set(id);
     this.state.set(state);
     if (state.environment) {
       this.themeService.setTheme(state.environment.id);
     }
-    this.saveLocalGame(id, state);
   }
 
   private async withLoading<T>(task: () => Promise<T>): Promise<T> {
@@ -123,47 +134,6 @@ export class GameService {
     }
   }
 
-  private readLocalSaves(): Record<string, LocalSaveEntry> {
-    if (typeof localStorage === 'undefined') return {};
-    try {
-      const raw = localStorage.getItem(this.localStorageKey);
-      return raw ? JSON.parse(raw) : {};
-    } catch (error) {
-      console.error('Error reading local saves', error);
-      return {};
-    }
-  }
-
-  private writeLocalSaves(saves: Record<string, LocalSaveEntry>) {
-    if (typeof localStorage === 'undefined') return;
-    localStorage.setItem(this.localStorageKey, JSON.stringify(saves));
-  }
-
-  private saveLocalGame(id: string, state: GameState) {
-    if (!id || !state) return;
-    const saves = this.readLocalSaves();
-    saves[id] = {
-      id,
-      characterName: state.character?.name || 'Sin nombre',
-      characterClass: state.character?.class || 'Sin clase',
-      updatedAt: new Date().toISOString(),
-      state
-    };
-    this.writeLocalSaves(saves);
-  }
-
-  private getLocalState(id: string): GameState | null {
-    const saves = this.readLocalSaves();
-    return saves[id]?.state || null;
-  }
-}
-
-interface LocalSaveEntry {
-  id: string;
-  characterName: string;
-  characterClass: string;
-  updatedAt: string;
-  state: GameState;
 }
 
 export interface LocalSaveSummary {

@@ -3026,5 +3026,215 @@
       "customRules": ""
     },
     "updatedAt": "2026-01-08T23:12:42.498Z"
+  },
+  "155d7d64-c3d4-4ddf-ad8b-fd0a217468f5": {
+    "character": {
+      "name": "asd",
+      "class": "Guerrero",
+      "hp": 120,
+      "maxHp": 120,
+      "mana": 20,
+      "maxMana": 20,
+      "avatarSeed": "ilpkhbn9",
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "luck": 10
+      },
+      "inventory": [
+        {
+          "id": "sword_1",
+          "name": "Espada de Hierro",
+          "type": "weapon",
+          "description": "Una espada confiable.",
+          "stats": {
+            "strength": 1
+          }
+        },
+        {
+          "id": "shield_1",
+          "name": "Escudo de Madera",
+          "type": "armor",
+          "description": "Protege contra ataques basicos."
+        }
+      ],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: asd, un Guerrero. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "La voz del destino se desvanece... (Error de conexion con la IA)"
+      }
+    ],
+    "narrativeSummary": "La aventura comienza.",
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "prompt": "Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.",
+      "classArchetypes": [
+        "Guerrero",
+        "Mago",
+        "Arquero",
+        "Picaro",
+        "Clerigo",
+        "Druida"
+      ],
+      "objectArchetypes": [
+        "espadas",
+        "arcos",
+        "armaduras",
+        "pergaminos",
+        "pociones",
+        "reliquias"
+      ],
+      "icon": "🐉",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-09T09:21:48.489Z"
+  },
+  "77d317ef-d25e-4851-9bbe-46ca22e1b494": {
+    "character": {
+      "name": "asd",
+      "class": "Mago",
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 110,
+      "maxMana": 110,
+      "avatarSeed": "tvwq4lal",
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "luck": 10
+      },
+      "inventory": [
+        {
+          "id": "staff_1",
+          "name": "Baston de Aprendiz",
+          "type": "weapon",
+          "description": "Canaliza magia basica.",
+          "stats": {
+            "intelligence": 1
+          }
+        },
+        {
+          "id": "potion_mana",
+          "name": "Pocion de Mana",
+          "type": "consumable",
+          "description": "Restaura mana."
+        }
+      ],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: asd, un Mago. \n        Ambientacion elegida: Fantasia. Reinos magicos, criaturas miticas y hechizos antiguos..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "La voz del destino se desvanece... (Error de conexion con la IA)"
+      }
+    ],
+    "narrativeSummary": "La aventura comienza.",
+    "environment": {
+      "id": "fantasy",
+      "name": "Fantasia",
+      "description": "Reinos magicos, criaturas miticas y hechizos antiguos.",
+      "prompt": "Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.",
+      "classArchetypes": [
+        "Guerrero",
+        "Mago",
+        "Arquero",
+        "Picaro",
+        "Clerigo",
+        "Druida"
+      ],
+      "objectArchetypes": [
+        "espadas",
+        "arcos",
+        "armaduras",
+        "pergaminos",
+        "pociones",
+        "reliquias"
+      ],
+      "icon": "🐉",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-09T09:22:27.586Z"
+  },
+  "40a42137-f598-42dc-89fc-e0040490735a": {
+    "character": {
+      "name": "asd",
+      "class": "Investigador",
+      "hp": 95,
+      "maxHp": 95,
+      "mana": 40,
+      "maxMana": 40,
+      "avatarSeed": "kapq9yns",
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "luck": 10
+      },
+      "inventory": [],
+      "equipment": {}
+    },
+    "location": "El inicio de tu viaje",
+    "narrativeHistory": [
+      {
+        "role": "system",
+        "content": "El jugador ha creado un personaje: asd, un Investigador. \n        Ambientacion elegida: Realista. Sin magia, decisiones humanas y consecuencias reales..\n        \n        \n        Comienza la aventura narrando su llegada al mundo o el inicio de su mision."
+      },
+      {
+        "role": "assistant",
+        "content": "El sol está a punto de ocultarse en el horizonte cuando llegas a la pequeña ciudad costera de Montecarlo, tu destino como investigador. La misión es sencilla: revisar un antiguo naufragio descubierto recientemente y recuperar cualquier artefacto o información valiosa que pueda tener. Pero no te esperan bienvenidos, los rumores sobre el lugar son extraños y algunos incluso hablan de sucesos sobrenaturales."
+      },
+      {
+        "role": "user",
+        "content": "hola"
+      },
+      {
+        "role": "assistant",
+        "content": "Llegas a Montecarlo para investigar un naufragio, pero los rumores locales son extraños."
+      },
+      {
+        "role": "system",
+        "content": "[SISTEMA]: HP: +10 (95/95)\nInventario actualizado: Vacio"
+      }
+    ],
+    "narrativeSummary": "Llegaste a Montecarlo y has comenzado tu investigación sobre un naufragio con rumores extraños.",
+    "environment": {
+      "id": "realistic",
+      "name": "Realista",
+      "description": "Sin magia, decisiones humanas y consecuencias reales.",
+      "prompt": "Realismo estricto: no hay magia ni tecnologia imposible. Consecuencias fisicas creibles.",
+      "classArchetypes": [
+        "Soldado",
+        "Investigador",
+        "Medico",
+        "Explorador",
+        "Guardia"
+      ],
+      "objectArchetypes": [
+        "armas convencionales",
+        "botiquines",
+        "documentos",
+        "radios",
+        "linternas"
+      ],
+      "icon": "🧭",
+      "customRules": ""
+    },
+    "updatedAt": "2026-01-09T09:24:00.736Z"
   }
 }
