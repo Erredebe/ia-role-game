@@ -11,13 +11,10 @@
 
     <div class="input-group">
       <label>Apariencia</label>
-      <div class="input-with-button">
-        <input type="text"
-               [(ngModel)]="avatarSeed"
-               (ngModelChange)="avatarSeedChange.emit($event)"
-               placeholder="Seed...">
-        <button type="button" (click)="randomizeAvatarSeed.emit()">Randomizar</button>
-      </div>
+      <app-avatar-builder
+        [config]="avatarConfig"
+        (configChange)="avatarConfigChange.emit($event)"
+      ></app-avatar-builder>
     </div>
 
     <div class="class-selection">

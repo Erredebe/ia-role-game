@@ -54,7 +54,14 @@ export class CharacterCreationComponent implements OnInit {
   selectedClassId: string = '';
   selectedEnvironmentId: string = 'fantasy';
   customRules: string = '';
-  avatarSeed: string = this.generateAvatarSeed();
+  avatarConfig: AvatarConfig = {
+    skinTone: 'ivory',
+    hairStyle: 'short',
+    eyeColor: 'brown',
+    mouthStyle: 'neutral',
+    outfit: 'tunic',
+    accessories: []
+  };
   backstory: string = '';
   
   currentStep: number = 1;
@@ -195,9 +202,10 @@ export class CharacterCreationComponent implements OnInit {
     this.updateAvailableClasses();
   }
 
-  get avatarConfig(): AvatarConfig {
+  get previewAvatarConfig(): AvatarConfig {
     return {
-      seed: this.avatarSeed || this.name || 'avatar',
+      ...this.avatarConfig,
+      seed: this.name || 'avatar',
       name: this.name || undefined,
       classId: this.selectedClassId || undefined,
       environmentId: this.selectedEnvironmentId || undefined
@@ -271,7 +279,7 @@ export class CharacterCreationComponent implements OnInit {
       maxHp: this.currentClass.baseHp,
       mana: this.currentClass.baseMana,
       maxMana: this.currentClass.baseMana,
-      avatarConfig: this.avatarConfig,
+      avatarConfig: this.previewAvatarConfig,
       backstory: trimmedBackstory ? trimmedBackstory : undefined,
       stats: this.stats,
       inventory: this.getInitialInventory(),
@@ -409,11 +417,7 @@ export class CharacterCreationComponent implements OnInit {
     return items;
   }
 
-  randomizeAvatarSeed() {
-    this.avatarSeed = this.generateAvatarSeed();
-  }
-
-  private generateAvatarSeed(): string {
-    return Math.random().toString(36).slice(2, 10);
+  updateAvatarConfig(config: AvatarConfig) {
+    this.avatarConfig = { ...this.avatarConfig, ...config };
   }
 }
