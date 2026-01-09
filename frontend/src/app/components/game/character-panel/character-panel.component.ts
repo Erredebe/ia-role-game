@@ -26,10 +26,15 @@ export class CharacterPanelComponent {
   @Output() unequipItem = new EventEmitter<EquipmentSlotKey>();
 
   get avatarConfig(): AvatarConfig {
+    const baseConfig = this.character?.avatarConfig;
+    const fallbackSeed =
+      baseConfig?.seed || this.character?.avatarSeed || this.character?.name || 'avatar';
     return {
-      seed: this.character?.avatarSeed || this.character?.name || 'avatar',
-      name: this.character?.name || undefined,
-      classId: this.mapClassNameToId(this.character?.class)
+      ...baseConfig,
+      seed: fallbackSeed,
+      name: baseConfig?.name ?? this.character?.name ?? undefined,
+      classId:
+        baseConfig?.classId ?? this.mapClassNameToId(this.character?.class),
     };
   }
 

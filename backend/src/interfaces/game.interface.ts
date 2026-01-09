@@ -1,5 +1,18 @@
 export type SystemAction = "equip" | "unequip";
 
+export interface AvatarConfig {
+  seed?: string;
+  name?: string;
+  classId?: string;
+  environmentId?: string;
+  skinTone?: string;
+  hairStyle?: string;
+  eyeColor?: string;
+  outfit?: string;
+  accessories?: string[];
+  svg?: string;
+}
+
 export interface GameState {
   character: Character;
   location: string;
@@ -16,6 +29,7 @@ export interface Character {
   maxHp: number;
   mana: number;
   maxMana: number;
+  avatarConfig?: AvatarConfig;
   avatarSeed?: string;
   backstory?: string;
   inventory: Item[];
