@@ -271,7 +271,7 @@ export class CharacterCreationComponent implements OnInit {
       maxHp: this.currentClass.baseHp,
       mana: this.currentClass.baseMana,
       maxMana: this.currentClass.baseMana,
-      avatarSeed: this.avatarSeed,
+      avatarConfig: this.avatarConfig,
       backstory: trimmedBackstory ? trimmedBackstory : undefined,
       stats: this.stats,
       inventory: this.getInitialInventory(),

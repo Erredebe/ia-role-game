@@ -33,11 +33,18 @@ const buildInitialState = (
 ): GameState => {
   const resolvedEnvironment = normalizeEnvironment(environment);
   const resolvedRules = resolvedEnvironment?.customRules || customRules;
+  const fallbackAvatarConfig =
+    character?.avatarSeed
+      ? {
+          seed: character.avatarSeed,
+          name: character.name,
+        }
+      : undefined;
 
   const initialState: GameState = {
     character: {
       ...character,
-      avatarSeed: character.avatarSeed,
+      avatarConfig: character.avatarConfig ?? fallbackAvatarConfig,
       hp: character.hp || 100,
       maxHp: character.hp || 100,
       mana: character.mana || 50,
