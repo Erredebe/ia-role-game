@@ -6,6 +6,7 @@ export interface AvatarConfig {
   skinTone?: string;
   hairStyle?: string;
   eyeColor?: string;
+  mouthStyle?: string;
   outfit?: string;
   accessories?: string[];
   svg?: string;

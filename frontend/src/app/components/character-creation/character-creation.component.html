@@ -36,15 +36,13 @@
       <app-character-creation-class-step
         *ngIf="currentStep === 2"
         [name]="name"
-        [avatarSeed]="avatarSeed"
         [availableClasses]="availableClasses"
         [selectedClassId]="selectedClassId"
         [currentClass]="currentClass"
         [currentEnvironment]="currentEnvironment"
-        [avatarConfig]="avatarConfig"
+        [avatarConfig]="previewAvatarConfig"
         (nameChange)="name = $event"
-        (avatarSeedChange)="avatarSeed = $event"
-        (randomizeAvatarSeed)="randomizeAvatarSeed()"
+        (avatarConfigChange)="updateAvatarConfig($event)"
         (selectClass)="selectedClassId = $event"
       >
       </app-character-creation-class-step>

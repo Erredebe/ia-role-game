@@ -1,0 +1,74 @@
+.avatar-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(18, 22, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.builder-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #dce2f0;
+  font-size: 0.95rem;
+}
+
+.builder-row select,
+.builder-row input[type="range"] {
+  width: 100%;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.value-chip {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #f3f6ff;
+}
+
+.accessory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.accessory-grid button {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+  color: #eef2ff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.accessory-grid button.active {
+  border-color: rgba(109, 168, 255, 0.9);
+  box-shadow: 0 0 0 1px rgba(109, 168, 255, 0.6);
+}
+
+.builder-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.randomize-btn {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(20, 24, 40, 0.6);
+  color: #f3f6ff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.randomize-btn:hover {
+  background: rgba(40, 48, 78, 0.7);
+}

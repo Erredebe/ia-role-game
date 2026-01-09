@@ -1,0 +1,69 @@
+<div class="avatar-builder">
+  <div class="builder-row">
+    <label>Piel</label>
+    <div class="slider-row">
+      <input
+        type="range"
+        min="0"
+        [max]="skinToneOptions.length - 1"
+        [(ngModel)]="skinToneIndex"
+        (ngModelChange)="onSkinToneChange($event)"
+      />
+      <span class="value-chip">{{ skinToneOptions[skinToneIndex]?.label }}</span>
+    </div>
+  </div>
+
+  <div class="builder-row">
+    <label>Pelo</label>
+    <select [(ngModel)]="hairStyle" (ngModelChange)="emitConfig()">
+      <option *ngFor="let option of hairStyleOptions" [value]="option.id">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+
+  <div class="builder-row">
+    <label>Ojos</label>
+    <select [(ngModel)]="eyeColor" (ngModelChange)="emitConfig()">
+      <option *ngFor="let option of eyeColorOptions" [value]="option.id">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+
+  <div class="builder-row">
+    <label>Boca</label>
+    <select [(ngModel)]="mouthStyle" (ngModelChange)="emitConfig()">
+      <option *ngFor="let option of mouthStyleOptions" [value]="option.id">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+
+  <div class="builder-row">
+    <label>Ropa</label>
+    <select [(ngModel)]="outfit" (ngModelChange)="emitConfig()">
+      <option *ngFor="let option of outfitOptions" [value]="option.id">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+
+  <div class="builder-row">
+    <label>Accesorios</label>
+    <div class="accessory-grid">
+      <button
+        type="button"
+        *ngFor="let option of accessoryOptions"
+        [class.active]="accessories.has(option.id)"
+        (click)="toggleAccessory(option.id)"
+      >
+        {{ option.label }}
+      </button>
+    </div>
+  </div>
+
+  <div class="builder-actions">
+    <button type="button" class="randomize-btn" (click)="randomize()">Randomizar</button>
+  </div>
+</div>
