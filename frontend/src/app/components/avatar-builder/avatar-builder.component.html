@@ -1,0 +1,71 @@
+<div class="avatar-builder">
+  <div class="builder-header">
+    <div class="title-block">
+      <h1>Avatar Builder</h1>
+      <p>Generador determinista de avatares vectoriales en SVG.</p>
+    </div>
+    <div class="seed-controls">
+      <label>
+        Seed
+        <input type="text" [(ngModel)]="seed" />
+      </label>
+      <button class="ghost" (click)="applySeed()">Aplicar</button>
+      <button class="ghost" (click)="copySeed()">Copiar seed</button>
+    </div>
+  </div>
+
+  <div class="builder-body">
+    <div class="preview-panel">
+      <div class="preview-card" [innerHTML]="safeSvg"></div>
+      <div class="preview-actions">
+        <button class="primary" (click)="randomizeAll()">Randomizar todo</button>
+        <button class="secondary" (click)="randomizeCategory()">Randomizar categoría</button>
+        <button class="ghost" (click)="reset()">Reset</button>
+      </div>
+      <div class="export-actions">
+        <button class="secondary" (click)="downloadSvg()">Descargar SVG</button>
+        <button class="secondary" (click)="downloadPng(512)">Descargar PNG 512</button>
+        <button class="secondary" (click)="downloadPng(1024)">Descargar PNG 1024</button>
+      </div>
+      <div class="traits-summary">
+        <h3>Traits actuales</h3>
+        <ul>
+          <li><strong>Head:</strong> {{ traits.headShape + 1 }}</li>
+          <li><strong>Piel:</strong> {{ traits.skinTone + 1 }}</li>
+          <li><strong>Ojos:</strong> {{ traits.eyes + 1 }}</li>
+          <li><strong>Boca:</strong> {{ traits.mouth + 1 }}</li>
+          <li><strong>Pelo:</strong> {{ traits.hair + 1 }}</li>
+          <li><strong>Ropa:</strong> {{ traits.clothing + 1 }}</li>
+          <li><strong>Fondo:</strong> {{ traits.background + 1 }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="controls-panel">
+      <div class="category-tabs">
+        <button
+          *ngFor="let category of categories"
+          [class.active]="category.id === activeCategory"
+          (click)="setActiveCategory(category.id)"
+        >
+          {{ category.label }}
+        </button>
+      </div>
+
+      <div class="trait-groups">
+        <div class="trait-group" *ngFor="let trait of currentCategoryTraits()">
+          <h4>{{ trait.label }}</h4>
+          <div class="options-grid">
+            <button
+              *ngFor="let option of trait.options; index as optionIndex"
+              [class.selected]="traits[trait.key] === optionIndex"
+              (click)="setTrait(trait.key, optionIndex)"
+            >
+              {{ option }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
