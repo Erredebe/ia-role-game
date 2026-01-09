@@ -242,11 +242,9 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
       });
     }
 
-    return res
-      .status(400)
-      .json({
-        error: result ? result.logs.join(", ") : error || "Accion invalida",
-      });
+    return res.status(400).json({
+      error: result ? result.logs.join(", ") : error || "Accion invalida",
+    });
   }
 
   const userMessage: ChatMessage = { role: "user", content: action };
@@ -263,7 +261,12 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
   }
 
   const { newState, logs } = await import("../utils/state.helper.js").then(
-    (m) => m.applyStateUpdate(state, result.updatedState || {}, result.stateChangeJustification)
+    (m) =>
+      m.applyStateUpdate(
+        state,
+        result.updatedState || {},
+        result.stateChangeJustification
+      )
   );
   state.character = newState.character;
 
