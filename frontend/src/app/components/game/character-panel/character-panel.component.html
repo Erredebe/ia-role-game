@@ -1,10 +1,7 @@
 ﻿<aside class="sidebar glass-card">
   <div class="profile">
     <div class="avatar-glow">
-      <img
-        [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (character?.avatarSeed || character?.name || 'avatar')"
-        alt="Avatar"
-      />
+      <app-avatar-renderer [config]="avatarConfig"></app-avatar-renderer>
     </div>
     <h2>{{ character?.name }}</h2>
     <p class="subtitle">{{ character?.class }}</p>

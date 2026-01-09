@@ -300,13 +300,15 @@
   box-shadow: 0 0 30px var(--accent-glow);
 }
 
-.avatar-preview img {
+.avatar-preview app-avatar-renderer,
+.avatar-preview .avatar-renderer {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   border: 4px solid var(--accent-primary);
   padding: 5px;
   background: var(--bg-panel);
+  display: block;
 }
 
 .class-badge {
