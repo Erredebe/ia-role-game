@@ -97,9 +97,10 @@
     <!-- Main: Chat -->
     <main class="chat-area glass-card">
       <div class="messages" #scrollContainer>
-        <div *ngFor="let msg of state()?.narrativeHistory" 
+        <div *ngFor="let msg of displayHistory()" 
              [class]="'message ' + msg.role">
           <div class="bubble">
+            <span *ngIf="msg.role === 'system'" class="system-tag">Sistema</span>
             <p>{{ msg.content }}</p>
           </div>
         </div>

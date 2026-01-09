@@ -1,5 +1,46 @@
 import { GameState, Item, Equipment } from '../interfaces/game.interface.js';
 
+const normalizeItem = (item: any): Item => {
+    if (typeof item === 'string') {
+        return { id: item, name: item, type: 'misc', description: '' };
+    }
+
+    const name = typeof item?.name === 'string' ? item.name : '';
+    const id = typeof item?.id === 'string' && item.id ? item.id : name;
+
+    return {
+        id,
+        name: name || (typeof item?.id === 'string' ? item.id : 'Item'),
+        type: item?.type || 'misc',
+        description: item?.description || '',
+        stats: item?.stats,
+        icon: item?.icon
+    };
+};
+
+const normalizeName = (value: string | undefined): string => (value || '').trim().toLowerCase();
+
+const itemsMatch = (left: Item, right: Item): boolean => {
+    if (left.id && right.id && left.id === right.id) return true;
+
+    const leftName = normalizeName(left.name);
+    const rightName = normalizeName(right.name);
+    if (!leftName || !rightName) return false;
+
+    const leftType = left.type || 'misc';
+    const rightType = right.type || 'misc';
+
+    return leftName === rightName && leftType === rightType;
+};
+
+const inventoryHasItem = (inventory: Item[], item: Item): boolean =>
+    inventory.some((entry: Item) => itemsMatch(entry, item));
+
+const removeFirstMatch = (inventory: Item[], item: Item): void => {
+    const index = inventory.findIndex((entry: Item) => itemsMatch(entry, item));
+    if (index !== -1) inventory.splice(index, 1);
+};
+
 /**
  * Applies updates from the AI (partial GameState) to the current GameState.
  * Explicitly handles complex objects like Inventory and Equipment.
@@ -9,6 +50,11 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
     const logs: string[] = [];
 
     if (!updatedState) return { newState, logs };
+
+    const oldInventoryNames = newState.character.inventory.map((i: Item) => i.name).sort();
+    const inventoryProvided = updatedState.character?.inventory !== undefined;
+    const equipmentUpdate = updatedState.character?.equipment;
+    const equipmentProvided = equipmentUpdate !== undefined;
 
     // 1. Handle Character HP
     if (updatedState.character?.hp !== undefined) {
@@ -30,30 +76,19 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
     // 2. Handle Inventory
     // Strategy: If AI provides inventory, we assume it's the NEW list (taking into account items removed/added).
     // The AI prompt will be updated to instruct "inventory" should be the COMPLETE new list if changed.
-    if (updatedState.character?.inventory) {
-        // Normalize items in case they are strings
-        const newInventory = updatedState.character.inventory.map((item: any) => 
-            typeof item === 'string' ? { id: item, name: item, type: 'misc', description: '' } as Item : item
-        );
-        
-        // Check for differences to log
-        const oldNames = newState.character.inventory.map((i: Item) => i.name).sort();
-        const newNames = newInventory.map((i: Item) => i.name).sort();
-        
-        if (JSON.stringify(oldNames) !== JSON.stringify(newNames)) {
-             logs.push(`Inventario actualizado: ${newNames.join(', ') || 'Vacio'}`);
-        }
-
+    if (inventoryProvided) {
+        const newInventory = Array.isArray(updatedState.character?.inventory)
+            ? updatedState.character.inventory.map((item: any) => normalizeItem(item))
+            : [];
         newState.character.inventory = newInventory;
     }
 
     // 3. Handle Equipment
     // Strategy: Merge updates. If AI sends "head": { ... }, replace head. 
-    if (updatedState.character?.equipment) {
+    if (equipmentUpdate && typeof equipmentUpdate === 'object') {
         if (!newState.character.equipment) newState.character.equipment = {};
         
-        const equipmentUpdates = updatedState.character.equipment as Equipment; // Partial<Equipment> actually
-        let eqChanged = false;
+        const equipmentUpdates = equipmentUpdate as Equipment; // Partial<Equipment> actually
 
         for (const [slot, item] of Object.entries(equipmentUpdates)) {
             // If item is null/undefined in update, implies unequip? Or just ignore? 
@@ -62,17 +97,37 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
             
             // Allow null to clear slot
             if (item === null) {
-                if (newState.character.equipment[slot as keyof Equipment]) {
-                     newState.character.equipment[slot as keyof Equipment] = undefined;
-                     logs.push(`Desequipado: ${slot}`);
-                     eqChanged = true;
+                const equippedItem = newState.character.equipment[slot as keyof Equipment];
+                if (equippedItem) {
+                    newState.character.equipment[slot as keyof Equipment] = undefined;
+                    logs.push(`Desequipado: ${slot}`);
+                    if (!inventoryProvided && !inventoryHasItem(newState.character.inventory, equippedItem)) {
+                        newState.character.inventory.push(equippedItem);
+                    }
                 }
-            } else if (typeof item === 'object') {
-                newState.character.equipment[slot as keyof Equipment] = item;
-                logs.push(`Equipado ${slot}: ${item.name}`);
-                eqChanged = true;
+            } else if (item !== undefined) {
+                const normalizedItem = normalizeItem(item);
+                const currentEquipped = newState.character.equipment[slot as keyof Equipment];
+                if (currentEquipped && !inventoryProvided && !inventoryHasItem(newState.character.inventory, currentEquipped)) {
+                    newState.character.inventory.push(currentEquipped);
+                }
+                newState.character.equipment[slot as keyof Equipment] = normalizedItem;
+                logs.push(`Equipado ${slot}: ${normalizedItem.name}`);
             }
         }
+    }
+
+    if ((inventoryProvided || equipmentProvided) && newState.character.equipment) {
+        for (const equippedItem of Object.values(newState.character.equipment)) {
+            if (equippedItem) {
+                removeFirstMatch(newState.character.inventory, equippedItem);
+            }
+        }
+    }
+
+    const finalInventoryNames = newState.character.inventory.map((i: Item) => i.name).sort();
+    if (JSON.stringify(oldInventoryNames) !== JSON.stringify(finalInventoryNames)) {
+        logs.push(`Inventario actualizado: ${finalInventoryNames.join(', ') || 'Vacio'}`);
     }
 
     // 4. Handle other simple fields if necessary (mana, stats, etc - not strictly requested but good for future)

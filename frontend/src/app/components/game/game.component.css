@@ -215,6 +215,7 @@
 
 .message.user { justify-content: flex-end; }
 .message.assistant { justify-content: flex-start; }
+.message.system { justify-content: center; }
 
 .bubble {
   max-width: 80%;
@@ -262,6 +263,30 @@
   background: var(--surface-soft-strong);
   color: var(--text-main);
   border-bottom-left-radius: 0;
+}
+
+.system .bubble {
+  background: rgba(var(--accent-secondary-rgb), 0.12);
+  color: var(--text-dim);
+  border: 1px dashed rgba(var(--accent-secondary-rgb), 0.45);
+  box-shadow: none;
+  text-align: center;
+  max-width: 70%;
+  padding: 0.6rem 1rem;
+}
+
+.system .bubble p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.system-tag {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
 }
 
 .chat-controls {

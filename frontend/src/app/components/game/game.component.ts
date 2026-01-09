@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../../services/game.service';
+import { ChatMessage } from '../../interfaces/game';
 
 @Component({
   selector: 'app-game',
@@ -26,6 +27,7 @@ export class GameComponent implements OnInit {
 
   state = computed(() => this.gameService.state());
   loading = computed(() => this.gameService.loading());
+  displayHistory = computed(() => this.buildDisplayHistory(this.state()?.narrativeHistory || []));
 
   calculatedStats = computed(() => {
     const character = this.state()?.character;
@@ -121,6 +123,63 @@ export class GameComponent implements OnInit {
         // Pero aquí las guardamos del último response. 
         // Para simplificar, si recargamos, las sugerencias se pierden hasta el primer movimiento.
     }
+  }
+
+  private buildDisplayHistory(history: ChatMessage[]): ChatMessage[] {
+    const output: ChatMessage[] = [];
+
+    for (const message of history) {
+      if (message.role === 'assistant') {
+        output.push(...this.splitAssistantMessage(message));
+        continue;
+      }
+
+      if (message.role === 'system') {
+        const normalized = this.normalizeSystemContent(message.content);
+        if (normalized) {
+          output.push({ role: 'system', content: normalized });
+        }
+        continue;
+      }
+
+      output.push(message);
+    }
+
+    return output;
+  }
+
+  private splitAssistantMessage(message: ChatMessage): ChatMessage[] {
+    const marker = /---\s*\[SISTEMA\]/i;
+    const index = message.content.search(marker);
+
+    if (index === -1) {
+      return [message];
+    }
+
+    const narrative = message.content.slice(0, index).trim();
+    let systemText = message.content.slice(index).replace(marker, '').trim();
+    systemText = systemText.replace(/^[:\s-]+/, '').trim();
+
+    const result: ChatMessage[] = [];
+    if (narrative) {
+      result.push({ role: 'assistant', content: narrative });
+    }
+    if (systemText) {
+      result.push({ role: 'system', content: systemText });
+    }
+
+    return result;
+  }
+
+  private normalizeSystemContent(content: string): string | null {
+    const trimmed = content.trim();
+    if (!trimmed) return null;
+
+    const match = trimmed.match(/^\[SISTEMA\]\s*:?\s*/i);
+    if (!match) return null;
+
+    const cleaned = trimmed.slice(match[0].length).trim();
+    return cleaned || null;
   }
 
   private scrollToBottom() {

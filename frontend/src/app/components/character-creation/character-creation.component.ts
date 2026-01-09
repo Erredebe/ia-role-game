@@ -46,43 +46,43 @@ export class CharacterCreationComponent implements OnInit {
 
   classes: CharacterClass[] = [
     { 
-      id: 'warrior', name: 'Guerrero', description: 'Frente de batalla y defensor del grupo.', icon: '??', baseHp: 120, baseMana: 20,
+      id: 'warrior', name: 'Guerrero', description: 'Frente de batalla y defensor del grupo.', icon: '⚔️', baseHp: 120, baseMana: 20,
       allowedEnvironments: ['fantasy', 'post-apocalyptic']
     },
     { 
-      id: 'mage', name: 'Mago', description: 'Erudito de artes arcanas y hechizos poderosos.', icon: '??', baseHp: 80, baseMana: 110,
+      id: 'mage', name: 'Mago', description: 'Erudito de artes arcanas y hechizos poderosos.', icon: '🔮', baseHp: 80, baseMana: 110,
       allowedEnvironments: ['fantasy']
     },
     { 
-      id: 'archer', name: 'Arquero', description: 'Especialista en combate a distancia y rastreo.', icon: '??', baseHp: 100, baseMana: 40,
+      id: 'archer', name: 'Arquero', description: 'Especialista en combate a distancia y rastreo.', icon: '🏹', baseHp: 100, baseMana: 40,
       allowedEnvironments: ['fantasy', 'post-apocalyptic']
     },
     { 
-      id: 'rogue', name: 'Picaro', description: 'Sigilo, engaño y golpes precisos.', icon: '??', baseHp: 95, baseMana: 30,
+      id: 'rogue', name: 'Picaro', description: 'Sigilo, engaño y golpes precisos.', icon: '🗡️', baseHp: 95, baseMana: 30,
       allowedEnvironments: ['fantasy', 'contemporary', 'post-apocalyptic']
     },
     {
-      id: 'soldier', name: 'Soldado', description: 'Entrenado en tacticas militares y combate directo.', icon: '??', baseHp: 115, baseMana: 20,
+      id: 'soldier', name: 'Soldado', description: 'Entrenado en tacticas militares y combate directo.', icon: '🪖', baseHp: 115, baseMana: 20,
       allowedEnvironments: ['realistic', 'contemporary', 'sci-fi', 'post-apocalyptic'] 
     },
     {
-      id: 'hacker', name: 'Hacker', description: 'Experto en intrusion, sistemas y guerra digital.', icon: '??', baseHp: 85, baseMana: 70,
+      id: 'hacker', name: 'Hacker', description: 'Experto en intrusion, sistemas y guerra digital.', icon: '💻', baseHp: 85, baseMana: 70,
       allowedEnvironments: ['contemporary', 'sci-fi']
     },
     {
-      id: 'pilot', name: 'Piloto', description: 'As del volante y la navegacion en entornos hostiles.', icon: '??', baseHp: 100, baseMana: 35,
+      id: 'pilot', name: 'Piloto', description: 'As del volante y la navegacion en entornos hostiles.', icon: '✈️', baseHp: 100, baseMana: 35,
       allowedEnvironments: ['contemporary', 'sci-fi', 'post-apocalyptic']
     },
     {
-      id: 'investigator', name: 'Investigador', description: 'Analista de pistas, crimen y conspiraciones.', icon: '??', baseHp: 95, baseMana: 40,
+      id: 'investigator', name: 'Investigador', description: 'Analista de pistas, crimen y conspiraciones.', icon: '🕵️', baseHp: 95, baseMana: 40,
       allowedEnvironments: ['realistic', 'contemporary']
     },
     {
-      id: 'medic', name: 'Medico', description: 'Soporte vital y tratamiento en campo.', icon: '??', baseHp: 90, baseMana: 60,
+      id: 'medic', name: 'Medico', description: 'Soporte vital y tratamiento en campo.', icon: '🩺', baseHp: 90, baseMana: 60,
       allowedEnvironments: ['realistic', 'sci-fi', 'post-apocalyptic']
     },
     {
-      id: 'mechanic', name: 'Mecanico', description: 'Reparaciones rapidas y dominio de dispositivos.', icon: '??', baseHp: 105, baseMana: 30,
+      id: 'mechanic', name: 'Mecanico', description: 'Reparaciones rapidas y dominio de dispositivos.', icon: '🛠️', baseHp: 105, baseMana: 30,
       allowedEnvironments: ['contemporary', 'sci-fi', 'post-apocalyptic']
     }
   ];
@@ -92,7 +92,7 @@ export class CharacterCreationComponent implements OnInit {
       id: 'fantasy',
       name: 'Fantasia',
       description: 'Reinos magicos, criaturas miticas y hechizos antiguos.',
-      icon: '??',
+      icon: '🐉',
       prompt: 'Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.',
       classArchetypes: ['Guerrero', 'Mago', 'Arquero', 'Picaro', 'Clerigo', 'Druida'],
       objectArchetypes: ['espadas', 'arcos', 'armaduras', 'pergaminos', 'pociones', 'reliquias']
@@ -101,7 +101,7 @@ export class CharacterCreationComponent implements OnInit {
       id: 'realistic',
       name: 'Realista',
       description: 'Sin magia, decisiones humanas y consecuencias reales.',
-      icon: '??',
+      icon: '🧭',
       prompt: 'Realismo estricto: no hay magia ni tecnologia imposible. Consecuencias fisicas creibles.',
       classArchetypes: ['Soldado', 'Investigador', 'Medico', 'Explorador', 'Guardia'],
       objectArchetypes: ['armas convencionales', 'botiquines', 'documentos', 'radios', 'linternas']
@@ -110,7 +110,7 @@ export class CharacterCreationComponent implements OnInit {
       id: 'contemporary',
       name: 'Contemporaneo',
       description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.',
-      icon: '??',
+      icon: '🏙️',
       prompt: 'Mundo actual urbano: tecnologia moderna, crimen organizado y corporaciones. Sin magia.',
       classArchetypes: ['Hacker', 'Investigador', 'Piloto', 'Agente', 'Mecanico'],
       objectArchetypes: ['smartphones', 'laptops', 'tarjetas de acceso', 'drones', 'vehiculos']
@@ -119,7 +119,7 @@ export class CharacterCreationComponent implements OnInit {
       id: 'sci-fi',
       name: 'Ciencia Ficcion',
       description: 'Naves, IA y fronteras del espacio profundo.',
-      icon: '??',
+      icon: '🚀',
       prompt: 'Futuro avanzado: IA, viajes espaciales, implantes y megacorporaciones. Tecnologia domina.',
       classArchetypes: ['Piloto', 'Hacker', 'Soldado espacial', 'Ingeniero', 'Medico'],
       objectArchetypes: ['rifles de plasma', 'implantes', 'nanobots', 'modulos de nave', 'data chips']
@@ -128,7 +128,7 @@ export class CharacterCreationComponent implements OnInit {
       id: 'post-apocalyptic',
       name: 'Postapocaliptico',
       description: 'Ruinas, supervivencia y facciones emergentes.',
-      icon: '??',
+      icon: '☢️',
       prompt: 'Mundo devastado: recursos escasos, facciones rivales y tecnologia reciclada.',
       classArchetypes: ['Superviviente', 'Saqueador', 'Mecanico', 'Tirador', 'Medico de campo'],
       objectArchetypes: ['chatarra', 'filtros de agua', 'municion', 'comida enlatada', 'radios rotas']

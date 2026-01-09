@@ -152,7 +152,7 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
             state.character = result.newState.character;
             
             // Add system log to history so AI knows what happened next turn
-            const systemMsg = `[SISTEMA]: ${result.logs.join('. ')}`;
+            const systemMsg = `[SISTEMA]: ${result.logs.join('\n')}`;
             state.narrativeHistory.push({ role: 'system', content: systemMsg });
             
             await storageService.saveGame(id, state);
@@ -187,11 +187,14 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
     state.character = newState.character;
     // We could just assign other props if applyStateUpdate handled them, currently it mostly handles character
     
-    const hpLog = logs.join('\n');
-    const finalDescription = result.description + (hpLog ? `\n\n--- [SISTEMA]\n${hpLog}` : '');
+    const systemLog = logs.join('\n');
+    const finalDescription = result.description;
 
     // Add AI response to history
     state.narrativeHistory.push({ role: 'assistant', content: finalDescription });
+    if (systemLog) {
+        state.narrativeHistory.push({ role: 'system', content: `[SISTEMA]: ${systemLog}` });
+    }
 
     await storageService.saveGame(id, state);
 
