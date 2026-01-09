@@ -7,7 +7,13 @@
              *ngFor="let env of environments"
              [class.active]="selectedEnvironmentId === env.id"
              (click)="selectEnvironment.emit(env.id)">
-          <span class="environment-icon">{{ env.icon }}</span>
+          <div class="environment-thumb">
+            <img *ngIf="env.image"
+                 [src]="env.image"
+                 [alt]="env.name"
+                 loading="lazy">
+            <span class="environment-icon" *ngIf="!env.image">{{ env.icon }}</span>
+          </div>
           <div class="environment-info">
             <h4>{{ env.name }}</h4>
             <p>{{ env.description }}</p>
@@ -30,7 +36,14 @@
      <div class="environment-preview-card">
         <h3>{{ currentEnvironment.name }}</h3>
         <p>{{ currentEnvironment.description }}</p>
-        <div class="environment-icon-large">{{ currentEnvironment.icon }}</div>
+        <div class="environment-preview-media" *ngIf="currentEnvironment.image; else environmentIcon">
+          <img [src]="currentEnvironment.image"
+               [alt]="currentEnvironment.name"
+               loading="lazy">
+        </div>
+        <ng-template #environmentIcon>
+          <div class="environment-icon-large">{{ currentEnvironment.icon }}</div>
+        </ng-template>
      </div>
   </div>
 </section>

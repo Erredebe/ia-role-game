@@ -1,5 +1,3 @@
-import { AvatarConfig } from './avatar';
-
 export type SystemAction = 'equip' | 'unequip';
 
 export interface GameState {
@@ -19,8 +17,6 @@ export interface Character {
   maxHp: number;
   mana: number;
   maxMana: number;
-  avatarConfig?: AvatarConfig;
-  avatarSeed?: string;
   backstory?: string;
   inventory: Item[];
   equipment: Equipment;

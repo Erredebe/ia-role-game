@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { ThemeService } from '../../services/theme.service';
 import { Item } from '../../interfaces/game';
-import { AvatarConfig } from '../../interfaces/avatar';
 import { CharacterClass, EnvironmentOption } from './character-creation.types';
 import { EnvironmentStepComponent } from './steps/environment-step/environment-step.component';
 import { ClassStepComponent } from './steps/class-step/class-step.component';
@@ -54,14 +53,6 @@ export class CharacterCreationComponent implements OnInit {
   selectedClassId: string = '';
   selectedEnvironmentId: string = 'fantasy';
   customRules: string = '';
-  avatarConfig: AvatarConfig = {
-    skinTone: 'ivory',
-    hairStyle: 'short',
-    eyeColor: 'brown',
-    mouthStyle: 'neutral',
-    outfit: 'tunic',
-    accessories: []
-  };
   backstory: string = '';
   
   currentStep: number = 1;
@@ -70,7 +61,7 @@ export class CharacterCreationComponent implements OnInit {
 
   readonly classes: CharacterClass[] = [
     { 
-      id: 'warrior', name: 'Guerrero', description: 'Frente de batalla y defensor del grupo.', icon: '⚔️', baseHp: 120, baseMana: 20,
+      id: 'warrior', name: 'Guerrero', description: 'Frente de batalla y defensor del grupo.', icon: '⚔️', image: 'assets/guerrero.png', baseHp: 120, baseMana: 20,
       allowedEnvironments: ['fantasy', 'post-apocalyptic']
     },
     { 
@@ -78,15 +69,15 @@ export class CharacterCreationComponent implements OnInit {
       allowedEnvironments: ['fantasy']
     },
     { 
-      id: 'archer', name: 'Arquero', description: 'Especialista en combate a distancia y rastreo.', icon: '🏹', baseHp: 100, baseMana: 40,
+      id: 'archer', name: 'Arquero', description: 'Especialista en combate a distancia y rastreo.', icon: '🏹', image: 'assets/arquero.png', baseHp: 100, baseMana: 40,
       allowedEnvironments: ['fantasy', 'post-apocalyptic']
     },
     { 
-      id: 'rogue', name: 'Picaro', description: 'Sigilo, engaño y golpes precisos.', icon: '🗡️', baseHp: 95, baseMana: 30,
+      id: 'rogue', name: 'Picaro', description: 'Sigilo, engaño y golpes precisos.', icon: '🗡️', image: 'assets/picaro.png', baseHp: 95, baseMana: 30,
       allowedEnvironments: ['fantasy', 'contemporary', 'post-apocalyptic']
     },
     {
-      id: 'soldier', name: 'Soldado', description: 'Entrenado en tacticas militares y combate directo.', icon: '🪖', baseHp: 115, baseMana: 20,
+      id: 'soldier', name: 'Soldado', description: 'Entrenado en tacticas militares y combate directo.', icon: '🪖', image: 'assets/soldado.png', baseHp: 115, baseMana: 20,
       allowedEnvironments: ['realistic', 'contemporary', 'sci-fi', 'post-apocalyptic'] 
     },
     {
@@ -98,11 +89,11 @@ export class CharacterCreationComponent implements OnInit {
       allowedEnvironments: ['contemporary', 'sci-fi', 'post-apocalyptic']
     },
     {
-      id: 'investigator', name: 'Investigador', description: 'Analista de pistas, crimen y conspiraciones.', icon: '🕵️', baseHp: 95, baseMana: 40,
+      id: 'investigator', name: 'Investigador', description: 'Analista de pistas, crimen y conspiraciones.', icon: '🕵️', image: 'assets/investigador.png', baseHp: 95, baseMana: 40,
       allowedEnvironments: ['realistic', 'contemporary']
     },
     {
-      id: 'medic', name: 'Medico', description: 'Soporte vital y tratamiento en campo.', icon: '🩺', baseHp: 90, baseMana: 60,
+      id: 'medic', name: 'Medico', description: 'Soporte vital y tratamiento en campo.', icon: '🩺', image: 'assets/medic.png', baseHp: 90, baseMana: 60,
       allowedEnvironments: ['realistic', 'sci-fi', 'post-apocalyptic']
     },
     {
@@ -117,6 +108,7 @@ export class CharacterCreationComponent implements OnInit {
       name: 'Fantasia',
       description: 'Reinos magicos, criaturas miticas y hechizos antiguos.',
       icon: '🐉',
+      image: 'assets/fantasia.png',
       prompt: 'Alta fantasia epica: magia real, deidades, criaturas miticas y politica feudal. Evita tecnologia moderna.',
       classArchetypes: ['Guerrero', 'Mago', 'Arquero', 'Picaro', 'Clerigo', 'Druida'],
       objectArchetypes: ['espadas', 'arcos', 'armaduras', 'pergaminos', 'pociones', 'reliquias']
@@ -135,6 +127,7 @@ export class CharacterCreationComponent implements OnInit {
       name: 'Contemporaneo',
       description: 'Ciudades actuales, tecnologia moderna y conflictos urbanos.',
       icon: '🏙️',
+      image: 'assets/contemporaneo.png',
       prompt: 'Mundo actual urbano: tecnologia moderna, crimen organizado y corporaciones. Sin magia.',
       classArchetypes: ['Hacker', 'Investigador', 'Piloto', 'Agente', 'Mecanico'],
       objectArchetypes: ['smartphones', 'laptops', 'tarjetas de acceso', 'drones', 'vehiculos']
@@ -144,6 +137,7 @@ export class CharacterCreationComponent implements OnInit {
       name: 'Ciencia Ficcion',
       description: 'Naves, IA y fronteras del espacio profundo.',
       icon: '🚀',
+      image: 'assets/ciencia_ficcion.png',
       prompt: 'Futuro avanzado: IA, viajes espaciales, implantes y megacorporaciones. Tecnologia domina.',
       classArchetypes: ['Piloto', 'Hacker', 'Soldado espacial', 'Ingeniero', 'Medico'],
       objectArchetypes: ['rifles de plasma', 'implantes', 'nanobots', 'modulos de nave', 'data chips']
@@ -153,6 +147,7 @@ export class CharacterCreationComponent implements OnInit {
       name: 'Postapocaliptico',
       description: 'Ruinas, supervivencia y facciones emergentes.',
       icon: '☢️',
+      image: 'assets/postapocaliptico.png',
       prompt: 'Mundo devastado: recursos escasos, facciones rivales y tecnologia reciclada.',
       classArchetypes: ['Superviviente', 'Saqueador', 'Mecanico', 'Tirador', 'Medico de campo'],
       objectArchetypes: ['chatarra', 'filtros de agua', 'municion', 'comida enlatada', 'radios rotas']
@@ -200,16 +195,6 @@ export class CharacterCreationComponent implements OnInit {
     this.selectedEnvironmentId = envId;
     this.themeService.setTheme(envId);
     this.updateAvailableClasses();
-  }
-
-  get previewAvatarConfig(): AvatarConfig {
-    return {
-      ...this.avatarConfig,
-      seed: this.name || 'avatar',
-      name: this.name || undefined,
-      classId: this.selectedClassId || undefined,
-      environmentId: this.selectedEnvironmentId || undefined
-    };
   }
 
   nextStep() {
@@ -279,7 +264,6 @@ export class CharacterCreationComponent implements OnInit {
       maxHp: this.currentClass.baseHp,
       mana: this.currentClass.baseMana,
       maxMana: this.currentClass.baseMana,
-      avatarConfig: this.previewAvatarConfig,
       backstory: trimmedBackstory ? trimmedBackstory : undefined,
       stats: this.stats,
       inventory: this.getInitialInventory(),
@@ -417,7 +401,7 @@ export class CharacterCreationComponent implements OnInit {
     return items;
   }
 
-  updateAvatarConfig(config: AvatarConfig) {
-    this.avatarConfig = { ...this.avatarConfig, ...config };
-  }
 }
+
+
+

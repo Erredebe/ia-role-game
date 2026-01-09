@@ -9,14 +9,6 @@
              maxlength="20">
     </div>
 
-    <div class="input-group">
-      <label>Apariencia</label>
-      <app-avatar-builder
-        [config]="avatarConfig"
-        (configChange)="avatarConfigChange.emit($event)"
-      ></app-avatar-builder>
-    </div>
-
     <div class="class-selection">
       <label>Clase Disponibles en {{ currentEnvironment.name }}</label>
       <div class="class-grid">
@@ -24,7 +16,13 @@
              *ngFor="let c of availableClasses"
              [class.active]="selectedClassId === c.id"
              (click)="selectClass.emit(c.id)">
-          <span class="class-icon">{{ c.icon }}</span>
+          <div class="class-thumb">
+            <img *ngIf="c.image"
+                 [src]="c.image"
+                 [alt]="c.name"
+                 loading="lazy">
+            <span class="class-icon" *ngIf="!c.image">{{ c.icon }}</span>
+          </div>
           <div class="class-info">
             <h4>{{ c.name }}</h4>
             <p>{{ c.description }}</p>
@@ -36,10 +34,15 @@
   </div>
 
   <div class="step-preview">
-    <div class="avatar-preview">
-      <div class="avatar-glow">
-        <app-avatar-renderer [config]="avatarConfig"></app-avatar-renderer>
+    <div class="class-preview">
+      <div class="class-preview-media" *ngIf="currentClass?.image; else classIcon">
+        <img [src]="currentClass?.image"
+             [alt]="currentClass?.name || 'Clase'"
+             loading="lazy">
       </div>
+      <ng-template #classIcon>
+        <div class="class-preview-icon">{{ currentClass?.icon || '?' }}</div>
+      </ng-template>
       <h3>{{ name || '???' }}</h3>
       <p class="class-badge" *ngIf="currentClass">{{ currentClass.name }}</p>
       <p class="environment-badge">{{ currentEnvironment.name }}</p>

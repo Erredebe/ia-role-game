@@ -262,51 +262,11 @@ export class GameService {
   }
 
   private applyState(id: string, state: GameState): void {
-    const normalizedState = this.normalizeAvatarConfig(state);
     this.currentId.set(id);
-    this.state.set(normalizedState);
+    this.state.set(state);
     // Set theme based on environment (default to dark if not specified)
-    const theme = (normalizedState.environment as any)?.theme || 'dark';
+    const theme = (state.environment as any)?.theme || 'dark';
     this.themeService.setTheme(theme);
-  }
-
-  private normalizeAvatarConfig(state: GameState): GameState {
-    const character = state.character;
-    if (!character || character.avatarConfig) {
-      return state;
-    }
-
-    const avatarConfig = {
-      seed: character.avatarSeed || character.name || 'avatar',
-      name: character.name || undefined,
-      classId: this.mapClassNameToId(character.class),
-    };
-
-    return {
-      ...state,
-      character: {
-        ...character,
-        avatarConfig,
-      },
-    };
-  }
-
-  private mapClassNameToId(className?: string): string | undefined {
-    if (!className) return undefined;
-    const normalized = className.trim().toLowerCase();
-    const map: Record<string, string> = {
-      guerrero: 'warrior',
-      mago: 'mage',
-      arquero: 'archer',
-      picaro: 'rogue',
-      soldado: 'soldier',
-      hacker: 'hacker',
-      piloto: 'pilot',
-      investigador: 'investigator',
-      medico: 'medic',
-      mecanico: 'mechanic',
-    };
-    return map[normalized];
   }
 }
 

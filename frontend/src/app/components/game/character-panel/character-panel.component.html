@@ -1,7 +1,13 @@
 ﻿<aside class="sidebar glass-card">
   <div class="profile">
-    <div class="avatar-glow">
-      <app-avatar-renderer [config]="avatarConfig"></app-avatar-renderer>
+    <div class="class-portrait">
+      <img *ngIf="classImage; else classFallback"
+           [src]="classImage"
+           [alt]="character?.class || 'Clase'"
+           loading="lazy">
+      <ng-template #classFallback>
+        <span class="class-initial">{{ classInitial }}</span>
+      </ng-template>
     </div>
     <h2>{{ character?.name }}</h2>
     <p class="subtitle">{{ character?.class }}</p>

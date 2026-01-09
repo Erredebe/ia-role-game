@@ -1,15 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Character, Equipment, Item, Stats } from '../../../interfaces/game';
-import { AvatarConfig } from '../../../interfaces/avatar';
-import { AvatarRendererComponent } from '../../avatar/avatar-renderer.component';
 
 type EquipmentSlotKey = keyof Equipment;
 
 @Component({
   selector: 'app-character-panel',
   standalone: true,
-  imports: [CommonModule, AvatarRendererComponent],
+  imports: [CommonModule],
   templateUrl: './character-panel.component.html',
   styleUrl: './character-panel.component.css'
 })
@@ -25,17 +23,24 @@ export class CharacterPanelComponent {
   @Output() equipItem = new EventEmitter<Item>();
   @Output() unequipItem = new EventEmitter<EquipmentSlotKey>();
 
-  get avatarConfig(): AvatarConfig {
-    const baseConfig = this.character?.avatarConfig;
-    const fallbackSeed =
-      baseConfig?.seed || this.character?.avatarSeed || this.character?.name || 'avatar';
-    return {
-      ...baseConfig,
-      seed: fallbackSeed,
-      name: baseConfig?.name ?? this.character?.name ?? undefined,
-      classId:
-        baseConfig?.classId ?? this.mapClassNameToId(this.character?.class),
+  get classImage(): string | null {
+    const classId = this.mapClassNameToId(this.character?.class);
+    if (!classId) return null;
+    const imageMap: Record<string, string> = {
+      warrior: 'assets/guerrero.png',
+      archer: 'assets/arquero.png',
+      rogue: 'assets/picaro.png',
+      soldier: 'assets/soldado.png',
+      investigator: 'assets/investigador.png',
+      medic: 'assets/medic.png',
     };
+    return imageMap[classId] || null;
+  }
+
+  get classInitial(): string {
+    const source = (this.character?.class || this.character?.name || '').trim();
+    if (!source) return '?';
+    return source.charAt(0).toUpperCase();
   }
 
   isEquippable(item: Item): boolean {
