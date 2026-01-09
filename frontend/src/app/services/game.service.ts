@@ -5,60 +5,81 @@ import { firstValueFrom } from 'rxjs';
 import { ThemeService } from './theme.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GameService {
   private apiUrl = 'http://localhost:3000/api/game';
-  
+  private readonly STORAGE_KEY = 'ia_game_saves';
+
   // State using Angular Signals
   state = signal<GameState | null>(null);
   currentId = signal<string | null>(null);
   loading = signal<boolean>(false);
 
-  constructor(
-    private http: HttpClient,
-    private themeService: ThemeService
-  ) {}
+  constructor(private http: HttpClient, private themeService: ThemeService) {}
 
   async listGames(): Promise<LocalSaveSummary[]> {
     try {
-      const response = await firstValueFrom(
-        this.http.get<LocalSaveSummary[]>(`${this.apiUrl}/list`)
-      );
-      const entries = Array.isArray(response) ? response : [];
-      return entries
-        .map(entry => ({
-          id: entry.id,
-          characterName: entry.characterName || 'Sin nombre',
-          characterClass: entry.characterClass || 'Sin clase',
-          updatedAt: entry.updatedAt
+      const saves = this.getLocalSaves();
+      const games = Object.entries(saves)
+        .map(([id, save]) => ({
+          id,
+          characterName: save.character?.name || 'Sin nombre',
+          characterClass: save.character?.class || 'Sin clase',
+          updatedAt: save.updatedAt || new Date().toISOString(),
         }))
         .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+      console.log('Listed games from localStorage:', games);
+      return games;
     } catch (error) {
       console.error('Error listing games', error);
       return [];
     }
   }
 
-  async createNewGame(character: any, environment?: any): Promise<{id: string, state: GameState}> {
+  async createNewGame(
+    character: any,
+    environment?: any
+  ): Promise<{ id: string; state: GameState }> {
     return this.withLoading(async () => {
-      const response = await firstValueFrom(this.http.post<any>(`${this.apiUrl}/new`, { character, environment }));
+      console.log('Creating new game with character:', character.name);
+      const response = await firstValueFrom(
+        this.http.post<any>(`${this.apiUrl}/new`, { character, environment })
+      );
+      console.log('Backend response:', response);
+
       const id = response.id || response.sessionId;
       const state = response.state || response.gameState;
 
+      console.log('Extracted ID:', id);
+      console.log('Extracted state:', state);
+
       if (!id || !state) {
+        console.error('Invalid response from backend');
         throw new Error('Respuesta invalida al crear partida');
       }
 
+      // Save to localStorage
+      console.log('Attempting to save to localStorage...');
+      this.saveToLocalStorage(id, state);
       this.applyState(id, state);
+      console.log('Game created and saved successfully');
       return { id, state };
     });
   }
 
   async fetchState(id: string) {
     try {
-      const state = await firstValueFrom(this.http.get<GameState>(`${this.apiUrl}/${id}/state`));
-      this.applyState(id, state);
+      // Load from localStorage instead of API
+      const state = this.loadFromLocalStorage(id);
+      if (state) {
+        this.applyState(id, state);
+      } else {
+        // Fallback to API if not in localStorage
+        const state = await firstValueFrom(this.http.get<GameState>(`${this.apiUrl}/${id}/state`));
+        this.saveToLocalStorage(id, state);
+        this.applyState(id, state);
+      }
     } catch (error) {
       console.error('Error fetching state', error);
     }
@@ -66,13 +87,24 @@ export class GameService {
 
   async sendAction(action: string) {
     const id = this.currentId();
-    if (!id) throw new Error('No active session');
+    const currentState = this.state();
+    if (!id || !currentState) throw new Error('No active session');
 
     return this.withLoading(async () => {
-      const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, { action }));
-      this.applyState(id, response.gameState);
+      const payload = {
+        action,
+        currentState,
+      };
+      const response = await firstValueFrom(
+        this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload)
+      );
+      const newState = response.gameState;
+
+      // Save updated state to localStorage
+      this.saveToLocalStorage(id, newState);
+      this.applyState(id, newState);
       return response;
-    }).catch(error => {
+    }).catch((error) => {
       console.error('Error sending action', error);
       throw error;
     });
@@ -80,18 +112,26 @@ export class GameService {
 
   async performSystemAction(systemAction: SystemAction, targetId: string) {
     const id = this.currentId();
-    if (!id) throw new Error('No active session');
+    const currentState = this.state();
+    if (!id || !currentState) throw new Error('No active session');
 
     return this.withLoading(async () => {
       const payload = {
-        action: '', // Not used for system actions but keeping schema
+        action: '',
         type: 'system',
         systemAction,
-        targetId
+        targetId,
+        currentState,
       };
-      
-      const response = await firstValueFrom(this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload));
-      this.applyState(id, response.gameState);
+
+      const response = await firstValueFrom(
+        this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload)
+      );
+      const newState = response.gameState;
+
+      // Save updated state to localStorage
+      this.saveToLocalStorage(id, newState);
+      this.applyState(id, newState);
       return response;
     }).catch((error: any) => {
       console.error('Error performing system action', error);
@@ -102,14 +142,14 @@ export class GameService {
   async saveCurrentGame(): Promise<boolean> {
     const id = this.currentId();
     const state = this.state();
-    if (!id || !state) return false;
+    console.log(`saveCurrentGame called - id: ${id}, has state: ${!!state}`);
+    if (!id || !state) {
+      console.warn('Cannot save: missing id or state');
+      return false;
+    }
 
     try {
-      const response = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/restore`, { id, state })
-      );
-      const savedState = response.gameState || state;
-      this.applyState(id, savedState);
+      this.saveToLocalStorage(id, state);
       return true;
     } catch (error) {
       console.error('Error saving game', error);
@@ -117,11 +157,78 @@ export class GameService {
     }
   }
 
-  private applyState(id: string, state: GameState) {
-    this.currentId.set(id);
-    this.state.set(state);
-    if (state.environment) {
-      this.themeService.setTheme(state.environment.id);
+  private saveToLocalStorage(id: string, state: GameState): void {
+    try {
+      const saves = this.getLocalSaves();
+
+      // Store the state with update timestamp
+      saves[id] = {
+        ...state,
+        updatedAt: new Date().toISOString(),
+      } as any;
+
+      // Serialize to JSON
+      const jsonStr = JSON.stringify(saves);
+      console.log(`Before localStorage.setItem - Size: ${jsonStr.length} bytes`);
+
+      localStorage.setItem(this.STORAGE_KEY, jsonStr);
+      console.log(`✓ Game saved to localStorage with ID: ${id}`);
+
+      // Verify
+      const verify = localStorage.getItem(this.STORAGE_KEY);
+      if (verify) {
+        const parsed = JSON.parse(verify);
+        console.log(`✓ Verified: ${Object.keys(parsed).length} games in storage`);
+      }
+    } catch (error) {
+      console.error('❌ Error saving to localStorage:', error);
+      console.error('State:', state);
+    }
+  }
+
+  private loadFromLocalStorage(id: string): GameState | null {
+    const saves = this.getLocalSaves();
+    return saves[id] || null;
+  }
+
+  private getLocalSaves(): Record<string, GameState & { updatedAt: string }> {
+    try {
+      const data = localStorage.getItem(this.STORAGE_KEY);
+      if (!data) {
+        console.log('No saved games in localStorage');
+        return {};
+      }
+      const parsed = JSON.parse(data);
+      console.log(`Loaded ${Object.keys(parsed).length} saved games from localStorage`);
+      return parsed;
+    } catch (error) {
+      console.error('Error reading from localStorage', error);
+      return {};
+    }
+  }
+
+  // Debug method to test localStorage directly
+  testLocalStorage(): boolean {
+    try {
+      console.log('Testing localStorage...');
+      const testKey = '__test_localStorage_' + Date.now();
+      const testValue = 'test_value_' + Math.random();
+
+      localStorage.setItem(testKey, testValue);
+      const retrieved = localStorage.getItem(testKey);
+      const success = retrieved === testValue;
+
+      if (success) {
+        localStorage.removeItem(testKey);
+        console.log('✓ localStorage is working correctly');
+        return true;
+      } else {
+        console.error('✗ localStorage value mismatch');
+        return false;
+      }
+    } catch (error) {
+      console.error('✗ localStorage error:', error);
+      return false;
     }
   }
 
@@ -134,6 +241,13 @@ export class GameService {
     }
   }
 
+  private applyState(id: string, state: GameState): void {
+    this.currentId.set(id);
+    this.state.set(state);
+    // Set theme based on environment (default to dark if not specified)
+    const theme = (state.environment as any)?.theme || 'dark';
+    this.themeService.setTheme(theme);
+  }
 }
 
 export interface LocalSaveSummary {

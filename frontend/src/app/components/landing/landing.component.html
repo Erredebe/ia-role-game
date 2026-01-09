@@ -6,6 +6,45 @@
     <div class="actions">
       <button class="primary-btn" (click)="newGame()">NUEVA PARTIDA</button>
     </div>
+
+    <!-- Debug info -->
+    <div
+      style="
+        margin-top: 20px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        font-size: 12px;
+        color: #ccc;
+      "
+    >
+      <pre>{{ debugInfo }}</pre>
+      <button
+        (click)="testStorage()"
+        style="
+          margin-top: 10px;
+          padding: 5px 10px;
+          background: rgba(100, 200, 255, 0.3);
+          border: 1px solid #4af;
+          cursor: pointer;
+        "
+      >
+        Test Storage
+      </button>
+      <button
+        (click)="clearStorage()"
+        style="
+          margin-top: 5px;
+          margin-left: 5px;
+          padding: 5px 10px;
+          background: rgba(255, 100, 100, 0.3);
+          border: 1px solid #f44;
+          cursor: pointer;
+        "
+      >
+        Clear Storage
+      </button>
+    </div>
   </div>
 
   <div class="saves-section" *ngIf="savedGames.length > 0">
