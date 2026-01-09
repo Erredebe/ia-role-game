@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { ThemeService } from '../../services/theme.service';
 import { Item } from '../../interfaces/game';
+import { AvatarConfig } from '../../interfaces/avatar';
 import { CharacterClass, EnvironmentOption } from './character-creation.types';
 import { EnvironmentStepComponent } from './steps/environment-step/environment-step.component';
 import { ClassStepComponent } from './steps/class-step/class-step.component';
@@ -194,9 +195,13 @@ export class CharacterCreationComponent implements OnInit {
     this.updateAvailableClasses();
   }
 
-  get avatarUrl() {
-    const seed = this.avatarSeed || this.name || 'avatar';
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+  get avatarConfig(): AvatarConfig {
+    return {
+      seed: this.avatarSeed || this.name || 'avatar',
+      name: this.name || undefined,
+      classId: this.selectedClassId || undefined,
+      environmentId: this.selectedEnvironmentId || undefined
+    };
   }
 
   nextStep() {

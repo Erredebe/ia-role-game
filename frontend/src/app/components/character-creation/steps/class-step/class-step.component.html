@@ -41,7 +41,7 @@
   <div class="step-preview">
     <div class="avatar-preview">
       <div class="avatar-glow">
-        <img [src]="avatarUrl" alt="Preview">
+        <app-avatar-renderer [config]="avatarConfig"></app-avatar-renderer>
       </div>
       <h3>{{ name || '???' }}</h3>
       <p class="class-badge" *ngIf="currentClass">{{ currentClass.name }}</p>
