@@ -132,8 +132,15 @@ const syncInventoryWithEquipment = (inventory: Item[], equipment: Equipment): vo
 /**
  * Applies updates from the AI (partial GameState) to the current GameState.
  * Explicitly handles complex objects like Inventory and Equipment.
+ * 
+ * CRITICAL: If inventory changes, stateChangeJustification.inventory MUST be provided.
+ * Otherwise the change is rejected and inventory is not modified.
  */
-export const applyStateUpdate = (currentState: GameState, updatedState: Partial<GameState>): { newState: GameState, logs: string[] } => {
+export const applyStateUpdate = (
+    currentState: GameState, 
+    updatedState: Partial<GameState>,
+    stateChangeJustification?: { inventory?: string; hp?: string; equipment?: string; other?: string }
+): { newState: GameState, logs: string[] } => {
     const newState = cloneState(currentState);
     const logs: string[] = [];
 
@@ -159,10 +166,18 @@ export const applyStateUpdate = (currentState: GameState, updatedState: Partial<
     }
 
     // 2. Handle Inventory
-    // Strategy: If AI provides inventory, we assume it's the NEW list (taking into account items removed/added).
-    // The AI prompt will be updated to instruct "inventory" should be the COMPLETE new list if changed.
+    // ⚠️ CRITICAL: If inventory changes, justification MUST be provided
     if (inventoryProvided) {
-        newState.character.inventory = normalizeInventory(updatedState.character?.inventory);
+        if (!stateChangeJustification?.inventory) {
+            console.warn(
+                '⚠️ INVENTORY CHANGE REJECTED: AI tried to change inventory without justification'
+            );
+            logs.push('❌ Cambio de inventario rechazado: sin justificación narrativa explícita');
+            // DO NOT apply the inventory change - keep current inventory
+        } else {
+            newState.character.inventory = normalizeInventory(updatedState.character?.inventory);
+            logs.push(`✓ ${stateChangeJustification.inventory}`);
+        }
     }
 
     // 3. Handle Equipment

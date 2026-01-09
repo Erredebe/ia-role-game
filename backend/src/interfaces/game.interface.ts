@@ -69,4 +69,11 @@ export interface GameAction {
     suggestedActions?: string[];
     updatedState?: Partial<GameState>;
     updatedSummary?: string; // Nuevo resumen narrativo sugerido por la IA
+    stateChangeJustification?: {
+        // Explicación explícita de por qué cambian los valores
+        inventory?: string; // Si cambió el inventario, DEBE explicar por qué
+        hp?: string;
+        equipment?: string;
+        other?: string;
+    };
 }

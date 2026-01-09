@@ -263,7 +263,7 @@ export const handlePlayerAction = async (req: Request, res: Response) => {
   }
 
   const { newState, logs } = await import("../utils/state.helper.js").then(
-    (m) => m.applyStateUpdate(state, result.updatedState || {})
+    (m) => m.applyStateUpdate(state, result.updatedState || {}, result.stateChangeJustification)
   );
   state.character = newState.character;
 

@@ -49,15 +49,23 @@ export class GameService {
       console.log('Backend response:', response);
 
       const id = response.id || response.sessionId;
-      const state = response.state || response.gameState;
+      let state = response.state || response.gameState;
+      const suggestedActions = response.suggestedActions || [];
 
       console.log('Extracted ID:', id);
       console.log('Extracted state:', state);
+      console.log('Extracted actions:', suggestedActions);
 
       if (!id || !state) {
         console.error('Invalid response from backend');
         throw new Error('Respuesta invalida al crear partida');
       }
+
+      // Agregar acciones sugeridas al estado
+      state = {
+        ...state,
+        suggestedActions: suggestedActions,
+      };
 
       // Save to localStorage
       console.log('Attempting to save to localStorage...');
@@ -98,7 +106,13 @@ export class GameService {
       const response = await firstValueFrom(
         this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload)
       );
-      const newState = response.gameState;
+      let newState = response.gameState;
+
+      // Agregar acciones sugeridas al estado
+      newState = {
+        ...newState,
+        suggestedActions: response.suggestedActions || [],
+      };
 
       // Save updated state to localStorage
       this.saveToLocalStorage(id, newState);
@@ -127,7 +141,13 @@ export class GameService {
       const response = await firstValueFrom(
         this.http.post<ActionResponse>(`${this.apiUrl}/${id}/action`, payload)
       );
-      const newState = response.gameState;
+      let newState = response.gameState;
+
+      // Agregar acciones sugeridas al estado
+      newState = {
+        ...newState,
+        suggestedActions: response.suggestedActions || [],
+      };
 
       // Save updated state to localStorage
       this.saveToLocalStorage(id, newState);

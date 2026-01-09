@@ -152,11 +152,10 @@ export class GameComponent implements OnInit {
   }
 
   private extractSuggestions() {
-    const history = this.state()?.narrativeHistory;
-    if (history && history.length > 0) {
-      // En un caso real, las sugerencias vendrían del backend en el estado
-      // Pero aquí las guardamos del último response.
-      // Para simplificar, si recargamos, las sugerencias se pierden hasta el primer movimiento.
+    const state = this.state();
+    if (state && state.suggestedActions) {
+      this.suggestedActions = state.suggestedActions;
+      console.log('Extracted suggestions:', this.suggestedActions);
     }
   }
 
