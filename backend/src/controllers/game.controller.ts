@@ -83,6 +83,19 @@ const buildGreetingMessage = (
   const backstoryText = character?.backstory?.trim()
     ? `Trasfondo del personaje: ${character.backstory.trim()}.`
     : "";
+  const inventoryText = Array.isArray(character?.inventory)
+    ? `Inventario inicial: ${
+        character.inventory.length
+          ? character.inventory
+              .map((item: any) =>
+                typeof item === "string"
+                  ? item
+                  : item?.name || item?.id || "Item"
+              )
+              .join(", ")
+          : "Vacio"
+      }.`
+    : "Inventario inicial: Vacio.";
 
   return {
     role: "system",
@@ -90,6 +103,7 @@ const buildGreetingMessage = (
         ${environmentText}
         ${rulesText}
         ${backstoryText}
+        ${inventoryText}
         Comienza la aventura narrando su llegada al mundo o el inicio de su mision.`,
   };
 };

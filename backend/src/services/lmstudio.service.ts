@@ -10,7 +10,7 @@ export class LMStudioService implements AIAdapter {
   private readonly baseUrl =
     process.env.LM_STUDIO_URL || "http://localhost:1234/v1";
   private readonly model =
-    process.env.LM_STUDIO_MODEL || "dolphin3.0-llama3.1-8b";
+    process.env.LM_STUDIO_MODEL || "openai/gpt-oss-20b";
   private readonly historyLimit = 10;
   private jsonModeSupported = true;
   private jsonModeWarned = false;
@@ -31,7 +31,8 @@ export class LMStudioService implements AIAdapter {
     }
 
     try {
-      return JSON.parse(candidate) as GameAction;
+      const parsed = JSON.parse(candidate) as GameAction;
+      return this.mergeDuplicateDescriptions(candidate, parsed);
     } catch {
       // fallthrough to bracket search
     }
@@ -47,7 +48,8 @@ export class LMStudioService implements AIAdapter {
       if (depth === 0) {
         const slice = raw.slice(start, i + 1);
         try {
-          return JSON.parse(slice) as GameAction;
+          const parsed = JSON.parse(slice) as GameAction;
+          return this.mergeDuplicateDescriptions(slice, parsed);
         } catch {
           return null;
         }
@@ -55,6 +57,41 @@ export class LMStudioService implements AIAdapter {
     }
 
     return null;
+  }
+
+  private mergeDuplicateDescriptions(
+    raw: string,
+    parsed: GameAction
+  ): GameAction {
+    const descriptionParts = this.extractDescriptionParts(raw);
+    if (descriptionParts.length <= 1) return parsed;
+
+    const merged = descriptionParts
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .join("\n\n");
+
+    return {
+      ...parsed,
+      description: merged,
+    };
+  }
+
+  private extractDescriptionParts(raw: string): string[] {
+    const regex = /"description"\s*:\s*"((?:\\.|[^"\\])*)"/g;
+    const parts: string[] = [];
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(raw))) {
+      const value = match[1] ?? "";
+      try {
+        parts.push(JSON.parse(`"${value}"`));
+      } catch {
+        parts.push(value);
+      }
+    }
+
+    return parts;
   }
 
   private buildSystemPrompt(isFirstMessage: boolean = false): ChatMessage {
@@ -66,38 +103,13 @@ REGLAS CRÍTICAS DE CAMBIOS DE ESTADO:
 ⚠️ NUNCA cambies HP, inventario, equipo u otros atributos SOLO porque sí.
 ⚠️ SOLO modifica el estado en estos casos JUSTIFICADOS:
   • El jugador fue atacado exitosamente → reduce su HP CON EXPLICACIÓN
-  • El jugador encontró un objeto → agrega a inventario CON DESCRIPCIÓN CLARA
-  • El jugador usa/consume un objeto → remueve SOLO si lo mencionó explícitamente
+  • El jugador encontró un objeto → agrega a inventario CON DESCRIPCIÓN
+  • El jugador usa/consume un objeto → remueve CON EXPLICACIÓN
   • El jugador equipa/desequipa → mueve entre equipment e inventory
-  • El jugador vende/descarta → remueve SOLO si lo pidió o lo narró
-  • El jugador gana una recompensa → añade CON CONTEXTO NARRATIVO CLARO
-  • El jugador pierde un objeto → SOLO si fue atacado/robado/destruido en la narrativa
-
-INVENTARIO - REGLAS ESPECIALES (⚠️⚠️⚠️ CRÍTICO):
-==================================================
-❌ NUNCA vacíes el inventario sin explicación EXPLÍCITA en la narrativa
-❌ NUNCA modifiques el inventario a menos que el jugador lo haya mencionado O causado directamente
-❌ NUNCA remuevas objetos "porque ya no los necesita"
-❌ NUNCA cambies objetos de forma implícita o no explicada
-
-✅ SI cambias el inventario, DEBE cumplir:
-   1. El jugador pidió/causó el cambio DIRECTAMENTE
-   2. La narrativa EXPLICA CLARAMENTE por qué cambió
-   3. La explicación aparece en la descripción de forma DIRECTA
-
-EJEMPLOS VÁLIDOS:
-✓ "Encuentras una llave oxidada en el suelo → 'Ahora llevas la llave' → agregada al inventario"
-✓ "Usas la poción para curarte → 'Bebes la poción agotada' → removida del inventario"
-✓ "Equipas tu espada → 'Desenfundas tu espada' → se mueve a equipment"
-
-EJEMPLOS INVÁLIDOS (NUNCA HAGAS ESTO):
-✗ Vaciar el inventario sin razón
-✗ "Dejas caer tus cosas" sin que el jugador lo pida
-✗ Cambiar objetos porque "la narrativa lo necesita"
-✗ Remover objetos sin explicación en el texto
-
+  • El jugador vende/descarta → remueve CON JUSTIFICACIÓN
+  • El jugador gana una recompensa → añade CON CONTEXTO
 ⚠️ EN CASO DE DUDA, NO HAGAS EL CAMBIO. Es mejor no cambiar que cambiar sin razón.
-⚠️ SIEMPRE proporciona explicación EXPLÍCITA en la narrativa para cada cambio de estado.
+⚠️ SIEMPRE proporciona explicación en la narrativa para cada cambio de estado.
 
 ESTADO - INSTRUCCIONES TÉCNICAS:
 =================================
@@ -132,17 +144,14 @@ PRIMER MENSAJE - INTRODUCCIÓN ÉPICA:
    - ¿Hay compañeros que contar con él?
    - ¿Cuál es el peligro/misterio?
 
-4. SUGIERE ACCIONES PARA APRENDER MÁS SOBRE LA MISIÓN (⭐ OBLIGATORIO):
-   - DEBES proporcionar EXACTAMENTE 3 acciones sugeridas
-   - Mínimo 2 de las 3 deben ser para obtener información sobre la misión
-   - Ejemplos:
-     * "Interrogar al prisionero sobre los detalles de la conspiración"
-     * "Leer la carta con las instrucciones completas"
-     * "Hablar con el capitán para entender mejor la amenaza"
-     * "Examinar el mapa de la zona donde ocurrirá la misión"
-     * "Preguntarle a tu aliado qué sabe del objetivo"
+4. SUGIERE ACCIONES PARA APRENDER MÁS SOBRE LA MISIÓN (⭐ MUY IMPORTANTE):
+   - Sugerencias como "Interrogar al prisionero sobre los detalles"
+   - "Leer la carta con las instrucciones completas"
+   - "Hablar con el capitán para entender mejor la amenaza"
+   - "Examinar el mapa de la zona donde ocurrirá la misión"
+   - "Preguntarle a tu aliado qué sabe del objetivo"
+   - Mínimo 2 de las 3 acciones sugeridas deben ser para obtener información sobre la misión
    - Hazlas ESPECÍFICAS y DIRECTAS, no genéricas
-   - NUNCA devuelvas menos de 3 acciones
 
 5. TAMAÑO MÍNIMO: Este primer mensaje debe ser SUSTANCIALMENTE más largo (4-5 párrafos)
    - Describe lo que el personaje ha vivido hasta aquí
@@ -150,15 +159,8 @@ PRIMER MENSAJE - INTRODUCCIÓN ÉPICA:
    - Presenta aliados o enemigos potenciales
    - Crea intriga: ¿hay secretos sobre la misión? ¿hay peligro mayor?
 
-⚠️ RECUERDA: El primer mensaje establece el TONO DE TODA LA AVENTURA. Hazlo épico, detallado y cautivador. 
-⚠️ OBLIGATORIO: Siempre incluye exactamente 3 acciones sugeridas en "suggestedActions".`
-      : `
-
-ACCIONES SUGERIDAS - OBLIGATORIO:
-==================================
-⚠️ SIEMPRE debes incluir 3 acciones sugeridas en "suggestedActions"
-⚠️ Las acciones deben ser ESPECÍFICAS relacionadas con lo que acaba de suceder
-⚠️ NUNCA devuelvas un array vacío de acciones`;
+RECUERDA: El primer mensaje establece el TONO DE TODA LA AVENTURA. Hazlo épico, detallado y cautivador. Las acciones sugeridas DEBEN permitir al jugador profundizar en los detalles de su misión.`
+      : "";
 
     return {
       role: "system",
@@ -177,18 +179,8 @@ FORMATO DE RESPUESTA - JSON VÁLIDO (sin texto adicional):
         }
     },
     "updatedSummary": "Resumen del evento...",
-    "stateChangeJustification": {
-        "inventory": "OBLIGATORIO si 'inventory' en updatedState cambió. Explica EXACTAMENTE por qué el jugador tiene menos/más items.",
-        "hp": "OBLIGATORIO si 'hp' cambió. Explica qué le pasó al personaje (ataque, curación, etc)",
-        "equipment": "OBLIGATORIO si 'equipment' cambió. Explica qué equipo se puso/quitó y por qué"
-    },
     "type": "narrative"
-}
-
-⚠️⚠️⚠️ REGLA CRÍTICA DE VALIDACIÓN ⚠️⚠️⚠️:
-Si cambias "inventory", DEBES incluir "stateChangeJustification.inventory" explicando por qué.
-Sin esa justificación, el servidor RECHAZARÁ el cambio.
-NUNCA intentes cambiar el inventario sin una razón EXPLÍCITA en la narrativa.`,
+}`,
     };
   }
 
@@ -226,16 +218,10 @@ NUNCA intentes cambiar el inventario sin una razón EXPLÍCITA en la narrativa.`
   }
 
   private normalizeAction(payload: GameAction): GameAction {
-    // Asegurar que siempre hay acciones sugeridas
-    const suggestedActions =
-      payload.suggestedActions && payload.suggestedActions.length > 0
-        ? payload.suggestedActions
-        : ["Continuar", "Observar los alrededores", "Buscar más información"];
-
     return {
       ...payload,
       type: payload.type || "narrative",
-      suggestedActions: suggestedActions,
+      suggestedActions: payload.suggestedActions || [],
       updatedState: payload.updatedState || {},
     };
   }
